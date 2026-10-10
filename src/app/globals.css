@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0b1215;
+
+  /* Brand Colors */
+  --white: #ffffff;
+  --black: #0b1215;
+  --accent-red: #D92121;
+  --accent-green: #2B471F;
+
+  /* Semantic Token Mappings */
+  --primary: #D92121;
+  --primary-hover: #b81b1b;
+  --secondary: #2B471F;
+  --secondary-hover: #223918;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Brand Colors */
+  --color-white: #F8F8FF;
+  --color-black: #000000;
+  --color-accent-red: #D92121;
+  --color-accent-green: #2B471F;
+
+  /* Brand Aliases */
+  --color-brand-red: #D92121;
+  --color-brand-green: #2B471F;
+  --color-brand-black: #000000;
+  --color-brand-white: #F8F8FF;
+
+  --font-primary: var(--font-primary);
+  --font-secondary: var(--font-secondary);
+  --font-tertiary: var(--font-tertiary);
+  --font-seaweed: var(--font-tertiary);
+  --font-script: var(--font-tertiary);
+  --font-chunko: var(--font-primary);
+  --font-inter: var(--font-secondary);
+  --font-salmond: var(--font-secondary);
+  --font-sans: var(--font-secondary), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Smooth scrolling managed by Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+::selection {
+  background-color: #D92121;
+  color: #ffffff;
+}
+
+/* Hide scrollbar across all browsers */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / Edge */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Custom sleek scrollbar for modal dialogs and drawers */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.22) transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* ── Figma Grid System ──────────────────────────────────────────────
+ * Canvas: 1440px
+ * Desktop (lg): 12 columns, 96px margin, 24px gutter
+ * Mobile: 4 columns, 24px margin, 16px gutter
+ * ─────────────────────────────────────────────────────────────────── */
+.figma-container {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (min-width: 1024px) {
+  .figma-container {
+    padding-left: 96px;
+    padding-right: 96px;
+  }
+}
+
+.figma-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .figma-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
