@@ -617,23 +617,75 @@ export async function getClientAddons(): Promise<Addon[]> {
   }
 }
 
-// ─── 5. Config Version Polling (Live Catalog Sync) ─────────────────
+// ─── 5. Config Version Polling (Live Catalog Sync - Singleton) ────
 
 const CONFIG_POLL_INTERVAL_MS = 60_000; // Poll every 60s
 
+let globalKnownVersion = "0";
+let globalIntervalId: ReturnType<typeof setInterval> | null = null;
+let globalVisibilityBound = false;
+let globalInFlight = false;
+const catalogListeners = new Set<() => void>();
+
+async function pollConfigVersion() {
+  if (globalInFlight) return;
+  globalInFlight = true;
+
+  try {
+    const res = await fetch(`${API_BASE}/config-version`);
+    if (!res.ok) return;
+    const data = await res.json();
+    const serverVersion = data?.version ?? "0";
+
+    if (globalKnownVersion === "0") {
+      // First poll — record baseline
+      globalKnownVersion = serverVersion;
+      return;
+    }
+
+    if (serverVersion !== globalKnownVersion) {
+      globalKnownVersion = serverVersion;
+      invalidateClientConfigCache();
+      catalogListeners.forEach((listener) => {
+        try {
+          listener();
+        } catch (err) {
+          console.error("Catalog update listener error:", err);
+        }
+      });
+    }
+  } catch {
+    // Network error — skip silently, next interval will retry
+  } finally {
+    globalInFlight = false;
+  }
+}
+
+function startGlobalPolling() {
+  if (typeof window === "undefined") return;
+  if (globalIntervalId || catalogListeners.size === 0) return;
+  globalIntervalId = setInterval(pollConfigVersion, CONFIG_POLL_INTERVAL_MS);
+}
+
+function stopGlobalPolling() {
+  if (globalIntervalId) {
+    clearInterval(globalIntervalId);
+    globalIntervalId = null;
+  }
+}
+
+function handleGlobalVisibility() {
+  if (document.hidden) {
+    stopGlobalPolling();
+  } else {
+    pollConfigVersion();
+    startGlobalPolling();
+  }
+}
+
 /**
- * Polls the lightweight /config-version endpoint to detect admin changes.
- *
- * Why polling instead of SSE?
- * Cloudflare Workers kill streaming connections after ~30s. Each disconnect
- * counted as an "Error" in Cloudflare metrics and opened a new MongoDB
- * connection. With 100 users that's ~12,000 errors/hour.
- *
- * This approach:
- * - Polls every 60s (edge-cached at Cloudflare, so most polls are free)
- * - Pauses when the browser tab is hidden (saves bandwidth)
- * - Immediately checks on tab focus (instant UX when user returns)
- * - Zero Cloudflare errors, minimal DB load
+ * Subscribes a callback to live catalog changes.
+ * Managed as a shared singleton across the application to prevent redundant HTTP requests.
  */
 export function subscribeToLiveCatalogUpdates(
   onUpdate: () => void
@@ -642,67 +694,24 @@ export function subscribeToLiveCatalogUpdates(
     return () => {};
   }
 
-  let knownVersion = "0";
-  let intervalId: ReturnType<typeof setInterval> | null = null;
-  let isClosed = false;
+  catalogListeners.add(onUpdate);
 
-  const poll = async () => {
-    try {
-      const res = await fetch(`${API_BASE}/config-version`, {
-        cache: "no-cache",
-      });
-      if (!res.ok) return;
-      const data = await res.json();
-      const serverVersion = data?.version ?? "0";
+  if (!globalVisibilityBound) {
+    document.addEventListener("visibilitychange", handleGlobalVisibility);
+    globalVisibilityBound = true;
+  }
 
-      if (knownVersion === "0") {
-        // First poll — just record the baseline, don't trigger update
-        knownVersion = serverVersion;
-        return;
-      }
-
-      if (serverVersion !== knownVersion) {
-        knownVersion = serverVersion;
-        invalidateClientConfigCache();
-        onUpdate();
-      }
-    } catch {
-      // Network error — skip silently, will retry next interval
-    }
-  };
-
-  const startPolling = () => {
-    if (intervalId || isClosed) return;
-    intervalId = setInterval(poll, CONFIG_POLL_INTERVAL_MS);
-  };
-
-  const stopPolling = () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
-    }
-  };
-
-  // Pause polling when tab is hidden, resume + immediate check on focus
-  const handleVisibility = () => {
-    if (document.hidden) {
-      stopPolling();
-    } else {
-      poll(); // Immediate check when user returns to tab
-      startPolling();
-    }
-  };
-
-  document.addEventListener("visibilitychange", handleVisibility);
-
-  // Initial poll + start interval
-  poll();
-  startPolling();
+  // Trigger poll on initial subscriber
+  if (catalogListeners.size === 1) {
+    pollConfigVersion();
+    startGlobalPolling();
+  }
 
   return () => {
-    isClosed = true;
-    stopPolling();
-    document.removeEventListener("visibilitychange", handleVisibility);
+    catalogListeners.delete(onUpdate);
+    if (catalogListeners.size === 0) {
+      stopGlobalPolling();
+    }
   };
 }
 
