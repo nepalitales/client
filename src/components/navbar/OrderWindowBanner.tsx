@@ -5,6 +5,7 @@ import {
   getClientOrderWindows,
   getClientHolidays,
   formatOrderWindowBannerText,
+  subscribeToLiveCatalogUpdates,
   type OrderWindowDayConfig,
   type HolidayItem,
 } from "@/lib/api";
@@ -16,27 +17,39 @@ export function OrderWindowBanner() {
 
   useEffect(() => {
     let isMounted = true;
-    Promise.all([getClientOrderWindows(), getClientHolidays()])
-      .then(([windowsRes, holidaysRes]) => {
-        if (!isMounted) return;
-        if (windowsRes?.success && windowsRes.orderWindows) {
-          setOrderWindows(windowsRes.orderWindows);
-        }
-        if (holidaysRes?.success && holidaysRes.holidays) {
-          setHolidays(holidaysRes.holidays);
-        }
-      })
-      .catch((err) => {
-        console.warn("[OrderWindowBanner] Could not fetch banner data:", err);
-      })
-      .finally(() => {
-        if (isMounted) {
-          setLoading(false);
-        }
-      });
+
+    const fetchBannerData = (force = false) => {
+      Promise.all([getClientOrderWindows(force), getClientHolidays(force)])
+        .then(([windowsRes, holidaysRes]) => {
+          if (!isMounted) return;
+          if (windowsRes?.success && windowsRes.orderWindows) {
+            setOrderWindows(windowsRes.orderWindows);
+          }
+          if (holidaysRes?.success && Array.isArray(holidaysRes.holidays)) {
+            setHolidays(holidaysRes.holidays);
+          }
+        })
+        .catch((err) => {
+          console.warn("[OrderWindowBanner] Could not fetch banner data:", err);
+        })
+        .finally(() => {
+          if (isMounted) {
+            setLoading(false);
+          }
+        });
+    };
+
+    // Initial fetch (force fresh to bypass any previous session cache)
+    fetchBannerData(true);
+
+    // Live update when admin adds or deletes holidays or changes schedule
+    const unsubscribe = subscribeToLiveCatalogUpdates(() => {
+      fetchBannerData(true);
+    });
 
     return () => {
       isMounted = false;
+      unsubscribe();
     };
   }, []);
 

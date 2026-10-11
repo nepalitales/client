@@ -210,49 +210,45 @@ export interface ClientHolidaysResponse {
 }
 
 const HOLIDAYS_CACHE_KEY = "nt_client_holidays_cache";
-const HOLIDAYS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 let cachedHolidaysPromise: Promise<ClientHolidaysResponse | null> | null = null;
+
+export function invalidateClientConfigCache(): void {
+  cachedHolidaysPromise = null;
+  cachedOrderWindowsPromise = null;
+  if (typeof window !== "undefined") {
+    try {
+      sessionStorage.removeItem(HOLIDAYS_CACHE_KEY);
+      sessionStorage.removeItem(ORDER_WINDOWS_CACHE_KEY);
+    } catch {
+      // Storage access blocked or unavailable
+    }
+  }
+}
 
 export async function getClientHolidays(
   forceRefresh = false
 ): Promise<ClientHolidaysResponse | null> {
-  if (cachedHolidaysPromise && !forceRefresh) {
-    return cachedHolidaysPromise;
-  }
-
-  if (!forceRefresh && typeof window !== "undefined") {
+  // Purge any legacy sessionStorage cache immediately
+  if (typeof window !== "undefined") {
     try {
-      const raw = sessionStorage.getItem(HOLIDAYS_CACHE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Date.now() - parsed.timestamp < HOLIDAYS_CACHE_TTL_MS) {
-          cachedHolidaysPromise = Promise.resolve(parsed.data);
-          return parsed.data;
-        }
-      }
+      sessionStorage.removeItem(HOLIDAYS_CACHE_KEY);
     } catch {
       // Storage access blocked or unavailable
     }
   }
 
+  if (cachedHolidaysPromise && !forceRefresh) {
+    return cachedHolidaysPromise;
+  }
+
   cachedHolidaysPromise = (async () => {
     try {
       const res = await clientFetch("/holidays", {
-        cache: "default",
+        cache: "no-store",
       });
       if (!res.ok) return null;
       const json: ClientHolidaysResponse = await res.json();
-      if (typeof window !== "undefined" && json?.success) {
-        try {
-          sessionStorage.setItem(
-            HOLIDAYS_CACHE_KEY,
-            JSON.stringify({ timestamp: Date.now(), data: json })
-          );
-        } catch {
-          // ignore quota limits
-        }
-      }
       return json;
     } catch (err) {
       console.warn("[Holidays API] Error fetching holidays:", err);
@@ -667,6 +663,7 @@ export function subscribeToLiveCatalogUpdates(
 
       if (serverVersion !== knownVersion) {
         knownVersion = serverVersion;
+        invalidateClientConfigCache();
         onUpdate();
       }
     } catch {
