@@ -847,6 +847,8 @@ export interface VerifyOtpResponse {
   message: string;
   token?: string;
   user?: ClientUser;
+  isNewUser?: boolean;
+  requiresUsername?: boolean;
 }
 
 export async function sendClientOtp(
@@ -901,6 +903,47 @@ export async function verifyClientOtp(
   }
 }
 
+export async function updateClientUsername(
+  username: string
+): Promise<{ success: boolean; user?: ClientUser; message?: string }> {
+  try {
+    const res = await clientFetch("/auth/username", {
+      method: "POST",
+      body: JSON.stringify({ username: username.trim() }),
+    });
+    const data = await res.json();
+    if (data.success && data.user && typeof window !== "undefined") {
+      try {
+        localStorage.setItem("nt_client_user", JSON.stringify(data.user));
+      } catch {}
+    }
+    return data;
+  } catch (err) {
+    return { success: false, message: "Network error setting username" };
+  }
+}
+
+export async function updateClientProfile(data: {
+  username?: string;
+  phone?: string;
+}): Promise<{ success: boolean; user?: ClientUser; message?: string }> {
+  try {
+    const res = await clientFetch("/auth/profile", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+    const resData = await res.json();
+    if (resData.success && resData.user && typeof window !== "undefined") {
+      try {
+        localStorage.setItem("nt_client_user", JSON.stringify(resData.user));
+      } catch {}
+    }
+    return resData;
+  } catch (err) {
+    return { success: false, message: "Network error updating profile" };
+  }
+}
+
 export async function getClientMe(): Promise<ClientUser | null> {
   try {
     const res = await clientFetch("/auth/me");
@@ -929,7 +972,11 @@ export async function clientSignOut(): Promise<void> {
 
 export interface ClientAddress {
   id?: string;
-  label?: string;
+  label?: string; // "Home" | "Work" | "Other"
+  flatNumber?: string;
+  wing?: string;
+  addressLine1?: string;
+  addressLine2?: string;
   street: string;
   building?: string;
   floor?: string;
