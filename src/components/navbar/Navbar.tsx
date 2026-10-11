@@ -14,9 +14,27 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const { openCart, totalItems } = useCart();
   const { openAuthModal, user, isLoggedIn, signOut } = useCheckout();
+
+  const handleMouseEnter = () => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    setUserMenuOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setUserMenuOpen(false);
+    }, 150);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    };
+  }, []);
 
   // Close user dropdown when clicking outside
   useEffect(() => {
@@ -127,7 +145,12 @@ export function Navbar() {
 
             {/* Sign In CTA Button or User Name Button (Identical Branded Style) */}
             {isLoggedIn ? (
-              <div ref={userMenuRef} className="relative">
+              <div
+                ref={userMenuRef}
+                className="relative"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen((prev) => !prev)}
@@ -136,7 +159,7 @@ export function Navbar() {
                   aria-expanded={userMenuOpen}
                 >
                   <span className="truncate">
-                    {user?.username || user?.email?.split("@")[0] || "Account"}
+                    {user?.username || "Account"}
                   </span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 stroke-[2.5] transition-transform duration-200 shrink-0 ${
@@ -145,30 +168,23 @@ export function Navbar() {
                   />
                 </button>
 
-                {/* Dropdown Menu */}
+                {/* Dropdown Menu - Sign Out Only (Clean Website Aesthetic) */}
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-neutral-100 py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="px-4 py-2 border-b border-neutral-100 text-left">
-                      <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
-                        Signed In As
-                      </p>
-                      <p className="text-xs font-bold text-neutral-900 truncate">
-                        {user?.username || user?.email?.split("@")[0]}
-                      </p>
-                      <p className="text-[11px] text-neutral-500 truncate">
-                        {user?.email}
-                      </p>
-                    </div>
+                  <div
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    className="absolute right-0 mt-2 w-40 bg-white rounded-2xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] border border-neutral-100 p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                  >
                     <button
                       type="button"
                       onClick={() => {
                         setUserMenuOpen(false);
                         signOut();
                       }}
-                      className="w-full text-left px-4 py-2 text-xs font-semibold text-neutral-700 hover:text-accent-red hover:bg-red-50/50 transition-colors flex items-center justify-between cursor-pointer"
+                      className="w-full text-left px-3.5 py-2.5 text-xs font-bold uppercase tracking-wider text-neutral-700 hover:text-accent-red hover:bg-red-50/70 rounded-xl transition-all flex items-center justify-between cursor-pointer group"
                     >
                       <span>Sign Out</span>
-                      <LogOut className="w-3.5 h-3.5" />
+                      <LogOut className="w-3.5 h-3.5 text-neutral-400 group-hover:text-accent-red transition-colors" />
                     </button>
                   </div>
                 )}
@@ -276,7 +292,7 @@ export function Navbar() {
                 <div className="space-y-2.5">
                   <div className="flex w-full items-center justify-center py-3 px-6 text-sm font-bold uppercase tracking-wider text-white bg-accent-red rounded-full shadow-sm">
                     <span className="truncate">
-                      {user?.username || user?.email?.split("@")[0] || "Account"}
+                      {user?.username || "Account"}
                     </span>
                   </div>
                   <button
