@@ -131,7 +131,7 @@ export function Navbar() {
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen((prev) => !prev)}
-                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2 text-xs xl:text-sm font-bold uppercase tracking-wider text-white bg-accent-red hover:bg-[#b81b1b] rounded-full shadow-sm hover:shadow transition-all active:scale-[0.98] cursor-pointer max-w-[200px]"
+                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2 text-xs xl:text-sm font-bold uppercase tracking-wider text-white bg-accent-red hover:bg-[#b81b1b] rounded-full shadow-sm hover:shadow transition-all active:scale-[0.98] cursor-pointer max-w-50"
                   aria-label="User account menu"
                   aria-expanded={userMenuOpen}
                 >
@@ -218,7 +218,7 @@ export function Navbar() {
             className="p-2 -mr-2 text-neutral-900 hover:text-accent-red transition-colors relative flex items-center justify-center cursor-pointer"
             aria-label="View Shopping Cart"
           >
-            <ShoppingBag className="w-6 h-6 stroke-[2]" />
+            <ShoppingBag className="w-6 h-6 stroke-2" />
             <span className="absolute top-1 right-1 bg-accent-red text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center leading-none">
               {totalItems}
             </span>
