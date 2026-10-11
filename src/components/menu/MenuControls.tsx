@@ -7,6 +7,7 @@ import { Search, X } from "lucide-react";
 export interface MenuFilterState {
   search: string;
   isVegOnly: boolean;
+  isNonVegOnly: boolean;
   category: string; // "all" | "momo" | "shaphaley"
 }
 
@@ -59,40 +60,45 @@ export function MenuControls({
         <span className="text-neutral-900 font-semibold">Menu</span>
       </nav>
 
-      {/* ─── Search Bar & Veg Toggle Switch ─────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-        {/* Left: Search Input & Veg Toggle Switch */}
-        <div className="flex items-center gap-4 flex-1 max-w-xl">
-          {/* Search Input Box */}
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search dishes..."
-              aria-label="Search dishes"
-              className="w-full bg-white border border-neutral-200/90 rounded-full pl-10 pr-10 py-2.5 text-sm font-secondary text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-400 transition-colors shadow-sm"
-            />
-            {searchInput && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchInput("");
-                  onUpdateFilters({ search: "" });
-                }}
-                aria-label="Clear search text"
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 p-0.5 rounded-full cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+      {/* ─── Search Bar & Diet Mode Toggles ─────────────────────── */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-6">
+        {/* Search Input Box */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search dishes..."
+            aria-label="Search dishes"
+            className="w-full bg-white border border-neutral-200/90 rounded-full pl-10 pr-10 py-2.5 text-sm font-secondary text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-400 transition-colors shadow-sm"
+          />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchInput("");
+                onUpdateFilters({ search: "" });
+              }}
+              aria-label="Clear search text"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 p-0.5 rounded-full cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
 
-          {/* Clean Veg Toggle Switch */}
-          <div className="flex items-center gap-2.5 select-none shrink-0">
+        {/* Diet Toggles: Veg & Non-Veg */}
+        <div className="flex items-center gap-4 sm:gap-6 select-none shrink-0 self-start sm:self-auto">
+          {/* Veg Toggle Switch */}
+          <div className="flex items-center gap-2 select-none shrink-0">
             <span
-              onClick={() => onUpdateFilters({ isVegOnly: !filters.isVegOnly })}
+              onClick={() =>
+                onUpdateFilters({
+                  isVegOnly: !filters.isVegOnly,
+                  isNonVegOnly: false,
+                })
+              }
               className={`text-sm font-bold font-secondary cursor-pointer transition-colors ${
                 filters.isVegOnly ? "text-[#16A34A]" : "text-neutral-700"
               }`}
@@ -103,8 +109,13 @@ export function MenuControls({
               type="button"
               role="switch"
               aria-checked={filters.isVegOnly}
-              aria-label="Toggle Veg Only dishes"
-              onClick={() => onUpdateFilters({ isVegOnly: !filters.isVegOnly })}
+              aria-label="Toggle Veg dishes"
+              onClick={() =>
+                onUpdateFilters({
+                  isVegOnly: !filters.isVegOnly,
+                  isNonVegOnly: false,
+                })
+              }
               className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#16A34A] ${
                 filters.isVegOnly ? "bg-[#16A34A]" : "bg-neutral-300"
               }`}
@@ -112,6 +123,44 @@ export function MenuControls({
               <span
                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
                   filters.isVegOnly ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Non-Veg Toggle Switch */}
+          <div className="flex items-center gap-2 select-none shrink-0">
+            <span
+              onClick={() =>
+                onUpdateFilters({
+                  isNonVegOnly: !filters.isNonVegOnly,
+                  isVegOnly: false,
+                })
+              }
+              className={`text-sm font-bold font-secondary cursor-pointer transition-colors ${
+                filters.isNonVegOnly ? "text-[#D92121]" : "text-neutral-700"
+              }`}
+            >
+              Non-Veg
+            </span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={filters.isNonVegOnly}
+              aria-label="Toggle Non-Veg dishes"
+              onClick={() =>
+                onUpdateFilters({
+                  isNonVegOnly: !filters.isNonVegOnly,
+                  isVegOnly: false,
+                })
+              }
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D92121] ${
+                filters.isNonVegOnly ? "bg-[#D92121]" : "bg-neutral-300"
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                  filters.isNonVegOnly ? "translate-x-5" : "translate-x-0"
                 }`}
               />
             </button>

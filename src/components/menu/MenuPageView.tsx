@@ -25,6 +25,7 @@ export function MenuPageView() {
   const [filters, setFilters] = useState<MenuFilterState>({
     search: "",
     isVegOnly: false,
+    isNonVegOnly: false,
     category: "all",
   });
 
@@ -94,9 +95,11 @@ export function MenuPageView() {
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // 1. Veg Only filter
+    // 1. Food Type filter (Veg / Non-Veg)
     if (filters.isVegOnly) {
       result = result.filter((p) => p.type === "veg");
+    } else if (filters.isNonVegOnly) {
+      result = result.filter((p) => p.type === "non-veg");
     }
 
     // 2. Category filter
@@ -250,6 +253,7 @@ export function MenuPageView() {
                 handleUpdateFilters({
                   search: "",
                   isVegOnly: false,
+                  isNonVegOnly: false,
                   category: "all",
                 })
               }

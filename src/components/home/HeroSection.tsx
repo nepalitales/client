@@ -43,7 +43,7 @@ export function HeroSection() {
               /स्वादिष्ट : मोमो /
             </p>
             <p className="font-secondary text-neutral-600 font-normal text-xs sm:text-sm md:text-base leading-relaxed mt-3 sm:mt-4 max-w-70 sm:max-w-80">
-              Something that&apos;ll make you say best momo you have ever had
+              Something that&apos;ll make you say best MOMO you have ever had
             </p>
           </div>
 
