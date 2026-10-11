@@ -84,11 +84,11 @@ export function FreshOutOfKitchenSection() {
           </p>
         </div>
 
-        {/* ─── Explore Menu Capsule Button (Red with Black Border & Pop Shadow) ──── */}
+        {/* ─── Explore Menu Capsule Button (Red Pill matching Order Buttons) ──── */}
         <div className="flex justify-center mt-7 sm:mt-9">
           <Link
             href="/menu"
-            className="bg-[#D92121] hover:bg-[#b81b1b] text-white border-2 border-black rounded-full px-8 sm:px-10 py-3 sm:py-3.5 font-secondary font-bold text-sm sm:text-base tracking-wide transition-all duration-200 shadow-[2px_3px_0px_#000000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#000000] inline-flex items-center justify-center cursor-pointer select-none"
+            className="bg-[#D92121] hover:bg-[#b81b1b] text-white font-secondary font-medium text-sm sm:text-base px-8 sm:px-10 py-2.5 sm:py-3 rounded-full transition-all duration-200 active:scale-95 shadow-xs inline-flex items-center justify-center cursor-pointer select-none"
           >
             Explore Menu
           </Link>
