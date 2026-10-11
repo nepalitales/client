@@ -16,6 +16,7 @@ import {
   type Addon,
   type OrderWindowStatusResponse,
 } from "@/lib/api";
+import { showDishLimitToast } from "@/components/ui/sonner";
 
 export interface CartItem {
   product: Product;
@@ -166,9 +167,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((prev) => {
       const currentTotal = prev.reduce((sum, item) => sum + item.quantity, 0);
       if (currentTotal + quantity > MAX_DISHES_PER_ORDER) {
-        alert(
-          `You can order at most ${MAX_DISHES_PER_ORDER} dishes in a single order.`
-        );
+        showDishLimitToast(MAX_DISHES_PER_ORDER);
         return prev;
       }
 
@@ -201,9 +200,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         .reduce((sum, item) => sum + item.quantity, 0);
 
       if (otherItemsCount + quantity > MAX_DISHES_PER_ORDER) {
-        alert(
-          `You can order at most ${MAX_DISHES_PER_ORDER} dishes in a single order.`
-        );
+        showDishLimitToast(MAX_DISHES_PER_ORDER);
         return prev;
       }
 

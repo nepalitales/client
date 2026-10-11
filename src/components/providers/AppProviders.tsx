@@ -8,6 +8,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { CheckoutModal } from "@/components/checkout/CheckoutModal";
 import { Navbar } from "@/components/navbar/Navbar";
 import { Footer } from "@/components/footer/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
@@ -21,6 +22,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
           </div>
           <CartDrawer />
           <CheckoutModal />
+          <Toaster />
         </CheckoutProvider>
       </CartProvider>
     </SmoothScrollProvider>
