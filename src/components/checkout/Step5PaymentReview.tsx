@@ -241,13 +241,13 @@ export function Step5PaymentReview() {
     <div className="flex flex-col min-h-95 justify-between pt-2 pb-2 font-secondary">
       <div className="space-y-4 pt-1">
         {paymentError && (
-          <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl">
+          <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
             {paymentError}
           </div>
         )}
 
         {/* ─── Destination & Window Card ───────────────────────── */}
-        <div className="bg-neutral-50 rounded-2xl p-4 border border-neutral-200/80 space-y-2 text-xs">
+        <div className="bg-neutral-50 rounded-xl p-4 border border-neutral-200/80 space-y-2 text-xs">
           <div className="flex items-center justify-between font-bold text-neutral-900">
             <span>{orderType === "delivery" ? "Doorstep Delivery" : "Cloud Kitchen Pickup"}</span>
             <span className="text-[#D92121]">
@@ -269,7 +269,7 @@ export function Step5PaymentReview() {
         </div>
 
         {/* ─── Bill Breakdown ─────────────────────────────────── */}
-        <div className="bg-white rounded-2xl p-4 border border-neutral-200 space-y-2.5 text-xs">
+        <div className="bg-white rounded-xl p-4 border border-neutral-200 space-y-2.5 text-xs">
           <div className="flex justify-between text-neutral-600">
             <span>Items Subtotal ({items.length})</span>
             <span className="font-semibold text-neutral-900">₹{itemsSubtotal}</span>
@@ -292,7 +292,7 @@ export function Step5PaymentReview() {
           </div>
 
           {orderType === "delivery" && (
-            <div className="rounded-xl bg-neutral-50 border border-neutral-200/70 p-2.5 text-[11px] text-neutral-600 leading-relaxed">
+            <div className="rounded-lg bg-neutral-50 border border-neutral-200/70 p-2.5 text-[11px] text-neutral-600 leading-relaxed">
               Delivery charges are paid directly by user upon delivery to courier service (Borzo / Porter).
             </div>
           )}
@@ -304,7 +304,7 @@ export function Step5PaymentReview() {
         </div>
 
         {/* Razorpay Trust Badge */}
-        <div className="py-2.5 px-3 rounded-xl bg-neutral-100 text-center text-[11px] text-neutral-600 font-medium flex items-center justify-center gap-1.5">
+        <div className="py-2.5 px-3 rounded-lg bg-neutral-100 text-center text-[11px] text-neutral-600 font-medium flex items-center justify-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
           <span>Secured with Razorpay (UPI, Google Pay, Cards, NetBanking)</span>
         </div>

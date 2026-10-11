@@ -115,7 +115,7 @@ export function Step2DeliverySlot() {
                   type="button"
                   disabled={isFull}
                   onClick={() => handleSlotSelect(slot)}
-                  className={`w-full p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                  className={`w-full p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
                     isFull
                       ? "opacity-45 cursor-not-allowed border-neutral-200 bg-neutral-50"
                       : isSelected

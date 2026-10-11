@@ -6,7 +6,7 @@ import { sendClientOtp, verifyClientOtp, type ClientUser } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 
 const authInputClass =
-  "w-full px-4 py-3.5 bg-white border rounded-xl text-sm font-medium text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all";
+  "w-full px-4 py-3.5 bg-white border rounded-lg text-sm font-medium text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all";
 
 export function Step3CustomerAuth() {
   const { setUser, setContactInfo, nextStep, isAuthStandalone } = useCheckout();
@@ -239,7 +239,7 @@ export function Step3CustomerAuth() {
             </div>
 
             {errorMessage && (
-              <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl">
+              <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
                 {errorMessage}
               </div>
             )}
@@ -297,7 +297,7 @@ export function Step3CustomerAuth() {
             </div>
 
             {errorMessage && (
-              <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl">
+              <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
                 {errorMessage}
               </div>
             )}
@@ -324,7 +324,7 @@ export function Step3CustomerAuth() {
                   onChange={(e) => handleOtpChange(idx, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(idx, e)}
                   onPaste={idx === 0 ? handlePaste : undefined}
-                  className={`w-11 sm:w-12 h-13 sm:h-14 border rounded-xl text-center text-xl sm:text-2xl font-bold font-mono text-neutral-900 bg-white transition-all focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 ${
+                  className={`w-11 sm:w-12 h-13 sm:h-14 border rounded-lg text-center text-xl sm:text-2xl font-bold font-mono text-neutral-900 bg-white transition-all focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 ${
                     digit
                       ? "border-neutral-900 ring-1 ring-neutral-900"
                       : "border-neutral-200"

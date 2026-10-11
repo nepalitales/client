@@ -163,7 +163,7 @@ export function CheckoutModal() {
         ref={panelRef}
         data-lenis-prevent
         onWheel={(e) => e.stopPropagation()}
-        className="relative w-full max-w-[420px] bg-white rounded-[28px] sm:rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.22)] flex flex-col pointer-events-auto max-h-[92vh] overflow-hidden border border-neutral-100 z-10 my-auto"
+        className="relative w-full max-w-[420px] bg-white rounded-2xl sm:rounded-[20px] shadow-[0_20px_50px_rgba(0,0,0,0.22)] flex flex-col pointer-events-auto max-h-[92vh] overflow-hidden border border-neutral-100 z-10 my-auto"
       >
         {/* ─── Top Header Bar: Chevron, Centered Title, Close Button ─── */}
         <div className="px-6 pt-5 pb-2 flex items-center justify-between shrink-0 bg-white">

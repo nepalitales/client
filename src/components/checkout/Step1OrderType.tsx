@@ -56,7 +56,7 @@ export function Step1OrderType() {
         </div>
 
         {/* ─── Selected Option Detail Summary ───────────────────── */}
-        <div className="w-full bg-neutral-50 border border-neutral-200/70 rounded-2xl p-4 text-left text-xs space-y-1.5">
+        <div className="w-full bg-neutral-50 border border-neutral-200/70 rounded-xl p-4 text-left text-xs space-y-1.5">
           {orderType === "delivery" ? (
             <>
               <div className="flex items-center justify-between font-semibold text-neutral-900">

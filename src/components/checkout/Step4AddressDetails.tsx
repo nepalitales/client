@@ -5,9 +5,9 @@ import { useCheckout } from "@/context/CheckoutContext";
 import { Store, Info } from "lucide-react";
 
 const baseInputClass =
-  "w-full px-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all";
+  "w-full px-4 py-3 bg-white border rounded-lg text-xs sm:text-sm text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all";
 const phoneInputClass =
-  "w-full pl-12 pr-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all";
+  "w-full pl-12 pr-4 py-3 bg-white border rounded-lg text-xs sm:text-sm text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all";
 
 export function Step4AddressDetails() {
   const {
@@ -243,7 +243,7 @@ export function Step4AddressDetails() {
           </div>
 
           {/* Kitchen Pickup Instructions Card */}
-          <div className="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/80 space-y-2 text-left">
+          <div className="p-3.5 rounded-xl bg-neutral-50 border border-neutral-200/80 space-y-2 text-left">
             <div className="flex items-center gap-2">
               <Store className="w-4 h-4 text-[#D92121]" />
               <span className="font-bold text-xs text-neutral-900">

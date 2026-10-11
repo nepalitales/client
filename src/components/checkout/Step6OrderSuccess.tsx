@@ -43,7 +43,7 @@ export function Step6OrderSuccess() {
         {/* Order Reference Box */}
         <div
           onClick={handleCopyOrderId}
-          className="inline-flex items-center gap-2 bg-neutral-100 hover:bg-neutral-200/80 px-4 py-2 rounded-xl text-xs font-mono font-bold text-neutral-900 transition-colors cursor-pointer select-none"
+          className="inline-flex items-center gap-2 bg-neutral-100 hover:bg-neutral-200/80 px-4 py-2 rounded-lg text-xs font-mono font-bold text-neutral-900 transition-colors cursor-pointer select-none"
         >
           <span>Order #{orderId}</span>
           <button type="button" title="Copy Order ID" className="text-neutral-500 hover:text-neutral-900">
@@ -56,7 +56,7 @@ export function Step6OrderSuccess() {
         </div>
 
         {/* Summary Card */}
-        <div className="bg-neutral-50 rounded-2xl p-4 border border-neutral-200/80 text-left text-xs space-y-2">
+        <div className="bg-neutral-50 rounded-xl p-4 border border-neutral-200/80 text-left text-xs space-y-2">
           <div className="flex justify-between">
             <span className="text-neutral-500">Order Mode:</span>
             <span className="font-bold text-neutral-900 capitalize">{orderType}</span>
