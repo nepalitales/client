@@ -103,7 +103,7 @@ export function Step2DeliverySlot() {
           <div
             data-lenis-prevent
             onWheel={(e) => e.stopPropagation()}
-            className="space-y-2.5 max-h-[300px] sm:max-h-[340px] overflow-y-auto pr-1.5 custom-scrollbar overscroll-contain touch-pan-y"
+            className="space-y-2.5 max-h-75 sm:max-h-85 overflow-y-auto pr-1.5 custom-scrollbar overscroll-contain touch-pan-y"
           >
             {slotsList.map((slot) => {
               const isSelected = selectedSlot?.id === slot.id;
@@ -142,7 +142,7 @@ export function Step2DeliverySlot() {
                         : "border-neutral-300 bg-white"
                     }`}
                   >
-                    {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                    {isSelected && <Check className="w-3 h-3 stroke-3" />}
                   </div>
                 </button>
               );

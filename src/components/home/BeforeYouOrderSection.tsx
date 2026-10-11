@@ -70,7 +70,7 @@ export function BeforeYouOrderSection() {
               </div>
 
               {/* Upper Section: Graphic Illustration (Enlarged) */}
-              <div className="pt-10 sm:pt-12 pb-6 sm:pb-8 px-4 sm:px-6 flex items-center justify-center flex-1 min-h-[230px] sm:min-h-[270px] lg:min-h-[290px]">
+              <div className="pt-10 sm:pt-12 pb-6 sm:pb-8 px-4 sm:px-6 flex items-center justify-center flex-1 min-h-57.5 sm:min-h-67.5 lg:min-h-72.5">
                 <div className="relative w-full h-48 sm:h-56 lg:h-64 flex items-center justify-center select-none">
                   <Image
                     src={item.image}

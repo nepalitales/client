@@ -79,7 +79,7 @@ function SignatureCard({ item }: { item: SignatureItem }) {
   return (
     <article className="flex flex-col group w-full max-w-md mx-auto lg:max-w-none">
       {/* ─── Stamp Graphic Header ───────────────────────────────── */}
-      <div className="relative w-full aspect-[419/344] select-none flex items-center justify-center">
+      <div className="relative w-full aspect-419/344 select-none flex items-center justify-center">
         <Image
           src={item.image}
           alt={item.name}

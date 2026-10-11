@@ -4,6 +4,11 @@ import React, { useState } from "react";
 import { useCheckout } from "@/context/CheckoutContext";
 import { Store, Info } from "lucide-react";
 
+const baseInputClass =
+  "w-full px-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all";
+const phoneInputClass =
+  "w-full pl-12 pr-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all";
+
 export function Step4AddressDetails() {
   const {
     orderType,
@@ -69,7 +74,7 @@ export function Step4AddressDetails() {
                 if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
               }}
               placeholder="Receiver's Name"
-              className={`w-full px-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${
+              className={`${baseInputClass} placeholder-neutral-400 ${
                 errors.name ? "border-red-500" : "border-neutral-200"
               }`}
             />
@@ -95,7 +100,7 @@ export function Step4AddressDetails() {
                   if (errors.phone) setErrors((prev) => ({ ...prev, phone: "" }));
                 }}
                 placeholder="Mobile Number (for delivery rider)"
-                className={`w-full pl-12 pr-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${
+                className={`${phoneInputClass} placeholder-neutral-400 ${
                   errors.phone ? "border-red-500" : "border-neutral-200"
                 }`}
               />
@@ -114,7 +119,7 @@ export function Step4AddressDetails() {
                 if (errors.building) setErrors((prev) => ({ ...prev, building: "" }));
               }}
               placeholder="Building Name, Flat No"
-              className={`w-full px-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${
+              className={`${baseInputClass} placeholder-neutral-400 ${
                 errors.building ? "border-red-500" : "border-neutral-200"
               }`}
             />
@@ -132,7 +137,7 @@ export function Step4AddressDetails() {
                 if (errors.street) setErrors((prev) => ({ ...prev, street: "" }));
               }}
               placeholder="Enter Complete Address"
-              className={`w-full px-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${
+              className={`${baseInputClass} placeholder-neutral-400 ${
                 errors.street ? "border-red-500" : "border-neutral-200"
               }`}
             />
@@ -155,7 +160,7 @@ export function Step4AddressDetails() {
                   if (errors.pincode) setErrors((prev) => ({ ...prev, pincode: "" }));
                 }}
                 placeholder="Pincode"
-                className={`w-full px-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${
+                className={`${baseInputClass} placeholder-neutral-400 ${
                   errors.pincode ? "border-red-500" : "border-neutral-200"
                 }`}
               />
@@ -171,7 +176,7 @@ export function Step4AddressDetails() {
                   setAddress((prev) => ({ ...prev, city: e.target.value }));
                 }}
                 placeholder="City (e.g. Mumbai)"
-                className={`w-full px-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all font-medium ${"border-neutral-200"}`}
+                className={`${baseInputClass} placeholder-neutral-400 border-neutral-200 font-medium`}
               />
             </div>
           </div>
@@ -185,7 +190,7 @@ export function Step4AddressDetails() {
                 setAddress((prev) => ({ ...prev, landmark: e.target.value }))
               }
               placeholder="Nearby landmark"
-              className={`w-full px-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${"border-neutral-200"}`}
+              className={`${baseInputClass} placeholder-neutral-400 border-neutral-200`}
             />
           </div>
         </div>
@@ -203,7 +208,7 @@ export function Step4AddressDetails() {
                 if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
               }}
               placeholder="Receiver's Name"
-              className={`w-full px-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${
+              className={`${baseInputClass} placeholder-neutral-400 ${
                 errors.name ? "border-red-500" : "border-neutral-200"
               }`}
             />
@@ -229,7 +234,7 @@ export function Step4AddressDetails() {
                   if (errors.phone) setErrors((prev) => ({ ...prev, phone: "" }));
                 }}
                 placeholder="Mobile Number"
-                className={`w-full pl-12 pr-4 py-3 bg-white border rounded-xl text-xs sm:text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${
+                className={`${phoneInputClass} placeholder-neutral-400 ${
                   errors.phone ? "border-red-500" : "border-neutral-200"
                 }`}
               />
@@ -245,7 +250,7 @@ export function Step4AddressDetails() {
                 Kitchen Collection Counter
               </span>
             </div>
-            <p className="text-[11px] text-neutral-600 leading-relaxed">
+            <p className="text-xs text-neutral-600 leading-relaxed font-normal">
               Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, Thane West - 400615.
             </p>
             <div className="flex items-start gap-1.5 pt-1 text-[11px] text-neutral-500">

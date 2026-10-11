@@ -306,7 +306,7 @@ export function CartDrawer() {
                       return (
                         <div
                           key={product.id}
-                          className="pt-4 first:pt-0 flex items-center gap-3 sm:gap-4"
+                          className="[&:not(:first-child)]:pt-4 flex items-center gap-3 sm:gap-4"
                         >
                           {/* Thumbnail */}
                           <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-neutral-200/80 shadow-2xs">
@@ -353,7 +353,7 @@ export function CartDrawer() {
                                 >
                                   <Minus className="w-3 h-3 stroke-[2.5]" />
                                 </button>
-                                <span className="font-secondary font-bold text-xs text-neutral-900 min-w-[20px] text-center">
+                                <span className="font-secondary font-bold text-xs text-neutral-900 min-w-5 text-center">
                                   {quantity}
                                 </span>
                                 <button
@@ -435,7 +435,7 @@ export function CartDrawer() {
                               >
                                 <Minus className="w-2.5 h-2.5 stroke-[2.5]" />
                               </button>
-                              <span className="font-secondary font-bold text-xs text-neutral-900 min-w-[16px] text-center">
+                              <span className="font-secondary font-bold text-xs text-neutral-900 min-w-4 text-center">
                                 {quantity}
                               </span>
                               <button
@@ -448,7 +448,7 @@ export function CartDrawer() {
                               </button>
                             </div>
 
-                            <span className="font-secondary font-bold text-xs sm:text-sm text-neutral-950 min-w-[36px] text-right">
+                            <span className="font-secondary font-bold text-xs sm:text-sm text-neutral-950 min-w-9 text-right">
                               ₹{addon.price * quantity}
                             </span>
 
@@ -542,7 +542,7 @@ export function CartDrawer() {
                                   >
                                     <Minus className="w-2.5 h-2.5 stroke-[2.5]" />
                                   </button>
-                                  <span className="font-secondary font-bold text-xs text-neutral-900 min-w-[14px] text-center">
+                                  <span className="font-secondary font-bold text-xs text-neutral-900 min-w-3.5 text-center">
                                     {qty}
                                   </span>
                                   <button

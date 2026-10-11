@@ -5,6 +5,9 @@ import { useCheckout } from "@/context/CheckoutContext";
 import { sendClientOtp, verifyClientOtp, type ClientUser } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 
+const authInputClass =
+  "w-full px-4 py-3.5 bg-white border rounded-xl text-sm font-medium text-neutral-900 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all";
+
 export function Step3CustomerAuth() {
   const { setUser, setContactInfo, nextStep, isAuthStandalone } = useCheckout();
 
@@ -253,7 +256,7 @@ export function Step3CustomerAuth() {
                   if (errorMessage) setErrorMessage("");
                 }}
                 placeholder="your.email@gmail.com"
-                className={`w-full px-4 py-3.5 bg-white border rounded-xl text-sm font-medium text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${"border-neutral-200"}`}
+                className={`${authInputClass} placeholder-neutral-400 border-neutral-200`}
               />
             </div>
           </div>
@@ -321,10 +324,10 @@ export function Step3CustomerAuth() {
                   onChange={(e) => handleOtpChange(idx, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(idx, e)}
                   onPaste={idx === 0 ? handlePaste : undefined}
-                  className={`w-11 sm:w-12 h-13 sm:h-14 border rounded-xl text-center text-xl sm:text-2xl font-bold font-mono text-neutral-900 bg-white transition-all focus:outline-none ${
+                  className={`w-11 sm:w-12 h-13 sm:h-14 border rounded-xl text-center text-xl sm:text-2xl font-bold font-mono text-neutral-900 bg-white transition-all focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 ${
                     digit
                       ? "border-neutral-900 ring-1 ring-neutral-900"
-                      : "border-neutral-200 focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900"
+                      : "border-neutral-200"
                   }`}
                 />
               ))}
