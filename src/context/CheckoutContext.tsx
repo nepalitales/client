@@ -176,6 +176,12 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
 
   // Fetch full user profile & all saved addresses from database
   const refreshUserAndAddresses = useCallback(async () => {
+    // Skip network calls if customer is not logged in
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+      if (!token) return;
+    }
+
     try {
       const liveUser = await getClientMe();
       if (liveUser) {

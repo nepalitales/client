@@ -40,7 +40,8 @@ export function FreshOutOfKitchenSection() {
         });
     };
 
-    fetchWindows(true);
+    // Initial mount reuses cached order windows instead of busting cache
+    fetchWindows(false);
 
     const unsubscribe = subscribeToLiveCatalogUpdates(() => {
       fetchWindows(true);

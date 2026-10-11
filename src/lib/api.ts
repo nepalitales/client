@@ -212,10 +212,15 @@ export interface ClientHolidaysResponse {
 const HOLIDAYS_CACHE_KEY = "nt_client_holidays_cache";
 
 let cachedHolidaysPromise: Promise<ClientHolidaysResponse | null> | null = null;
+let cachedCategoriesPromise: Promise<CategoryWithProducts[]> | null = null;
+let categoriesCacheTimestamp = 0;
+const CATEGORIES_CACHE_TTL_MS = 60_000; // 60s in-memory freshness
 
 export function invalidateClientConfigCache(): void {
   cachedHolidaysPromise = null;
   cachedOrderWindowsPromise = null;
+  cachedCategoriesPromise = null;
+  categoriesCacheTimestamp = 0;
   if (typeof window !== "undefined") {
     try {
       sessionStorage.removeItem(HOLIDAYS_CACHE_KEY);
@@ -526,18 +531,33 @@ export async function getPaginatedProducts(
   }
 }
 
-export async function getCategoriesWithProducts(): Promise<CategoryWithProducts[]> {
-  try {
-    const res = await clientFetch("/categories", {
-      cache: "no-store",
-    });
-    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-    const data = await res.json();
-    return data.categories || [];
-  } catch (err) {
-    console.warn("[Menu API] Error fetching categories:", err);
-    return [];
+export async function getCategoriesWithProducts(
+  forceRefresh = false
+): Promise<CategoryWithProducts[]> {
+  const now = Date.now();
+  if (
+    !forceRefresh &&
+    cachedCategoriesPromise &&
+    now - categoriesCacheTimestamp < CATEGORIES_CACHE_TTL_MS
+  ) {
+    return cachedCategoriesPromise;
   }
+
+  cachedCategoriesPromise = (async () => {
+    try {
+      const res = await clientFetch("/categories");
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      const data = await res.json();
+      categoriesCacheTimestamp = Date.now();
+      return data.categories || [];
+    } catch (err) {
+      console.warn("[Menu API] Error fetching categories:", err);
+      cachedCategoriesPromise = null;
+      return [];
+    }
+  })();
+
+  return cachedCategoriesPromise;
 }
 
 export async function getProductById(productId: string): Promise<Product | null> {

@@ -19,7 +19,7 @@ interface SignatureItem {
 
 const SIGNATURE_PRODUCTS: SignatureItem[] = [
   {
-    id: "sig_veg_kothey",
+    id: "prod_mv2moq3567e80597",
     name: "Veg Kothey Momo",
     type: "veg",
     quantity: "6 pcs",
@@ -31,7 +31,7 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
       "Bite-sized dumplings filled with fresh and finely chopped cabbage, onion, soya chunks and wrapped in a thin, soft flour dough. Steamed and only bottom part of momo is pan fried. Served with peanut chutney, red spicy chutney, and chilli oil.",
   },
   {
-    id: "sig_chicken_jhol",
+    id: "prod_mv2moq555c58a398",
     name: "Chicken Jhol Momo",
     type: "non-veg",
     quantity: "6 pcs",
@@ -43,7 +43,7 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
       "Steamed momo is served with the soup which is rich and creamy, and nutty flavour from roasted sesame seeds and peanut, soyabean. Momo and jhol is packed separately and chilli oil.",
   },
   {
-    id: "sig_chicken_shaphaley",
+    id: "prod_mv2moq5v1872319f",
     name: "Chicken Shaphaley",
     type: "non-veg",
     quantity: "2 pcs",
@@ -56,19 +56,29 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
   },
 ];
 
-function SignatureCard({ item }: { item: SignatureItem }) {
+function SignatureCard({
+  item,
+  liveProduct,
+}: {
+  item: SignatureItem;
+  liveProduct?: Product;
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { addItem, openCart } = useCart();
 
+  const activeId = liveProduct?.id || item.id;
+  const activePrice = liveProduct?.price ?? item.price;
+  const activeName = liveProduct?.name || item.name;
+
   const handleOrderNow = () => {
     const productPayload: Product = {
-      id: item.id,
-      name: item.name,
+      id: activeId,
+      name: activeName,
       description: item.fullDescription,
-      price: item.price,
+      price: activePrice,
       image: item.image,
-      categoryId: "signature",
-      categorySlug: "signature",
+      categoryId: liveProduct?.categoryId || "momo",
+      categorySlug: liveProduct?.categorySlug || "momo",
       type: item.type,
       quantity: item.quantity,
     };
@@ -148,14 +158,14 @@ function SignatureCard({ item }: { item: SignatureItem }) {
         {/* Price & Order Now Button */}
         <div className="flex items-center justify-between mt-4 pt-2">
           <span className="font-secondary font-bold text-xl sm:text-2xl text-[#D92121]">
-            ₹{item.price}
+            ₹{activePrice}
           </span>
 
           <button
             type="button"
             onClick={handleOrderNow}
             className="bg-[#D92121] hover:bg-[#b81b1b] text-white font-secondary font-medium text-xs sm:text-sm px-5 sm:px-6 py-2 sm:py-2.5 rounded-full transition-all duration-200 active:scale-95 shadow-xs cursor-pointer select-none"
-            aria-label={`Order ${item.name} for ₹${item.price}`}
+            aria-label={`Order ${activeName} for ₹${activePrice}`}
           >
             Order Now
           </button>
