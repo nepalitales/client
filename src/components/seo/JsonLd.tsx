@@ -116,7 +116,7 @@ export function RestaurantJsonLd({
       jobTitle: f.role,
       description: f.details,
       knowsAbout: [
-        "Himalayan Cuisine",
+        "Nepali Cuisine",
         "Authentic Momo Crafting",
         "Artisanal Chilli Oil",
         "Traditional Jhol",
@@ -140,7 +140,7 @@ export function RestaurantJsonLd({
             name: "Where is Nepali Tales located?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: `Nepali Tales is located at Metropolis Riveria, Shop No-2, Kasarvadavali, Ghodbunder Road, Thane, Maharashtra 400615. Contact: +91 76780 97659.`,
+              text: `Nepali Tales is located at Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, Thane, Maharashtra 400615. Contact: +91 76780 97659.`,
             },
           },
           {
@@ -153,7 +153,7 @@ export function RestaurantJsonLd({
           },
           {
             "@type": "Question",
-            name: "What makes Nepali Tales momos different from regular momos?",
+            name: "What makes Nepali Tales momo different from regular momo?",
             acceptedAnswer: {
               "@type": "Answer",
               text: "Ashika and Dipesh wake up at 5:00 AM daily to craft thin hand-rolled dough, fresh seasoned stuffing, slow-simmered herbal jhol, and fresh chutneys from scratch. They follow generational recipes from the Indo-Bhutan border rather than commercial shortcuts.",
@@ -164,7 +164,7 @@ export function RestaurantJsonLd({
             name: "What is Nepali Tales' viral chilli oil?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Nepali Tales' artisanal chilli oil is a slow-infused condiment featuring aromatic roasted spices, crispy garlic, and select Himalayan chillies. It gained viral popularity on Instagram (@nepali_tales) and has become a household staple for diners across Thane and Mumbai.",
+              text: "Nepali Tales' artisanal chilli oil is a slow-infused condiment featuring aromatic roasted spices, crispy garlic, and select Nepali chillies. It gained viral popularity on Instagram (@nepali_tales) and has become a household staple for diners across Thane and Mumbai.",
             },
           },
           {
@@ -172,7 +172,7 @@ export function RestaurantJsonLd({
             name: "How do I order from Nepali Tales?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "You can place your order directly via WhatsApp or phone at +91 76780 97659, email Nepalitales2025@gmail.com, or visit the outlet at Metropolis Riveria, Kasarvadavali, Ghodbunder Road, Thane.",
+              text: "You can place your order directly via WhatsApp or phone at +91 76780 97659, email Nepalitales2025@gmail.com, or visit the outlet at Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, Thane.",
             },
           },
           {

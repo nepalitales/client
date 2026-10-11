@@ -176,14 +176,14 @@ export function Footer() {
                 {siteConfig.name}
               </span>
               <p className="text-xs text-neutral-500 font-secondary mt-1">
-                Authentic Himalayan Cloud Kitchen • Thane
+                Authentic Nepali Cloud Kitchen • Thane
               </p>
             </div>
 
             {/* Address */}
             <div className="pt-1 text-sm text-neutral-600 font-secondary leading-relaxed">
-              <p>Metropolis Aquaris Building, Zone 1, Main Road,</p>
-              <p>Kasarvadavli, Thane West, 400615</p>
+              <p>Metropolis Rivera, Shop No 10, Kasarvadavali,</p>
+              <p>Opp to Laxmi Narayan Mandir, Thane West, 400615</p>
             </div>
 
             {/* Social Media Links: Instagram & YouTube (Icons Only) */}

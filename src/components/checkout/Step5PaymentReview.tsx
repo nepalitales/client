@@ -82,7 +82,7 @@ export function Step5PaymentReview() {
           amount: serverResult.razorpay!.amount,
           currency: serverResult.razorpay!.currency || "INR",
           name: "Nepali Tales",
-          description: "Artisanal Himalayan Momos Pre-Order",
+          description: "Artisanal Nepali Momo Pre-Order",
           order_id: serverResult.razorpay!.orderId,
           prefill: {
             name: contactInfo.name,

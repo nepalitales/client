@@ -242,7 +242,7 @@ export function CartDrawer() {
             <p className="line-clamp-1">
               {isOpenNow ? (
                 <span>
-                  <strong>Ordering Open</strong> — Preparing for next dispatch slot
+                  <strong>Ordering Open</strong> - Preparing for next dispatch slot
                 </span>
               ) : (
                 <span>
@@ -267,7 +267,7 @@ export function CartDrawer() {
                     Your bag is empty
                   </h3>
                   <p className="font-secondary text-sm text-neutral-500 max-w-xs">
-                    Looks like you haven&apos;t added any handcrafted momos yet.
+                    Looks like you haven&apos;t added any handcrafted momo yet.
                   </p>
                 </div>
                 <button
@@ -284,11 +284,11 @@ export function CartDrawer() {
                 onWheel={(e) => e.stopPropagation()}
                 className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5 custom-scrollbar overscroll-contain touch-pan-y"
               >
-                {/* 1. Momos Dishes List */}
+                {/* 1. Momo Dishes List */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between pb-1 border-b border-neutral-100">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-secondary">
-                      Momos ({totalDishesCount})
+                      Momo ({totalDishesCount})
                     </span>
                     {totalDishesCount >= 12 && (
                       <span className="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full font-medium">
@@ -479,7 +479,7 @@ export function CartDrawer() {
                           </span>
                         </h4>
                         <p className="text-[11px] text-neutral-500 font-secondary mt-0.5">
-                          Slow-simmered chilli oil &amp; authentic Himalayan dips
+                          Slow-simmered chilli oil &amp; authentic dips
                         </p>
                       </div>
                     </div>
@@ -575,7 +575,7 @@ export function CartDrawer() {
               <div className="space-y-1.5 text-xs text-neutral-600">
                 <div className="flex justify-between">
                   <span>
-                    Momos Subtotal ({totalDishesCount} {totalDishesCount === 1 ? "dish" : "dishes"})
+                    Momo Subtotal ({totalDishesCount} {totalDishesCount === 1 ? "dish" : "dishes"})
                   </span>
                   <span className="font-semibold text-neutral-900">
                     ₹{itemsSubtotal}

@@ -1,5 +1,5 @@
 /**
- * Nepali Tales — Client API Client
+ * Nepali Tales - Client API Client
  *
  * Public client API integration for order windows, categories, products, and FAQs.
  */
@@ -390,7 +390,7 @@ export const FALLBACK_FAQS: ClientFaq[] = [
     id: "faq_2",
     question: "Do you have dine-in facilities?",
     answer:
-      "We are currently a delivery-only cloud kitchen focused on bringing you authentic Himalayan momos and slow-simmered artisanal chilli oil.",
+      "We are currently a delivery-only cloud kitchen focused on bringing you authentic Nepali momo and slow-simmered artisanal chilli oil.",
     category: "General",
     displayOrder: 2,
   },
@@ -404,9 +404,9 @@ export const FALLBACK_FAQS: ClientFaq[] = [
   },
   {
     id: "faq_4",
-    question: "Are your momos spicy?",
+    question: "Are your momo spicy?",
     answer:
-      "The momos themselves are mildly spiced and flavorful so everyone can enjoy them. Our famous slow-simmered artisanal chilli oil and fiery red chutney are packed separately so you control the heat!",
+      "The momo themselves are mildly spiced and flavorful so everyone can enjoy them. Our famous slow-simmered artisanal chilli oil and fiery red chutney are packed separately so you control the heat!",
     category: "Food",
     displayOrder: 4,
   },

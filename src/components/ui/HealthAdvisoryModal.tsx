@@ -92,7 +92,7 @@ export function HealthAdvisoryModal() {
           <p className="mt-4 font-secondary text-xs sm:text-sm text-neutral-600 leading-relaxed">
             In compliance with Food Safety and Standards Authority of India
             (FSSAI) regulations, we transparently declare the presence of MSG in
-            our authentic seasoned momos and broths. Individuals with glutamate
+            our authentic seasoned momo and broths. Individuals with glutamate
             sensitivities, pregnant women, and parents are advised to review this
             prior to consumption.
           </p>

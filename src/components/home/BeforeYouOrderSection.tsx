@@ -17,7 +17,7 @@ const STEPS: StepItem[] = [
     title: "Order in Advance",
     description: "Order 1 day ahead so we can prepare your momo fresh.",
     image: "/assets/before-you-order-section/order-in-advance.png",
-    imageAlt: "Calendar with 2-3 hours and steaming basket of fresh momos",
+    imageAlt: "Calendar with 2-3 hours and steaming basket of fresh momo",
   },
   {
     step: 2,

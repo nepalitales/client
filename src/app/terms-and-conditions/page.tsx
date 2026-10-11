@@ -85,7 +85,7 @@ export default function TermsAndConditionsPage() {
             </h2>
             <p>
               Our website serves as a digital storefront and informational
-              platform for authentic Himalayan momos, signature jhol broths, and
+              platform for authentic Nepali momo, signature jhol broths, and
               artisanal chilli oil prepared fresh daily at our kitchen in
               Thane. You may use this website to:
             </p>
@@ -255,7 +255,7 @@ export default function TermsAndConditionsPage() {
               7. Food Allergens, Statutory MSG &amp; Consumption Advisory
             </h2>
             <p>
-              Our dishes are handcrafted using authentic Himalayan recipes.
+              Our dishes are handcrafted using authentic Nepali recipes.
               In accordance with FSSAI statutory labelling requirements, select
               seasoned dishes contain added Monosodium Glutamate (MSG).{" "}
               <strong className="text-neutral-950">

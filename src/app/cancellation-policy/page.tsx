@@ -140,7 +140,7 @@ export default function CancellationPolicyPage() {
               <p className="text-sm text-neutral-600 leading-relaxed">
                 The kitchen management will evaluate the request and determine
                 the refund percentage (if any). Because handcrafted artisanal
-                momos, traditional jhol broths, and specialty chilli oil incur
+                momo, traditional jhol broths, and specialty chilli oil incur
                 immediate raw material costs and manual preparation for that
                 specific selective order, refunds for post-window cancellations
                 are assessed based on the stage of preparation:

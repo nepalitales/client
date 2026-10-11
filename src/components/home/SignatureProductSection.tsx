@@ -28,7 +28,7 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
     shortDescription:
       "Bite-sized dumplings filled with fresh and finely chopped cabbage ,onion ,soya chunks.....",
     fullDescription:
-      "Bite-sized dumplings filled with fresh and finely chopped cabbage, onion, soya chunks, and Himalayan herbs, pan-fried until golden and crispy on the bottom while tender on top.",
+      "Bite-sized dumplings filled with fresh and finely chopped cabbage, onion, soya chunks, and Nepali herbs, pan-fried until golden and crispy on the bottom while tender on top.",
   },
   {
     id: "sig_chicken_jhol",
@@ -52,7 +52,7 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
     shortDescription:
       "Made of crispy fried bread stuffed with seasoned minced chicken, ....",
     fullDescription:
-      "Made of crispy fried bread stuffed with seasoned minced chicken, onions, and authentic Himalayan spices, served piping hot with signature dipping chutneys.",
+      "Made of crispy fried bread stuffed with seasoned minced chicken, onions, and authentic Nepali spices, served piping hot with signature dipping chutneys.",
   },
 ];
 

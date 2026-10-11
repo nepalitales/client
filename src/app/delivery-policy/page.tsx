@@ -52,7 +52,7 @@ export default function DeliveryPolicyPage() {
           </div>
 
           <p className="mt-5 text-base sm:text-lg text-neutral-600 leading-relaxed font-secondary max-w-4xl">
-            To bring hot, freshly steamed Himalayan momos, soulful jhol broths,
+            To bring hot, freshly steamed Nepali momo, soulful jhol broths,
             and artisanal chilli oil directly to your doorstep, {siteConfig.name}{" "}
             partners with dedicated on-demand third-party courier services.
             Please read this policy carefully regarding delivery payments,
@@ -194,7 +194,7 @@ export default function DeliveryPolicyPage() {
             <ol className="list-decimal pl-5 space-y-2 text-neutral-600">
               <li>
                 <strong className="text-neutral-900">Kitchen Preparation:</strong> 20 to 35 minutes depending
-                on order size, dish variety, and whether momos are steamed or
+                on order size, dish variety, and whether momo are steamed or
                 crispy kothey pan-fried.
               </li>
               <li>
@@ -249,7 +249,7 @@ export default function DeliveryPolicyPage() {
               two-wheeler transit.
             </p>
             <p>
-              For traditional Jhol Momos, broth and dumplings are packaged
+              For traditional Jhol Momo, broth and dumplings are packaged
               separately to ensure dumplings retain their tender wrapper texture
               until you pour the piping hot broth at home.
             </p>

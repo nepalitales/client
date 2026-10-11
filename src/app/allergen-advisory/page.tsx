@@ -209,7 +209,7 @@ export default function AllergenAdvisoryPage() {
               4. Safe Handling &amp; Consumption Notice
             </h2>
             <p>
-              Freshly steamed dumplings and warm Himalayan jhol broths are made
+              Freshly steamed dumplings and warm Nepali jhol broths are made
               daily without artificial preservatives. To ensure optimal taste,
               texture, and microbial safety:
             </p>
@@ -218,7 +218,7 @@ export default function AllergenAdvisoryPage() {
                 Consume food immediately upon delivery while piping hot.
               </li>
               <li>
-                Do not leave cooked momos or warm broths at room temperature for
+                Do not leave cooked momo or warm broths at room temperature for
                 extended periods.
               </li>
               <li>

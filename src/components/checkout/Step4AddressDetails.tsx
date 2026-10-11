@@ -246,7 +246,7 @@ export function Step4AddressDetails() {
               </span>
             </div>
             <p className="text-[11px] text-neutral-600 leading-relaxed">
-              Metropolis Riveria, Kasarvadavali, Ghodbunder Road, Thane West - 400615.
+              Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, Thane West - 400615.
             </p>
             <div className="flex items-start gap-1.5 pt-1 text-[11px] text-neutral-500">
               <Info className="w-3.5 h-3.5 shrink-0 text-neutral-400 mt-0.5" />

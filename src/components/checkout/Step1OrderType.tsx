@@ -74,7 +74,7 @@ export function Step1OrderType() {
                 <span className="text-emerald-600 font-bold uppercase">Free (₹0)</span>
               </div>
               <p className="text-neutral-500 leading-relaxed text-[11px]">
-                Collect hot from our cloud kitchen at Metropolis Riveria, Kasarvadavali, Thane West.
+                Collect hot from our cloud kitchen at Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, Thane West.
               </p>
             </>
           )}

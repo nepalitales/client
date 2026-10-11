@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { siteConfig } from "@/config/site";
 
-export const alt = "Nepali Tales — Authentic Himalayan Momos & Artisanal Chilli Oil";
+export const alt = "Nepali Tales - Authentic Nepali Momo & Artisanal Chilli Oil";
 export const size = {
   width: 1200,
   height: 630,
@@ -129,7 +129,7 @@ export default function Image() {
               Kitchen Location
             </div>
             <div style={{ fontSize: "18px", fontWeight: 600, color: "#FFFFFF" }}>
-              Shop No. 2, Metropolis Riveria, Thane — 400615
+              Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir - 400615
             </div>
           </div>
 
