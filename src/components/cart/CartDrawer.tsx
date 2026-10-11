@@ -306,7 +306,7 @@ export function CartDrawer() {
                       return (
                         <div
                           key={product.id}
-                          className="[&:not(:first-child)]:pt-4 flex items-center gap-3 sm:gap-4"
+                          className="not-first:pt-4 flex items-center gap-3 sm:gap-4"
                         >
                           {/* Thumbnail */}
                           <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-neutral-200/80 shadow-2xs">
