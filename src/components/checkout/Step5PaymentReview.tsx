@@ -263,7 +263,17 @@ export function Step5PaymentReview() {
 
           <p className="text-neutral-500 text-[11px] truncate">
             {orderType === "delivery"
-              ? [address.apartment, address.building, address.street, address.city && !address.city.toLowerCase().includes("thane") ? address.city : "Mumbai"].filter(Boolean).join(", ")
+              ? [
+                  address.flatNumber ? `Flat ${address.flatNumber}` : address.apartment,
+                  address.wing ? `Wing ${address.wing}` : null,
+                  address.addressLine1 || address.building,
+                  address.addressLine2 || address.street,
+                  address.landmark,
+                  address.city || "Thane",
+                  address.pincode,
+                ]
+                  .filter(Boolean)
+                  .join(", ")
               : `Contact: ${contactInfo.name || "Customer"} · +91 ${contactInfo.phone}`}
           </p>
         </div>
