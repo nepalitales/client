@@ -198,14 +198,158 @@ export async function getClientOrderWindows(
   return cachedOrderWindowsPromise;
 }
 
-/**
- * Format order window schedule into the standardized banner text:
- * ORDER WINDOW · MON–SAT · 10 AM–6 PM · CLOSED ON SUNDAYS & HOLIDAYS
- */
-export function formatOrderWindowBannerText(
-  orderWindows: OrderWindowDayConfig[]
-): string {
-  if (!orderWindows || orderWindows.length === 0) return "";
+export interface HolidayItem {
+  id?: string;
+  date: string; // "YYYY-MM-DD"
+  reason?: string;
+}
+
+export interface ClientHolidaysResponse {
+  success: boolean;
+  holidays: HolidayItem[];
+}
+
+const HOLIDAYS_CACHE_KEY = "nt_client_holidays_cache";
+const HOLIDAYS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+let cachedHolidaysPromise: Promise<ClientHolidaysResponse | null> | null = null;
+
+export async function getClientHolidays(
+  forceRefresh = false
+): Promise<ClientHolidaysResponse | null> {
+  if (cachedHolidaysPromise && !forceRefresh) {
+    return cachedHolidaysPromise;
+  }
+
+  if (!forceRefresh && typeof window !== "undefined") {
+    try {
+      const raw = sessionStorage.getItem(HOLIDAYS_CACHE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Date.now() - parsed.timestamp < HOLIDAYS_CACHE_TTL_MS) {
+          cachedHolidaysPromise = Promise.resolve(parsed.data);
+          return parsed.data;
+        }
+      }
+    } catch {
+      // Storage access blocked or unavailable
+    }
+  }
+
+  cachedHolidaysPromise = (async () => {
+    try {
+      const res = await clientFetch("/holidays", {
+        cache: "default",
+      });
+      if (!res.ok) return null;
+      const json: ClientHolidaysResponse = await res.json();
+      if (typeof window !== "undefined" && json?.success) {
+        try {
+          sessionStorage.setItem(
+            HOLIDAYS_CACHE_KEY,
+            JSON.stringify({ timestamp: Date.now(), data: json })
+          );
+        } catch {
+          // ignore quota limits
+        }
+      }
+      return json;
+    } catch (err) {
+      console.warn("[Holidays API] Error fetching holidays:", err);
+      return null;
+    }
+  })();
+
+  return cachedHolidaysPromise;
+}
+
+export interface HolidayBannerDetail {
+  text: string;
+  isToday: boolean;
+  dateFormatted: string;
+  reason?: string;
+}
+
+export function formatHolidayNotice(
+  holidays?: HolidayItem[]
+): HolidayBannerDetail | null {
+  if (!holidays || holidays.length === 0) return null;
+
+  // Format today's date in IST (Asia/Kolkata)
+  const now = new Date();
+  const istFormatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const todayIST = istFormatter.format(now); // "YYYY-MM-DD"
+
+  // Only consider today or future holidays, sorted by date ascending
+  const upcoming = holidays
+    .filter((h) => h.date >= todayIST)
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  if (upcoming.length === 0) return null;
+
+  const target = upcoming[0];
+  const isToday = target.date === todayIST;
+
+  // Format date display (e.g. "OCT 11")
+  const [y, m, d] = target.date.split("-").map(Number);
+  const dateObj = new Date(Date.UTC(y, m - 1, d));
+  const monthStr = dateObj
+    .toLocaleDateString("en-US", { month: "short", timeZone: "UTC" })
+    .toUpperCase();
+  const dateFormatted = `${monthStr} ${d}`;
+  const reasonClean = target.reason ? target.reason.trim().toUpperCase() : "";
+
+  let text = "";
+  if (isToday) {
+    text = reasonClean
+      ? `CLOSED TODAY (${dateFormatted} - ${reasonClean})`
+      : `CLOSED TODAY (${dateFormatted})`;
+  } else {
+    const tomorrowDate = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    const tomorrowIST = istFormatter.format(tomorrowDate);
+    const isTomorrow = target.date === tomorrowIST;
+
+    if (isTomorrow) {
+      text = reasonClean
+        ? `CLOSED TOMORROW (${dateFormatted} - ${reasonClean})`
+        : `CLOSED TOMORROW (${dateFormatted})`;
+    } else {
+      text = reasonClean
+        ? `HOLIDAY ON ${dateFormatted} (${reasonClean})`
+        : `HOLIDAY ON ${dateFormatted}`;
+    }
+  }
+
+  return {
+    text,
+    isToday,
+    dateFormatted,
+    reason: target.reason,
+  };
+}
+
+export function getOrderWindowBannerParts(
+  orderWindows: OrderWindowDayConfig[],
+  holidays?: HolidayItem[]
+): {
+  scheduleText: string;
+  closedText: string;
+  holidayInfo: HolidayBannerDetail | null;
+  fullText: string;
+} {
+  if (!orderWindows || orderWindows.length === 0) {
+    return {
+      scheduleText: "",
+      closedText: "",
+      holidayInfo: null,
+      fullText: "",
+    };
+  }
 
   const dayOrder: (
     | "monday"
@@ -272,7 +416,12 @@ export function formatOrderWindowBannerText(
   }
 
   if (openDays.length === 0) {
-    return "ORDER WINDOW · CURRENTLY CLOSED";
+    return {
+      scheduleText: "ORDER WINDOW · CURRENTLY CLOSED",
+      closedText: "",
+      holidayInfo: null,
+      fullText: "ORDER WINDOW · CURRENTLY CLOSED",
+    };
   }
 
   let openRange = "";
@@ -284,16 +433,48 @@ export function formatOrderWindowBannerText(
     openRange = shortMap[openDays[0]];
   }
 
+  const scheduleText = ["ORDER WINDOW", openRange, timeStr].filter(Boolean).join(" · ");
+
   let closedText = "";
   if (closedDays.length > 0) {
     const closedNames = closedDays
       .map((d) => pluralMap[d] || d.toUpperCase())
       .join(" & ");
-    closedText = `CLOSED ON ${closedNames} & HOLIDAYS`;
+    closedText = `CLOSED ON ${closedNames}`;
   }
 
-  const parts = ["ORDER WINDOW", openRange, timeStr, closedText].filter(Boolean);
-  return parts.join(" · ");
+  const holidayInfo = formatHolidayNotice(holidays);
+
+  let fullClosedSegment = "";
+  if (closedText) {
+    if (holidayInfo) {
+      fullClosedSegment = `${closedText} · ${holidayInfo.text}`;
+    } else {
+      fullClosedSegment = `${closedText} & HOLIDAYS`;
+    }
+  } else if (holidayInfo) {
+    fullClosedSegment = holidayInfo.text;
+  }
+
+  const fullText = [scheduleText, fullClosedSegment].filter(Boolean).join(" · ");
+
+  return {
+    scheduleText,
+    closedText,
+    holidayInfo,
+    fullText,
+  };
+}
+
+/**
+ * Format order window schedule and holidays into the standardized banner text:
+ * ORDER WINDOW · MON–SAT · 10 AM–6 PM · CLOSED ON SUNDAYS & HOLIDAYS
+ */
+export function formatOrderWindowBannerText(
+  orderWindows: OrderWindowDayConfig[],
+  holidays?: HolidayItem[]
+): string {
+  return getOrderWindowBannerParts(orderWindows, holidays).fullText;
 }
 
 // ─── 2. Products & Categories API ─────────────────────────────────
