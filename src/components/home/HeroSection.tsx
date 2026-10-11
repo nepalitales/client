@@ -14,19 +14,19 @@ export function HeroSection() {
             and all text underneath (order-2 and order-3).
             On desktop (lg+): relative container with image absolute top-0 sticking to the banner,
             and text flanking left and bottom-right. */}
-        <div className="relative flex flex-col lg:min-h-[580px] xl:min-h-[640px] lg:justify-between">
+        <div className="relative flex flex-col lg:min-h-[640px] xl:min-h-[720px] 2xl:min-h-[780px] lg:justify-between">
           
           {/* ─── 1. Momo Visual ───────────────────────────────────────── */}
           {/* Sticks to the black order window tab at pt-0 / top-0 */}
           <div className="order-1 lg:order-none lg:absolute lg:top-0 lg:left-0 lg:right-0 flex justify-center pointer-events-none z-0 mt-0">
-            <div className="w-full max-w-[310px] sm:max-w-[420px] md:max-w-[520px] lg:max-w-[680px] xl:max-w-[760px] transition-transform duration-700 ease-out hover:scale-[1.015]">
+            <div className="w-full max-w-[310px] sm:max-w-[420px] md:max-w-[520px] lg:max-w-[820px] xl:max-w-[940px] 2xl:max-w-[1020px] transition-transform duration-700 ease-out hover:scale-[1.015]">
               <Image
                 src="/assets/herosection/hero-img.webp"
                 alt="Authentic Nepali Momo held with wooden chopsticks"
                 width={3620}
                 height={2808}
                 priority
-                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 70vw, 760px"
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 70vw, (max-width: 1280px) 820px, (max-width: 1536px) 940px, 1020px"
                 className="w-full h-auto object-contain select-none"
               />
             </div>
