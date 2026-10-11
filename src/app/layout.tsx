@@ -37,6 +37,15 @@ export const metadata: Metadata = {
     default: "Nepali Tales - Authentic Nepali Momo",
     template: `%s | ${siteConfig.name}`,
   },
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/icon.png",
+  },
   description: siteConfig.description,
   applicationName: siteConfig.name,
   authors: siteConfig.founders.map((f) => ({ name: f.name })),
