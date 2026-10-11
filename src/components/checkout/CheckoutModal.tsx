@@ -163,10 +163,10 @@ export function CheckoutModal() {
         ref={panelRef}
         data-lenis-prevent
         onWheel={(e) => e.stopPropagation()}
-        className="relative w-full max-w-[420px] bg-white rounded-2xl sm:rounded-[20px] shadow-[0_20px_50px_rgba(0,0,0,0.22)] flex flex-col pointer-events-auto max-h-[92vh] overflow-hidden border border-neutral-100 z-10 my-auto"
+        className="relative w-full max-w-[480px] sm:max-w-[520px] md:max-w-[540px] bg-white rounded-2xl sm:rounded-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.22)] flex flex-col pointer-events-auto max-h-[92vh] overflow-hidden border border-neutral-100 z-10 my-auto"
       >
         {/* ─── Top Header Bar: Chevron, Centered Title, Close Button ─── */}
-        <div className="px-6 pt-5 pb-2 flex items-center justify-between shrink-0 bg-white">
+        <div className="px-6 sm:px-8 pt-5 pb-2 flex items-center justify-between shrink-0 bg-white">
           {canGoBack ? (
             <button
               type="button"
@@ -198,7 +198,7 @@ export function CheckoutModal() {
         <div
           data-lenis-prevent
           onWheel={(e) => e.stopPropagation()}
-          className="px-6 pb-6 pt-2 overflow-y-auto flex-1 font-secondary custom-scrollbar overscroll-contain touch-pan-y"
+          className="px-6 sm:px-8 pb-6 pt-2 overflow-y-auto flex-1 font-secondary custom-scrollbar overscroll-contain touch-pan-y"
         >
           {currentStep === "ORDER_TYPE" && <Step1OrderType />}
           {currentStep === "DELIVERY_SLOT" && <Step2DeliverySlot />}
