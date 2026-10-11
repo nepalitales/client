@@ -26,9 +26,9 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
     price: 219,
     image: "/assets/signature-product-section/veg-kothey-momo.png",
     shortDescription:
-      "Bite-sized dumplings filled with fresh and finely chopped cabbage ,onion ,soya chunks.....",
+      "Bite-sized dumplings filled with fresh and finely chopped cabbage, onion, soya chunks.....",
     fullDescription:
-      "Bite-sized dumplings filled with fresh and finely chopped cabbage, onion, soya chunks, and Nepali herbs, pan-fried until golden and crispy on the bottom while tender on top.",
+      "Bite-sized dumplings filled with fresh and finely chopped cabbage, onion, soya chunks and wrapped in a thin, soft flour dough. Steamed and only bottom part of momo is pan fried. Served with peanut chutney, red spicy chutney, and chilli oil.",
   },
   {
     id: "sig_chicken_jhol",
@@ -38,21 +38,21 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
     price: 249,
     image: "/assets/signature-product-section/chicken-jhol-momo.png",
     shortDescription:
-      "Steamed momo is served with a soup which is rich, creamy, and nutty flavor.....",
+      "Steamed momo is served with the soup which is rich and creamy, and nutty flavour.....",
     fullDescription:
-      "Steamed momo is served with a soup which is rich, creamy, and nutty flavor, crafted from roasted sesame seeds, juicy tomatoes, timur, and slow-simmered spices.",
+      "Steamed momo is served with the soup which is rich and creamy, and nutty flavour from roasted sesame seeds and peanut, soyabean. Momo and jhol is packed separately and chilli oil.",
   },
   {
     id: "sig_chicken_shaphaley",
-    name: "Chicken Shaphaley Momo",
+    name: "Chicken Shaphaley",
     type: "non-veg",
     quantity: "2 pcs",
     price: 239,
     image: "/assets/signature-product-section/chicken-shaphaley.png",
     shortDescription:
-      "Made of crispy fried bread stuffed with seasoned minced chicken, ....",
+      "Made of crispy fried bread stuffed with seasoned minced chicken, onions, and spices.....",
     fullDescription:
-      "Made of crispy fried bread stuffed with seasoned minced chicken, onions, and authentic Nepali spices, served piping hot with signature dipping chutneys.",
+      "Made of crispy fried bread stuffed with seasoned minced chicken, onions, and spices. Served with peanut chutney, red spicy chutney, and chilli oil.",
   },
 ];
 
