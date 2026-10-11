@@ -1,37 +1,54 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { getOrderWindowStatus } from "@/lib/api";
+import {
+  getClientOrderWindows,
+  subscribeToLiveCatalogUpdates,
+} from "@/lib/api";
 
 export function FreshOutOfKitchenSection() {
-  const [windowText, setWindowText] = useState<string>("06:00 AM-08:00 AM");
+  const [windowText, setWindowText] = useState<string>("");
 
   useEffect(() => {
     let isMounted = true;
-    getOrderWindowStatus()
-      .then((status) => {
-        if (!isMounted || !status?.activeWindows?.length) return;
-        const w = status.activeWindows[0];
-        const formatH = (t: string) => {
-          const [hStr, mStr] = t.split(":");
-          let h = parseInt(hStr, 10);
-          const m = parseInt(mStr || "0", 10);
-          const ampm = h >= 12 ? "PM" : "AM";
-          h = h % 12 || 12;
-          const padH = h < 10 ? `0${h}` : `${h}`;
-          const padM = m < 10 ? `0${m}` : `${m}`;
-          return `${padH}:${padM} ${ampm}`;
-        };
-        setWindowText(`${formatH(w.start)}-${formatH(w.end)}`);
-      })
-      .catch(() => {
-        // Fallback to static design default
-      });
+
+    const fetchWindows = (force = false) => {
+      getClientOrderWindows(force)
+        .then((res) => {
+          if (!isMounted || !res?.success || !res.orderWindows) return;
+          const enabledDay = res.orderWindows.find(
+            (d) => d.enabled && d.windows && d.windows.length > 0
+          );
+          if (enabledDay && enabledDay.windows.length > 0) {
+            const w = enabledDay.windows[0];
+            const formatH = (t: string) => {
+              const [hStr, mStr] = t.split(":");
+              let h = parseInt(hStr, 10);
+              const m = parseInt(mStr || "0", 10);
+              const ampm = h >= 12 ? "PM" : "AM";
+              h = h % 12 || 12;
+              const padH = h < 10 ? `0${h}` : `${h}`;
+              const padM = m < 10 ? `0${m}` : `${m}`;
+              return `${padH}:${padM} ${ampm}`;
+            };
+            setWindowText(`${formatH(w.start)} - ${formatH(w.end)}`);
+          }
+        })
+        .catch((err) => {
+          console.warn("[FreshOutOfKitchenSection] Could not fetch order windows:", err);
+        });
+    };
+
+    fetchWindows(true);
+
+    const unsubscribe = subscribeToLiveCatalogUpdates(() => {
+      fetchWindows(true);
+    });
 
     return () => {
       isMounted = false;
+      unsubscribe();
     };
   }, []);
 
@@ -42,45 +59,16 @@ export function FreshOutOfKitchenSection() {
     >
       <div className="figma-container">
 
-        {/* ─── Block 2: Headline with Inline Food Images ────────────── */}
-        <div className="text-center font-chunko text-[#D92121] tracking-[0.04em] uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[54px] leading-tight sm:leading-tight max-w-4xl mx-auto select-none">
-          {/* Line 1: WHERE [momo] GREAT FOOD */}
-          <div className="flex items-center justify-center flex-wrap gap-x-2 sm:gap-x-3 gap-y-1">
-            <span>WHERE</span>
-            <span className="inline-flex items-center justify-center h-8 sm:h-12 lg:h-14">
-              <Image
-                src="/assets/fresh-out-of-kitchen/momo.png"
-                alt="Fresh Steamed Momo"
-                width={80}
-                height={55}
-                priority
-                className="h-7 sm:h-11 lg:h-13 w-auto object-contain inline-block align-middle pointer-events-none"
-              />
-            </span>
-            <span>GREAT FOOD</span>
-          </div>
+        {/* ─── Headline: Clean Text Without Inline Food Images ──────── */}
+        <h2 className="text-center font-chunko text-[#D92121] tracking-[0.04em] uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[54px] leading-tight sm:leading-tight max-w-4xl mx-auto select-none">
+          <div>WHERE GREAT FOOD</div>
+          <div className="mt-1 sm:mt-2">BRINGS PEOPLE TOGETHER</div>
+        </h2>
 
-          {/* Line 2: BRINGS PEOPLE [shaphaley] TOGETHER */}
-          <div className="flex items-center justify-center flex-wrap gap-x-2 sm:gap-x-3 gap-y-1 mt-1 sm:mt-2">
-            <span>BRINGS PEOPLE</span>
-            <span className="inline-flex items-center justify-center h-8 sm:h-12 lg:h-14">
-              <Image
-                src="/assets/fresh-out-of-kitchen/shaphaley.png"
-                alt="Crispy Shaphaley with Chutneys"
-                width={100}
-                height={55}
-                priority
-                className="h-7 sm:h-11 lg:h-13 w-auto object-contain inline-block align-middle pointer-events-none"
-              />
-            </span>
-            <span>TOGETHER</span>
-          </div>
-        </div>
-
-        {/* ─── Order Window Announcement Bar ────────────────────────── */}
+        {/* ─── Order Window Announcement Bar (Dynamically from Server) ─ */}
         <div className="mt-8 sm:mt-10 max-w-xl mx-auto border-t border-b border-neutral-200/90 py-3 sm:py-3.5 px-4 text-center select-none">
           <p className="font-secondary font-black text-xs sm:text-sm lg:text-base tracking-wider text-neutral-900 uppercase">
-            ORDER WINDOW • {windowText}
+            ORDER WINDOW • {windowText || "02:00 PM - 04:00 PM"}
           </p>
         </div>
 
