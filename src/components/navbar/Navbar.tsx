@@ -68,11 +68,17 @@ export function Navbar() {
       <div className="figma-container">
         {/* ─── Desktop 3-Column Navigation Grid ─────────────────── */}
         <div className="hidden lg:grid grid-cols-3 items-center h-20">
-          {/* Left Column: Menu, About */}
+          {/* Left Column: Home, Menu, About */}
           <nav
             aria-label="Primary Left Navigation"
             className="flex items-center justify-start gap-8 font-secondary"
           >
+            <Link
+              href="/"
+              className="text-sm font-semibold tracking-wide text-neutral-800 hover:text-accent-red transition-colors"
+            >
+              Home
+            </Link>
             <Link
               href="/menu"
               className="text-sm font-semibold tracking-wide text-neutral-800 hover:text-accent-red transition-colors"
@@ -228,6 +234,13 @@ export function Navbar() {
               aria-label="Mobile Navigation"
               className="flex flex-col space-y-4 font-secondary text-base font-semibold text-neutral-900"
             >
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 hover:text-accent-red transition-colors border-b border-neutral-50"
+              >
+                Home
+              </Link>
               <Link
                 href="/menu"
                 onClick={() => setMobileMenuOpen(false)}
