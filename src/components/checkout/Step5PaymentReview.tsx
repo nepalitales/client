@@ -3,7 +3,12 @@
 import React, { useState } from "react";
 import { useCheckout } from "@/context/CheckoutContext";
 import { useCart } from "@/context/CartContext";
-import { createClientOrder, type CreateOrderPayload } from "@/lib/api";
+import {
+  createClientOrder,
+  verifyClientPayment,
+  loadRazorpayScript,
+  type CreateOrderPayload,
+} from "@/lib/api";
 import { Loader2, ShieldCheck } from "lucide-react";
 
 export function Step5PaymentReview() {
@@ -43,6 +48,15 @@ export function Step5PaymentReview() {
     setProcessingStatus("Initializing Razorpay Secure Checkout...");
 
     try {
+      // 1. Ensure Razorpay Checkout script is loaded
+      const isScriptLoaded = await loadRazorpayScript();
+      if (!isScriptLoaded) {
+        setPaymentError("Could not load payment gateway. Please check your internet connection and try again.");
+        setIsProcessing(false);
+        return;
+      }
+
+      // 2. Prepare order payload
       const orderPayload: CreateOrderPayload = {
         orderType,
         dispatchSlotId: selectedSlot?.id || "slot_default",
@@ -62,65 +76,123 @@ export function Step5PaymentReview() {
         address: orderType === "delivery" ? address : undefined,
       };
 
-      let serverResult = await createClientOrder(orderPayload);
+      // 3. Create order on server
+      const serverResult = await createClientOrder(orderPayload);
 
-      const hasRazorpayKey = Boolean(
-        serverResult?.success &&
-        serverResult?.razorpay?.orderId &&
-        serverResult?.razorpay?.keyId
-      );
+      if (!serverResult.success || !serverResult.order) {
+        setPaymentError(
+          serverResult.message || "Failed to create order. Please check slot availability and try again."
+        );
+        setIsProcessing(false);
+        return;
+      }
 
-      if (
-        hasRazorpayKey &&
-        typeof window !== "undefined" &&
-        (window as unknown as { Razorpay?: any }).Razorpay
-      ) {
+      // 4. Resolve Razorpay credentials from server response
+      const razorpayOrderId =
+        serverResult.razorpay?.orderId ||
+        serverResult.payment?.razorpayOrderId;
+      const razorpayKeyId =
+        serverResult.razorpay?.keyId ||
+        serverResult.payment?.keyId ||
+        process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+      const amount =
+        serverResult.razorpay?.amount ||
+        serverResult.payment?.amount ||
+        totalPayable * 100;
+      const currency =
+        serverResult.razorpay?.currency ||
+        serverResult.payment?.currency ||
+        "INR";
+
+      // 5. If Razorpay order ID and Key are present, open Razorpay Checkout modal
+      if (razorpayOrderId && razorpayKeyId && (window as unknown as { Razorpay?: any }).Razorpay) {
         setProcessingStatus("Opening Razorpay Modal...");
         const Razorpay = (window as unknown as { Razorpay: any }).Razorpay;
+
         const options = {
-          key: serverResult.razorpay!.keyId,
-          amount: serverResult.razorpay!.amount,
-          currency: serverResult.razorpay!.currency || "INR",
+          key: razorpayKeyId,
+          amount,
+          currency,
           name: "Nepali Tales",
           description: "Artisanal Nepali Momo Pre-Order",
-          order_id: serverResult.razorpay!.orderId,
+          order_id: razorpayOrderId,
           prefill: {
-            name: contactInfo.name,
-            email: contactInfo.email,
-            contact: contactInfo.phone,
+            name: contactInfo.name || user?.username || "",
+            email: contactInfo.email || user?.email || "",
+            contact: contactInfo.phone || user?.phone || "",
           },
           theme: { color: "#D92121" },
-          handler: function (response: any) {
-            handlePaymentSuccess({
-              orderId: serverResult.order?.id || `NT-${Math.floor(10000 + Math.random() * 90000)}`,
-              razorpayPaymentId: response.razorpay_payment_id,
-            });
+          modal: {
+            ondismiss: function () {
+              setIsProcessing(false);
+              setProcessingStatus("");
+            },
+          },
+          handler: async function (response: {
+            razorpay_payment_id: string;
+            razorpay_order_id: string;
+            razorpay_signature: string;
+          }) {
+            setProcessingStatus("Verifying secure payment with server...");
+            try {
+              const verifyRes = await verifyClientPayment({
+                orderId: serverResult.order!.id,
+                razorpayOrderId: response.razorpay_order_id,
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpaySignature: response.razorpay_signature,
+              });
+
+              if (verifyRes.success) {
+                handlePaymentSuccess({
+                  orderId: serverResult.order?.orderNumber || serverResult.order?.id || response.razorpay_order_id,
+                  serverOrder: verifyRes.order || serverResult.order,
+                  razorpayPaymentId: response.razorpay_payment_id,
+                });
+              } else {
+                setPaymentError(verifyRes.message || "Payment verification failed. Please contact support.");
+                setIsProcessing(false);
+              }
+            } catch {
+              // Network issue after successful charge - complete checkout with order info
+              handlePaymentSuccess({
+                orderId: serverResult.order?.orderNumber || serverResult.order?.id || response.razorpay_order_id,
+                serverOrder: serverResult.order,
+                razorpayPaymentId: response.razorpay_payment_id,
+              });
+            }
           },
         };
+
         const rzp = new Razorpay(options);
+        rzp.on("payment.failed", function (response: any) {
+          setIsProcessing(false);
+          setPaymentError(
+            response.error?.description || "Payment failed. Please choose another payment method or try again."
+          );
+        });
         rzp.open();
         setIsProcessing(false);
         return;
       }
 
-      // Simulated Sandbox / Micro-delay for dev test
-      setProcessingStatus("Authorizing payment with Razorpay UPI & Cards...");
-      await new Promise((r) => setTimeout(r, 1000));
+      // If development / simulated mode fallback
+      if (serverResult.payment?.isSimulated || serverResult.razorpay?.isSimulated) {
+        setProcessingStatus("Processing test sandbox payment...");
+        await new Promise((r) => setTimeout(r, 1200));
+        handlePaymentSuccess({
+          orderId: serverResult.order?.orderNumber || serverResult.order?.id || `NT-${Date.now().toString().slice(-5)}`,
+          serverOrder: serverResult.order,
+        });
+        return;
+      }
 
-      const generatedOrderId =
-        serverResult?.order?.id ||
-        serverResult?.order?.orderNumber ||
-        `NT-${Math.floor(10000 + Math.random() * 90000)}`;
-
-      handlePaymentSuccess({
-        orderId: generatedOrderId,
-        serverOrder: serverResult?.order,
-      });
-    } catch (err) {
-      console.warn("[Payment] Error during checkout:", err);
-      handlePaymentSuccess({
-        orderId: `NT-${Math.floor(10000 + Math.random() * 90000)}`,
-      });
+      // If Razorpay gateway is unconfigured on server
+      setPaymentError("Payment gateway is temporarily unavailable. Please try again shortly.");
+      setIsProcessing(false);
+    } catch (err: any) {
+      console.error("[Payment] Error during checkout:", err);
+      setPaymentError(err?.message || "An unexpected error occurred during checkout. Please try again.");
+      setIsProcessing(false);
     }
   };
 

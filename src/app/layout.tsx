@@ -6,6 +6,7 @@ import { RestaurantJsonLd } from "@/components/seo/JsonLd";
 import { CookieConsent } from "@/components/ui/CookieConsent";
 import { AppProviders } from "@/components/providers/AppProviders";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 import "./globals.css";
 
 const chunkoBold = localFont({
@@ -142,6 +143,10 @@ export default function RootLayout({
           <CookieConsent />
         </AppProviders>
         <Analytics />
+        <Script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );

@@ -1016,11 +1016,20 @@ export interface OrderPlacedResult {
     deliveryAddress?: ClientAddress;
     createdAt?: string;
   };
+  payment?: {
+    provider: string;
+    razorpayOrderId?: string;
+    keyId: string;
+    amount: number;
+    currency: string;
+    isSimulated?: boolean;
+  };
   razorpay?: {
     orderId: string;
     keyId: string;
     amount: number;
     currency: string;
+    isSimulated?: boolean;
     notes?: Record<string, string>;
   };
 }
@@ -1033,12 +1042,77 @@ export async function createClientOrder(
       method: "POST",
       body: JSON.stringify(payload),
     });
-    const data = await res.json();
+    const data: OrderPlacedResult = await res.json();
+
+    // Normalize Razorpay payload whether server returned data.payment or data.razorpay
+    if (data?.payment?.razorpayOrderId && !data.razorpay) {
+      data.razorpay = {
+        orderId: data.payment.razorpayOrderId,
+        keyId: data.payment.keyId,
+        amount: data.payment.amount,
+        currency: data.payment.currency || "INR",
+        isSimulated: data.payment.isSimulated,
+      };
+    }
+
     return data;
-  } catch (err) {
+  } catch {
     return {
       success: false,
       message: "Network error submitting order",
     };
   }
+}
+
+export interface VerifyPaymentPayload {
+  orderId: string;
+  razorpayOrderId: string;
+  razorpayPaymentId: string;
+  razorpaySignature: string;
+}
+
+export interface VerifyPaymentResult {
+  success: boolean;
+  message?: string;
+  order?: any;
+}
+
+export async function verifyClientPayment(
+  payload: VerifyPaymentPayload
+): Promise<VerifyPaymentResult> {
+  try {
+    const res = await clientFetch("/orders/verify-payment", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    const data: VerifyPaymentResult = await res.json();
+    return data;
+  } catch {
+    return {
+      success: false,
+      message: "Network error verifying payment with server",
+    };
+  }
+}
+
+/**
+ * Ensures Razorpay Checkout script (checkout.js) is loaded on the page.
+ */
+export function loadRazorpayScript(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined") {
+      resolve(false);
+      return;
+    }
+    if ((window as unknown as { Razorpay?: unknown }).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 }
