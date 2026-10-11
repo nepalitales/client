@@ -14,19 +14,19 @@ export function HeroSection() {
             and all text underneath (order-2 and order-3).
             On desktop (lg+): relative container with image absolute top-0 sticking to the banner,
             and text flanking left and bottom-right. */}
-        <div className="relative flex flex-col lg:min-h-160 xl:min-h-180 2xl:min-h-195 lg:justify-between">
+        <div className="relative flex flex-col lg:min-h-135 xl:min-h-150 2xl:min-h-165 lg:justify-between">
           
           {/* ─── 1. Momo Visual ───────────────────────────────────────── */}
           {/* Sticks to the black order window tab at pt-0 / top-0 */}
           <div className="order-1 lg:order-0 lg:absolute lg:top-0 lg:left-0 lg:right-0 flex justify-center pointer-events-none z-0 mt-0">
-            <div className="w-full max-w-77.5 sm:max-w-105 md:max-w-130 lg:max-w-205 xl:max-w-235 2xl:max-w-255 transition-transform duration-700 ease-out hover:scale-[1.015]">
+            <div className="w-full max-w-77.5 sm:max-w-105 md:max-w-130 lg:max-w-164 xl:max-w-188 2xl:max-w-204 transition-transform duration-700 ease-out hover:scale-[1.015]">
               <Image
                 src="/assets/herosection/hero-img.webp"
                 alt="Authentic Nepali Momo held with wooden chopsticks"
                 width={3620}
                 height={2808}
                 priority
-                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 70vw, (max-width: 1280px) 820px, (max-width: 1536px) 940px, 1020px"
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 70vw, (max-width: 1280px) 656px, (max-width: 1536px) 752px, 816px"
                 className="w-full h-auto object-contain select-none"
               />
             </div>
@@ -47,18 +47,24 @@ export function HeroSection() {
             </p>
           </div>
 
-          {/* ─── 3. Bottom-Right Featured Tag ──────────────────────────── */}
-          {/* Mobile: order-3 (at the bottom of the section)
+          {/* ─── 3. Bottom Featured Tag ────────────────────────────────── */}
+          {/* Mobile: order-3 (left-aligned under heading text)
               Desktop: lg:order-0 (aligned to bottom-right) */}
-          <div className="order-3 lg:order-0 relative z-10 flex justify-end self-end text-right mt-6 sm:mt-8 lg:mt-0 lg:pb-2 xl:pb-4">
-            <div>
+          <div className="order-3 lg:order-0 relative z-10 flex justify-start self-start text-left lg:justify-end lg:self-end lg:text-right mt-6 sm:mt-8 lg:mt-0 lg:pb-2 xl:pb-4">
+            <a
+              href="https://indianexpress.com/article/cities/mumbai/nepali-tales-thane-momos-prajakta-koli-masterchef-couple-10864209/lite/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-block cursor-pointer hover:opacity-85 transition-opacity"
+              aria-label="Read feature in The Indian Express (opens in a new tab)"
+            >
               <p className="font-secondary text-xs sm:text-sm md:text-[15px] text-neutral-700 font-normal leading-tight">
                 As featured in
               </p>
-              <p className="font-secondary text-sm sm:text-base md:text-lg font-bold text-neutral-950 leading-tight mt-0.5 sm:mt-1 tracking-tight">
+              <p className="font-secondary text-sm sm:text-base md:text-lg font-bold text-neutral-950 group-hover:text-accent-red leading-tight mt-0.5 sm:mt-1 tracking-tight transition-colors">
                 The Indian Express
               </p>
-            </div>
+            </a>
           </div>
 
         </div>
