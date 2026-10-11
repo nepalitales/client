@@ -19,6 +19,8 @@ import {
   DEFAULT_CLIENT_ORDER_SETTINGS,
   getClientMe,
   clientSignOut,
+  getClientAddresses,
+  saveClientAddress,
 } from "@/lib/api";
 
 export type CheckoutStep =
@@ -95,6 +97,10 @@ interface CheckoutContextType {
 
   address: ClientAddress;
   setAddress: React.Dispatch<React.SetStateAction<ClientAddress>>;
+  savedAddresses: ClientAddress[];
+  setSavedAddresses: React.Dispatch<React.SetStateAction<ClientAddress[]>>;
+  refreshUserAndAddresses: () => Promise<void>;
+  saveAddressToServer: (addr: ClientAddress) => Promise<ClientAddress | null>;
 
   deliveryFee: number;
 
@@ -122,6 +128,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
   const [selectedSlot, setSelectedSlot] = useState<AvailableSlotItem | null>(null);
 
   const [user, setUser] = useState<ClientUser | null>(null);
+  const [savedAddresses, setSavedAddresses] = useState<ClientAddress[]>([]);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     name: "",
     phone: "",
@@ -131,6 +138,10 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
 
   const [address, setAddress] = useState<ClientAddress>({
     label: "Home",
+    flatNumber: "",
+    wing: "",
+    addressLine1: "",
+    addressLine2: "",
     street: "",
     building: "",
     floor: "",
@@ -163,6 +174,66 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
     refreshOrderSettings();
   }, [refreshOrderSettings]);
 
+  // Fetch full user profile & all saved addresses from database
+  const refreshUserAndAddresses = useCallback(async () => {
+    try {
+      const liveUser = await getClientMe();
+      if (liveUser) {
+        setUser(liveUser);
+        setContactInfo((prev) => ({
+          ...prev,
+          name: liveUser.username || prev.name,
+          phone: liveUser.phone || prev.phone,
+          email: liveUser.email || prev.email,
+        }));
+        try {
+          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(liveUser));
+        } catch {}
+
+        // Fetch addresses from server DB
+        const serverAddresses = await getClientAddresses();
+        if (serverAddresses && serverAddresses.length > 0) {
+          setSavedAddresses(serverAddresses);
+          const defaultAddr = serverAddresses.find((a) => a.isDefault) || serverAddresses[0];
+          setAddress(defaultAddr);
+          try {
+            localStorage.setItem(LAST_ADDRESS_STORAGE_KEY, JSON.stringify(defaultAddr));
+          } catch {}
+        }
+      }
+    } catch (err) {
+      console.warn("[Checkout] Error loading live user & addresses:", err);
+    }
+  }, []);
+
+  // Save address directly to MongoDB server collection
+  const saveAddressToServer = useCallback(async (addrToSave: ClientAddress) => {
+    try {
+      const preparedAddr: ClientAddress = {
+        ...addrToSave,
+        street: addrToSave.addressLine2 || addrToSave.addressLine1 || addrToSave.street || "",
+        building: addrToSave.addressLine1 || addrToSave.building || "",
+        apartment: addrToSave.flatNumber || addrToSave.apartment || "",
+      };
+      const saved = await saveClientAddress(preparedAddr);
+      if (saved) {
+        setAddress(saved);
+        setSavedAddresses((prev) => {
+          const filtered = prev.filter((a) => a.id !== saved.id);
+          return [saved, ...filtered];
+        });
+        try {
+          localStorage.setItem(LAST_ADDRESS_STORAGE_KEY, JSON.stringify(saved));
+        } catch {}
+        return saved;
+      }
+      return null;
+    } catch (err) {
+      console.warn("[Checkout] Error saving address to server:", err);
+      return null;
+    }
+  }, []);
+
   // 2. Hydrate user from localStorage on mount & verify session via cookies / token
   useEffect(() => {
     try {
@@ -191,34 +262,8 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
       // Storage access blocked or invalid
     }
 
-    // Verify session with server using HttpOnly cookie and/or Bearer token
-    let isMounted = true;
-    async function verifyLiveSession() {
-      try {
-        const liveUser = await getClientMe();
-        if (!isMounted) return;
-        if (liveUser) {
-          setUser(liveUser);
-          setContactInfo((prev) => ({
-            ...prev,
-            name: liveUser.username || prev.name,
-            phone: liveUser.phone || prev.phone,
-            email: liveUser.email || prev.email,
-          }));
-          try {
-            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(liveUser));
-          } catch {}
-        }
-      } catch (err) {
-        console.warn("[Checkout] Session verification check:", err);
-      }
-    }
-    verifyLiveSession();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+    refreshUserAndAddresses();
+  }, [refreshUserAndAddresses]);
 
   const isLoggedIn = useMemo(() => {
     if (!user) return false;
@@ -252,10 +297,32 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
       await clientSignOut();
     } finally {
       setUser(null);
+      setSavedAddresses([]);
+      setContactInfo({
+        name: "",
+        phone: "",
+        email: "",
+        notes: "",
+      });
+      setAddress({
+        label: "Home",
+        flatNumber: "",
+        wing: "",
+        addressLine1: "",
+        addressLine2: "",
+        street: "",
+        building: "",
+        floor: "",
+        apartment: "",
+        landmark: "",
+        city: "Mumbai",
+        pincode: "",
+      });
       if (typeof window !== "undefined") {
         try {
           localStorage.removeItem(USER_STORAGE_KEY);
           localStorage.removeItem(TOKEN_STORAGE_KEY);
+          localStorage.removeItem(LAST_ADDRESS_STORAGE_KEY);
         } catch {}
       }
     }
@@ -382,6 +449,10 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
         setContactInfo,
         address,
         setAddress,
+        savedAddresses,
+        setSavedAddresses,
+        refreshUserAndAddresses,
+        saveAddressToServer,
         deliveryFee,
         confirmedOrder,
         setConfirmedOrder,
