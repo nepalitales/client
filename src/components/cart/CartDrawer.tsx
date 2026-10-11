@@ -289,13 +289,17 @@ export function CartDrawer() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between pb-1 border-b border-neutral-100">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-secondary">
-                      Momo ({totalDishesCount})
+                      Momo ({totalDishesCount} / 15)
                     </span>
-                    {totalDishesCount >= 12 && (
+                    {totalDishesCount >= 15 ? (
+                      <span className="text-[10px] text-red-700 bg-red-50 px-2 py-0.5 rounded-full font-bold">
+                        Max limit reached (15/15)
+                      </span>
+                    ) : totalDishesCount >= 12 ? (
                       <span className="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full font-medium">
                         {15 - totalDishesCount} slots left (Max 15)
                       </span>
-                    )}
+                    ) : null}
                   </div>
 
                   <div className="space-y-4 divide-y divide-neutral-100">
@@ -359,11 +363,16 @@ export function CartDrawer() {
                                 </span>
                                 <button
                                   type="button"
+                                  disabled={totalDishesCount >= 15}
                                   onClick={() =>
                                     updateQuantity(product.id, quantity + 1)
                                   }
                                   aria-label="Increase quantity"
-                                  className="w-5 h-5 flex items-center justify-center text-neutral-600 hover:text-[#D92121] rounded-full transition-colors active:scale-90 cursor-pointer"
+                                  className={`w-5 h-5 flex items-center justify-center rounded-full transition-colors ${
+                                    totalDishesCount >= 15
+                                      ? "text-neutral-300 cursor-not-allowed opacity-40"
+                                      : "text-neutral-600 hover:text-[#D92121] active:scale-90 cursor-pointer"
+                                  }`}
                                 >
                                   <Plus className="w-3 h-3 stroke-[2.5]" />
                                 </button>
