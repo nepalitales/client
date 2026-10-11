@@ -440,52 +440,91 @@ export async function getClientAddons(): Promise<Addon[]> {
   }
 }
 
-// ─── 5. Real-Time Server-Sent Events (SSE) Live Catalog Sync ───────
+// ─── 5. Config Version Polling (Live Catalog Sync) ─────────────────
 
+const CONFIG_POLL_INTERVAL_MS = 60_000; // Poll every 60s
+
+/**
+ * Polls the lightweight /config-version endpoint to detect admin changes.
+ *
+ * Why polling instead of SSE?
+ * Cloudflare Workers kill streaming connections after ~30s. Each disconnect
+ * counted as an "Error" in Cloudflare metrics and opened a new MongoDB
+ * connection. With 100 users that's ~12,000 errors/hour.
+ *
+ * This approach:
+ * - Polls every 60s (edge-cached at Cloudflare, so most polls are free)
+ * - Pauses when the browser tab is hidden (saves bandwidth)
+ * - Immediately checks on tab focus (instant UX when user returns)
+ * - Zero Cloudflare errors, minimal DB load
+ */
 export function subscribeToLiveCatalogUpdates(
   onUpdate: () => void
 ): () => void {
-  if (typeof window === "undefined" || !("EventSource" in window)) {
+  if (typeof window === "undefined") {
     return () => {};
   }
 
-  let eventSource: EventSource | null = null;
+  let knownVersion = "0";
+  let intervalId: ReturnType<typeof setInterval> | null = null;
   let isClosed = false;
-  let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
-  const connect = () => {
-    if (isClosed) return;
+  const poll = async () => {
     try {
-      const url = `${API_BASE}/events`;
-      eventSource = new EventSource(url);
-
-      eventSource.addEventListener("config_changed", () => {
-        onUpdate();
+      const res = await fetch(`${API_BASE}/config-version`, {
+        cache: "no-cache",
       });
+      if (!res.ok) return;
+      const data = await res.json();
+      const serverVersion = data?.version ?? "0";
 
-      eventSource.onerror = () => {
-        if (eventSource) {
-          eventSource.close();
-          eventSource = null;
-        }
-        if (!isClosed && !reconnectTimer) {
-          reconnectTimer = setTimeout(() => {
-            reconnectTimer = null;
-            connect();
-          }, 4000);
-        }
-      };
-    } catch (err) {
-      console.warn("[LiveSync] Failed to initialize EventSource:", err);
+      if (knownVersion === "0") {
+        // First poll — just record the baseline, don't trigger update
+        knownVersion = serverVersion;
+        return;
+      }
+
+      if (serverVersion !== knownVersion) {
+        knownVersion = serverVersion;
+        onUpdate();
+      }
+    } catch {
+      // Network error — skip silently, will retry next interval
     }
   };
 
-  connect();
+  const startPolling = () => {
+    if (intervalId || isClosed) return;
+    intervalId = setInterval(poll, CONFIG_POLL_INTERVAL_MS);
+  };
+
+  const stopPolling = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+  };
+
+  // Pause polling when tab is hidden, resume + immediate check on focus
+  const handleVisibility = () => {
+    if (document.hidden) {
+      stopPolling();
+    } else {
+      poll(); // Immediate check when user returns to tab
+      startPolling();
+    }
+  };
+
+  document.addEventListener("visibilitychange", handleVisibility);
+
+  // Initial poll + start interval
+  poll();
+  startPolling();
 
   return () => {
     isClosed = true;
-    if (reconnectTimer) clearTimeout(reconnectTimer);
-    if (eventSource) eventSource.close();
+    stopPolling();
+    document.removeEventListener("visibilitychange", handleVisibility);
   };
 }
 
