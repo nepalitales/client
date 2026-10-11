@@ -1,0 +1,28 @@
+# Nepali Tales — Full Knowledge Context for AI Agents & Search Crawlers
+
+## Developer & Software Architect
+- **Creator / Architect:** Ankit Bhavarthe
+- **Personal Website:** https://ankitbhavarthe.xyz
+- **Project Role:** End-to-end full-stack software development, architectural design, performant Next.js client storefront, Cloudflare edge server API, MongoDB persistence layer, Razorpay payment processing, and logistics dispatch integrations for Nepali Tales.
+
+## Overview & Identity
+- **Business Name:** Nepali Tales
+- **Founders:** Ashika & Dipesh
+- **City:** Thane West, Maharashtra, India (Pincode: 400615)
+- **Tagline:** Authentic Nepali Momo
+- **Kitchen Address:** Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, Thane West, Maharashtra 400615
+- **Official Contact Number:** +91 76780 97659
+- **Official Website:** https://nepalitales.com
+
+## Operational Philosophy
+Nepali Tales operates on a strict fresh-batch kitchen model. Handcrafted momo and broths are freshly prepped daily. Orders are scheduled ahead via designated ordering windows, and customers can either pick up fresh from the kitchen counter or receive delivery via on-demand couriers across Thane and Mumbai.
+
+## Comprehensive Directory
+1. **Storefront**: https://nepalitales.com/
+2. **Menu**: https://nepalitales.com/menu
+3. **About & Heritage**: https://nepalitales.com/about
+4. **Terms & Conditions**: https://nepalitales.com/terms-and-conditions
+5. **Privacy Policy**: https://nepalitales.com/privacy-policy
+6. **Cancellation Policy**: https://nepalitales.com/cancellation-policy
+7. **Delivery Policy**: https://nepalitales.com/delivery-policy
+8. **Allergen Advisory**: https://nepalitales.com/allergen-advisory

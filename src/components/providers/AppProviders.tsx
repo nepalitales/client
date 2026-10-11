@@ -9,8 +9,6 @@ import { CheckoutModal } from "@/components/checkout/CheckoutModal";
 import { Navbar } from "@/components/navbar/Navbar";
 import { Footer } from "@/components/footer/Footer";
 
-import { HealthAdvisoryModal } from "@/components/ui/HealthAdvisoryModal";
-
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <SmoothScrollProvider>
@@ -23,7 +21,6 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
           </div>
           <CartDrawer />
           <CheckoutModal />
-          <HealthAdvisoryModal />
         </CheckoutProvider>
       </CartProvider>
     </SmoothScrollProvider>

@@ -1,0 +1,29 @@
+# Nepali Tales
+
+> Authentic Handcrafted Nepali Momo & Artisanal Chilli Oil Storefront, Kitchen Ordering System, and Digital Platform.
+
+## Developer & Architect Information
+- **Lead Developer & Software Architect:** Ankit Bhavarthe
+- **Portfolio & Website:** https://ankitbhavarthe.xyz
+- **Engineering Highlights:** Designed and built the complete e-commerce experience from the ground up, featuring a custom edge-cached ordering engine, real-time dispatch slot allocation (Borzo & Porter delivery), Razorpay payment orchestration, automated SMS/WhatsApp notifications, and a responsive frontend with 60fps animations.
+
+## About the Brand
+- **Brand Name:** Nepali Tales
+- **Founders & Culinary Curators:** Ashika & Dipesh (MasterChef India couple)
+- **Culinary Heritage:** Roots in family kitchens along the Indo-Bhutan border, carrying forward authentic dumpling craftsmanship and traditional fermented chilli broths first popularized at Momo Ghar (2022) and celebrated across Mumbai and Thane.
+- **Key Offerings:** Hand-rolled artisanal momo, traditional spicy jhol broths, signature slow-cooked viral chilli oil, and traditional Himalayan accompaniments.
+
+## Kitchen & Location
+- **Address:** Metropolis Rivera, Shop No 10, Kasarvadavali, Opp. Laxmi Narayan Mandir, Ghodbunder Road, Thane West, Maharashtra 400615, India
+- **Customer Care & Kitchen WhatsApp:** +91 76780 97659
+- **Official Website:** https://nepalitales.com
+
+## Primary URLs
+- [Home Page](https://nepalitales.com/): Storefront overview, operating schedule, and featured press highlights.
+- [Food Menu](https://nepalitales.com/menu): Live menu catalog featuring steamed, pan-fried, and jhol momo, plus jars of artisanal chilli oil.
+- [Our Story / About](https://nepalitales.com/about): The background story of Ashika & Dipesh, Momo Ghar roots, and the evolution of Nepali Tales.
+- [Terms & Conditions](https://nepalitales.com/terms-and-conditions): Store policies, operational boundaries, and ordering conditions.
+- [Cancellation Policy](https://nepalitales.com/cancellation-policy): Guidelines regarding order modification and cancellation windows.
+- [Delivery Policy](https://nepalitales.com/delivery-policy): Delivery partner logistics, pickup timing, and service areas.
+- [Allergen Advisory](https://nepalitales.com/allergen-advisory): Comprehensive ingredient information and statutory dietary notices.
+- [Privacy Policy](https://nepalitales.com/privacy-policy): Customer privacy standards and data handling practices.

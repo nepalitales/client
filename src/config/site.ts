@@ -10,13 +10,13 @@ export const siteConfig = {
   contact: {
     phone: "+91 76780 97659",
     phoneClean: "+917678097659",
-    kitchenPhone: "+91 9309348875",
-    kitchenPhoneClean: "9309348875",
+    kitchenPhone: "+91 76780 97659",
+    kitchenPhoneClean: "7678097659",
     email: "Nepalitales2025@gmail.com",
     whatsapp:
       "https://wa.me/917678097659?text=Hi%20Nepali%20Tales%2C%20I%20would%20like%20to%20order%20momo!",
     kitchenWhatsapp:
-      "https://wa.me/919309348875?text=Hi%20Nepali%20Tales%20Kitchen%2C%20I%20have%20an%20order%20query!",
+      "https://wa.me/917678097659?text=Hi%20Nepali%20Tales%20Kitchen%2C%20I%20have%20an%20order%20query!",
     instagram: "https://www.instagram.com/nepali_tales?stkn=d2lkY3Z5cjN5aHdm",
     youtube: "https://www.youtube.com/@nepali_tales",
   },
@@ -171,7 +171,7 @@ export const siteConfig = {
     "Mumbai Suburban",
   ],
   keywords: [
-    "Mostly Sane Best momo in mumbai",
+    "Prajakta Koli Best momo in mumbai",
     "Nepali Tales",
     "Nepali Tales momo",
     "authentic momo Thane",
@@ -190,4 +190,9 @@ export const siteConfig = {
     "Metropolis Rivera shop 10",
     "Nepali restaurant Ghodbunder Road 400615",
   ],
+  developer: {
+    name: "Ankit Bhavarthe",
+    url: "https://ankitbhavarthe.xyz",
+    role: "Full-Stack Architect & Developer",
+  },
 };

@@ -65,7 +65,7 @@ export function Footer() {
     };
   }, []);
 
-  // Compute dynamic Opening Time rows strictly from server order windows
+  // Compute dynamic Ordering Time rows strictly from server order windows
   const openingHoursRows = useMemo(() => {
     if (!orderWindows || orderWindows.length === 0) {
       return [];
@@ -210,10 +210,10 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Opening Time (Dynamic from Server) */}
+          {/* Column 2: Ordering Time (Dynamic from Server) */}
           <div className="lg:col-span-3 space-y-3">
             <h3 className="font-bold text-neutral-950 text-xl tracking-tight">
-              Opening Time
+              Ordering Time
             </h3>
 
             <div className="space-y-1.5 text-neutral-600 font-secondary text-sm sm:text-base leading-relaxed">
@@ -362,12 +362,12 @@ export function Footer() {
           <p className="font-normal">
             Designed &amp; Developed by{" "}
             <a
-              href="https://kairosartifex.site"
+              href="https://ankitbhavarthe.xyz"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-neutral-950 hover:text-brand-red transition-colors"
             >
-              KAIROS.ARTIFEX
+              Ankit Bhavarthe
             </a>
           </p>
         </div>

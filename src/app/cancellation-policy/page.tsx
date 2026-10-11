@@ -128,7 +128,7 @@ export default function CancellationPolicyPage() {
                   rel="noopener noreferrer"
                   className="font-bold text-brand-red underline hover:text-[#b81b1b]"
                 >
-                  Chat with Nepali Tales Kitchen (+91 9309348875)
+                  Chat with Nepali Tales Kitchen (+91 76780 97659)
                 </a>
               </p>
             </div>

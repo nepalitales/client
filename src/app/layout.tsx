@@ -49,10 +49,13 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
-  authors: siteConfig.founders.map((f) => ({ name: f.name })),
+  authors: [
+    ...siteConfig.founders.map((f) => ({ name: f.name })),
+    { name: siteConfig.developer.name, url: siteConfig.developer.url },
+  ],
   generator: "Next.js",
   keywords: siteConfig.keywords,
-  creator: "Ashika & Dipesh",
+  creator: `${siteConfig.developer.name} (${siteConfig.developer.url})`,
   publisher: siteConfig.name,
   formatDetection: {
     telephone: true,
