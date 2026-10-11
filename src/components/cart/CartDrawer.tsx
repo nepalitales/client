@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   X,
   Plus,
@@ -270,13 +271,13 @@ export function CartDrawer() {
                     Looks like you haven&apos;t added any handcrafted momo yet.
                   </p>
                 </div>
-                <button
-                  type="button"
+                <Link
+                  href="/menu"
                   onClick={closeCart}
-                  className="bg-[#D92121] hover:bg-[#b81b1b] text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                  className="bg-[#D92121] hover:bg-[#b81b1b] text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-150 shadow-sm cursor-pointer inline-flex items-center justify-center active:scale-95"
                 >
                   Explore Menu
-                </button>
+                </Link>
               </div>
             ) : (
               <div
