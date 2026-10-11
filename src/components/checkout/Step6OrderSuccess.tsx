@@ -24,7 +24,7 @@ export function Step6OrderSuccess() {
   };
 
   return (
-    <div className="flex flex-col min-h-[380px] justify-between pt-2 pb-2 font-secondary text-center">
+    <div className="flex flex-col min-h-95 justify-between pt-2 pb-2 font-secondary text-center">
       <div className="space-y-5 pt-3">
         {/* Success Icon */}
         <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto ring-8 ring-emerald-50">

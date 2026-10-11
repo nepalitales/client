@@ -166,7 +166,7 @@ export function Step5PaymentReview() {
   };
 
   return (
-    <div className="flex flex-col min-h-[380px] justify-between pt-2 pb-2 font-secondary">
+    <div className="flex flex-col min-h-95 justify-between pt-2 pb-2 font-secondary">
       <div className="space-y-4 pt-1">
         {paymentError && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl">

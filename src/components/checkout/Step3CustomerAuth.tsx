@@ -221,7 +221,7 @@ export function Step3CustomerAuth() {
   };
 
   return (
-    <div className="flex flex-col min-h-[380px] justify-between pt-3 pb-2 font-secondary">
+    <div className="flex flex-col min-h-95 justify-between pt-3 pb-2 font-secondary">
       {/* ─── State A: Enter Email (mobileNotFilled / mobileFilled) ─ */}
       {step === "INPUT" ? (
         <form onSubmit={handleRequestOtp} className="flex-1 flex flex-col justify-between">
@@ -253,7 +253,7 @@ export function Step3CustomerAuth() {
                   if (errorMessage) setErrorMessage("");
                 }}
                 placeholder="your.email@gmail.com"
-                className="w-full px-4 py-3.5 bg-white border border-neutral-200 rounded-xl text-sm font-medium text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all"
+                className={`w-full px-4 py-3.5 bg-white border rounded-xl text-sm font-medium text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-all ${"border-neutral-200"}`}
               />
             </div>
           </div>

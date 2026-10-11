@@ -81,7 +81,7 @@ export function Step2DeliverySlot() {
   };
 
   return (
-    <div className="flex flex-col min-h-[380px] justify-between pt-2 pb-2 font-secondary">
+    <div className="flex flex-col min-h-95 justify-between pt-2 pb-2 font-secondary">
       {/* ─── Top Instructions & Date ───────────────────────────── */}
       <div className="space-y-4 pt-1">
         <div className="space-y-1.5 text-left">

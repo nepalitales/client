@@ -10,7 +10,7 @@ export function Step1OrderType() {
   const isPickupAvailable = orderSettings.pickupEnabled;
 
   return (
-    <div className="flex flex-col min-h-[380px] justify-between pt-4 pb-2">
+    <div className="flex flex-col min-h-95 justify-between pt-4 pb-2">
       {/* ─── Center Content (No 3D icons or illustrations) ─────── */}
       <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6">
         <div className="space-y-2 max-w-xs mx-auto">
