@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site";
 import { RestaurantJsonLd } from "@/components/seo/JsonLd";
 import { CookieConsent } from "@/components/ui/CookieConsent";
 import { AppProviders } from "@/components/providers/AppProviders";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const chunkoBold = localFont({
@@ -137,6 +138,7 @@ export default function RootLayout({
           {children}
           <CookieConsent />
         </AppProviders>
+        <Analytics />
       </body>
     </html>
   );
