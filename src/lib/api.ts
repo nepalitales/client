@@ -851,7 +851,7 @@ export const DEFAULT_CLIENT_ORDER_SETTINGS: ClientOrderSettings = {
   deliveryEnabled: true,
   deliveryFee: 0,
   pickupInstructions:
-    "Collect your order from the kitchen at Metropolis Riveria, Kasarvadavali, Ghodbunder Road, Thane.",
+    "Collect your order from the kitchen at Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, 400615.",
 };
 
 export async function getClientOrderSettings(): Promise<ClientOrderSettings> {

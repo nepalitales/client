@@ -351,6 +351,11 @@ export function Footer() {
           />
         </div>
 
+        {/* ─── Disclaimer Bar (Mutual funds style) ────────────────── */}
+        <div className="border-t border-neutral-200/80 pt-3 pb-2 text-[10px] sm:text-[11px] text-neutral-400 font-secondary text-center leading-relaxed select-none">
+          * Disclaimer: Nepali Tales operates strictly on a 1-day advance pre-order schedule to guarantee fresh preparation with zero waste. Dishes contain Monosodium Glutamate (MSG) in safe culinary balance for authentic Himalayan flavor.
+        </div>
+
         {/* ─── Bottom Bar ────────────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-neutral-800 tracking-normal pt-1">
           {/* Left: Copyright */}

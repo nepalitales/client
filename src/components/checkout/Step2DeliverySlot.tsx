@@ -81,10 +81,10 @@ export function Step2DeliverySlot() {
   };
 
   return (
-    <div className="flex flex-col min-h-95 justify-between pt-2 pb-2 font-secondary">
+    <div className="flex flex-col justify-between pt-1 pb-1 font-secondary">
       {/* ─── Top Instructions & Date ───────────────────────────── */}
-      <div className="space-y-4 pt-1">
-        <div className="space-y-1.5 text-left">
+      <div className="space-y-3 pt-0.5">
+        <div className="space-y-1 text-left">
           <h4 className="font-secondary font-bold text-lg sm:text-xl text-neutral-900">
             {orderType === "delivery" ? "Select delivery window" : "Select pickup window"}
           </h4>
@@ -103,7 +103,7 @@ export function Step2DeliverySlot() {
           <div
             data-lenis-prevent
             onWheel={(e) => e.stopPropagation()}
-            className="space-y-2.5 max-h-75 sm:max-h-85 overflow-y-auto pr-1.5 custom-scrollbar overscroll-contain touch-pan-y"
+            className="space-y-2 max-h-56 sm:max-h-64 overflow-y-auto pr-1.5 custom-scrollbar overscroll-contain touch-pan-y pb-1"
           >
             {slotsList.map((slot) => {
               const isSelected = selectedSlot?.id === slot.id;
@@ -115,7 +115,7 @@ export function Step2DeliverySlot() {
                   type="button"
                   disabled={isFull}
                   onClick={() => handleSlotSelect(slot)}
-                  className={`w-full p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                  className={`w-full p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
                     isFull
                       ? "opacity-45 cursor-not-allowed border-neutral-200 bg-neutral-50"
                       : isSelected
@@ -151,8 +151,8 @@ export function Step2DeliverySlot() {
         )}
       </div>
 
-      {/* ─── Bottom Continue Action Button ─────────────────────── */}
-      <div className="pt-6 w-full">
+      {/* ─── Bottom Continue Action Button & Disclaimer ────────── */}
+      <div className="pt-4 w-full space-y-2">
         <button
           type="button"
           onClick={handleContinue}
@@ -165,6 +165,9 @@ export function Step2DeliverySlot() {
         >
           Continue
         </button>
+        <p className="text-[10px] text-neutral-400 leading-tight text-center px-1">
+          * Disclaimer: Advance pre-order required (1 day prior). Food prepared with MSG for authentic taste.
+        </p>
       </div>
     </div>
   );

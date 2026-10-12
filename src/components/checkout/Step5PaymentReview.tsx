@@ -320,8 +320,8 @@ export function Step5PaymentReview() {
         </div>
       </div>
 
-      {/* ─── Action Button: Pay with Razorpay ─────────────────── */}
-      <div className="pt-6 w-full">
+      {/* ─── Action Button: Pay with Razorpay & Disclaimer ──────── */}
+      <div className="pt-4 w-full space-y-2">
         <button
           type="button"
           disabled={isProcessing}
@@ -337,6 +337,9 @@ export function Step5PaymentReview() {
             <span>Pay ₹{totalPayable} via Razorpay</span>
           )}
         </button>
+        <p className="text-[10px] text-neutral-400 leading-tight text-center px-1">
+          * Disclaimer: Operating on 1-day advance pre-orders. Prepared with MSG for authentic Himalayan flavor.
+        </p>
       </div>
     </div>
   );

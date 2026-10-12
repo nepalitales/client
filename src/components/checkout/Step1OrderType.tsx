@@ -64,7 +64,7 @@ export function Step1OrderType() {
                 <span className="text-[#D92121] font-bold">Borzo Porter</span>
               </div>
               <p className="text-neutral-500 leading-relaxed text-[11px]">
-                Dispatched fresh all over Mumbai via Borzo porter service in thermal insulated bags. Delivery fee calculated separately as per actual distance.
+                Dispatched fresh all over Mumbai via Borzo porter service. Delivery fee calculated separately as per actual distance.
               </p>
             </>
           ) : (
@@ -74,15 +74,15 @@ export function Step1OrderType() {
                 <span className="text-emerald-600 font-bold uppercase">Free (₹0)</span>
               </div>
               <p className="text-neutral-500 leading-relaxed text-[11px]">
-                Collect hot from our cloud kitchen at Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, Thane West.
+                Collect hot from our cloud kitchen at Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, 400615.
               </p>
             </>
           )}
         </div>
       </div>
 
-      {/* ─── Bottom Continue Action Button ─────────────────────── */}
-      <div className="pt-6 w-full">
+      {/* ─── Bottom Continue Action Button & Disclaimer ────────── */}
+      <div className="pt-4 w-full space-y-2">
         <button
           type="button"
           onClick={nextStep}
@@ -90,6 +90,9 @@ export function Step1OrderType() {
         >
           Continue
         </button>
+        <p className="text-[10px] text-neutral-400 leading-tight text-center px-1">
+          * Disclaimer: All items are prepared on 1-day advance pre-order. Our authentic recipes contain MSG (Monosodium Glutamate) for genuine Himalayan taste.
+        </p>
       </div>
     </div>
   );

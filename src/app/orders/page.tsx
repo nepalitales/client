@@ -407,7 +407,7 @@ export default function MyOrdersPage() {
                           </p>
                           <p className="font-semibold text-neutral-900 mt-0.5">
                             {isPickup
-                              ? "Metropolis Riveria, Kasarvadavali, Thane"
+                              ? "Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, 400615"
                               : order.deliveryAddress?.street ||
                                 order.deliveryAddress?.borzoFormat?.address ||
                                 "Thane Address"}
