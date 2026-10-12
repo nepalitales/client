@@ -91,7 +91,7 @@ export function Step1OrderType() {
           Continue
         </button>
         <p className="text-[10px] text-neutral-400 leading-tight text-center px-1">
-          * Disclaimer: All items are prepared on 1-day advance pre-order. Our authentic recipes contain MSG (Monosodium Glutamate) for genuine Himalayan taste.
+          * Disclaimer: All items are prepared on 1-day advance pre-order. Food prepared with MSG for authentic flavor. Approved refunds credited within 3–5 working days.
         </p>
       </div>
     </div>

@@ -87,6 +87,7 @@ export default function CancellationPolicyPage() {
             <div className="rounded-xl border border-emerald-200/80 bg-white p-4 text-emerald-950 text-sm font-medium">
               If an order is cancelled within the valid order window, the customer
               will receive an immediate, full 100% refund of the food amount paid.
+              Refunds are processed and credited to your original payment source within 3–5 working days.
             </div>
           </section>
 
@@ -217,7 +218,7 @@ export default function CancellationPolicyPage() {
               <li>
                 Upon prompt review, our kitchen team will offer either an
                 immediate replacement preparation or an appropriate refund for
-                the affected item.
+                the affected item (credited within 3–5 working days).
               </li>
             </ol>
           </section>
@@ -225,22 +226,22 @@ export default function CancellationPolicyPage() {
           {/* Section 5 */}
           <section id="disbursement-timelines" className="space-y-3">
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-950">
-              5. Refund Disbursement Timelines
+              5. Refund Disbursement Timelines (3–5 Working Days)
             </h2>
             <p>
               All approved refunds are initiated through our payment gateway to
               the original payment method (UPI, Net Banking, Credit/Debit Card)
-              used at checkout:
+              used at checkout and will be refunded within <strong>3 to 5 working days</strong>:
             </p>
             <ul className="list-disc pl-5 space-y-1.5 text-neutral-600">
               <li>
-                <strong className="text-neutral-900">UPI Refunds:</strong> Typically reflected within 24 to 48
-                hours.
+                <strong className="text-neutral-900">Standard Refund SLA:</strong> All approved refunds are processed and credited back to the customer&apos;s source account within <strong>3 to 5 working days</strong>.
               </li>
               <li>
-                <strong className="text-neutral-900">Cards &amp; Net Banking:</strong> Typically credited
-                within 3 to 7 business days, subject to your issuing bank&apos;s
-                clearing cycles.
+                <strong className="text-neutral-900">UPI Refunds:</strong> Usually processed immediately by the gateway and typically reflected in your bank account within 24 to 48 hours (maximum 3–5 working days).
+              </li>
+              <li>
+                <strong className="text-neutral-900">Credit / Debit Cards &amp; Net Banking:</strong> Credited within <strong>3 to 5 working days</strong>, subject to your issuing bank&apos;s settlement cycle.
               </li>
             </ul>
             <p className="text-sm text-neutral-500 pt-1">

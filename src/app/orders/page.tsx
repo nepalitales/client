@@ -566,7 +566,7 @@ export default function MyOrdersPage() {
                               Order Cancelled
                             </p>
                             <p className="text-neutral-500 mt-0.5">
-                              A full refund of ₹{order.totalAmount} has been initiated to your original payment method. Cancellation confirmation has been sent to your email.
+                              A full refund of ₹{order.totalAmount} has been initiated to your original payment method (credited within 3–5 working days). Cancellation confirmation has been sent to your email.
                             </p>
                             {order.refund?.razorpayRefundId && (
                               <p className="font-mono text-[11px] text-neutral-400 mt-1">
@@ -617,7 +617,7 @@ export default function MyOrdersPage() {
                 Cancel Order #{orderToCancel.orderNumber}?
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-                Are you sure you want to cancel this order? Since our kitchen has not yet started cooking, an instant 100% full refund of <strong className="text-neutral-900">₹{orderToCancel.totalAmount}</strong> will be initiated directly to your original payment method via Razorpay.
+                Are you sure you want to cancel this order? Since our kitchen has not yet started cooking, an instant 100% full refund of <strong className="text-neutral-900">₹{orderToCancel.totalAmount}</strong> will be initiated directly to your original payment method via Razorpay (credited within 3–5 working days).
               </p>
             </div>
 

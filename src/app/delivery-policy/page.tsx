@@ -232,7 +232,7 @@ export default function DeliveryPolicyPage() {
                 delivery address. If the recipient remains unreachable, the
                 rider may return or dispose of the parcel per courier policy.
                 The brand is not liable for non-delivery or refunds due to
-                customer unreachability.
+                customer unreachability. For any other eligible food cancellations approved by kitchen management, refunds are credited within 3–5 working days.
               </li>
             </ul>
           </section>

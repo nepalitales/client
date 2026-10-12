@@ -338,7 +338,7 @@ export function Step5PaymentReview() {
           )}
         </button>
         <p className="text-[10px] text-neutral-400 leading-tight text-center px-1">
-          * Disclaimer: Operating on 1-day advance pre-orders. Prepared with MSG for authentic Himalayan flavor.
+          * Disclaimer: Operating on 1-day advance pre-orders. Prepared with MSG for authentic flavor. Approved refunds credited within 3–5 working days.
         </p>
       </div>
     </div>

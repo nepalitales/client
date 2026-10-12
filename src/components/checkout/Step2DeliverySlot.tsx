@@ -166,7 +166,7 @@ export function Step2DeliverySlot() {
           Continue
         </button>
         <p className="text-[10px] text-neutral-400 leading-tight text-center px-1">
-          * Disclaimer: Advance pre-order required (1 day prior). Food prepared with MSG for authentic taste.
+          * Disclaimer: Advance pre-order required (1 day prior). Food prepared with MSG for authentic taste. Approved refunds credited within 3–5 working days.
         </p>
       </div>
     </div>

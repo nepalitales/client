@@ -231,7 +231,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 6 */}
           <section id="cancellations" className="space-y-3">
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-950">
-              6. Cancellations and Refunds
+              6. Cancellations and Refunds (3–5 Working Days)
             </h2>
             <p>
               Order cancellations and refunds are subject strictly to our dedicated{" "}
@@ -246,6 +246,10 @@ export default function TermsAndConditionsPage() {
               cancellations are locked and any discretionary refund consideration
               requires contacting our kitchen directly at{" "}
               <strong>{siteConfig.contact.kitchenPhone}</strong>.
+            </p>
+            <p>
+              All approved refunds are processed through our payment gateway and
+              will be refunded to the customer&apos;s original payment method (UPI, Debit/Credit Card, or Net Banking) within <strong>3 to 5 working days</strong>.
             </p>
           </section>
 
