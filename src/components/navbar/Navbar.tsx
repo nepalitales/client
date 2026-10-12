@@ -89,23 +89,37 @@ export function Navbar() {
           {/* Left Column: Home, Menu, About */}
           <nav
             aria-label="Primary Left Navigation"
-            className="flex items-center justify-start gap-8 font-secondary"
+            className="flex items-center justify-start gap-6 xl:gap-8 font-secondary"
           >
             <Link
               href="/"
-              className="text-sm font-semibold tracking-wide text-neutral-800 hover:text-accent-red transition-colors"
+              className={`text-sm font-semibold tracking-wide transition-colors ${
+                pathname === "/" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
+              }`}
             >
               Home
             </Link>
             <Link
               href="/menu"
-              className="text-sm font-semibold tracking-wide text-neutral-800 hover:text-accent-red transition-colors"
+              className={`text-sm font-semibold tracking-wide transition-colors ${
+                pathname === "/menu" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
+              }`}
             >
               Menu
             </Link>
             <Link
+              href="/orders"
+              className={`text-sm font-semibold tracking-wide transition-colors ${
+                pathname === "/orders" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
+              }`}
+            >
+              Orders
+            </Link>
+            <Link
               href="/about"
-              className="text-sm font-semibold tracking-wide text-neutral-800 hover:text-accent-red transition-colors"
+              className={`text-sm font-semibold tracking-wide transition-colors ${
+                pathname === "/about" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
+              }`}
             >
               About
             </Link>
@@ -261,31 +275,31 @@ export function Navbar() {
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 hover:text-accent-red transition-colors border-b border-neutral-50"
+                className={`py-2 transition-colors border-b border-neutral-50 ${pathname === "/" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
               >
                 Home
               </Link>
               <Link
                 href="/menu"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 hover:text-accent-red transition-colors border-b border-neutral-50"
+                className={`py-2 transition-colors border-b border-neutral-50 ${pathname === "/menu" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
               >
                 Menu
               </Link>
               <Link
-                href="/about"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 hover:text-accent-red transition-colors border-b border-neutral-50"
-              >
-                About
-              </Link>
-              <Link
                 href="/orders"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 hover:text-accent-red transition-colors border-b border-neutral-50 flex items-center justify-between"
+                className={`py-2 transition-colors border-b border-neutral-50 flex items-center justify-between ${pathname === "/orders" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
               >
-                <span>My Orders</span>
+                <span>Orders</span>
                 <Package className="w-4 h-4 text-neutral-400" />
+              </Link>
+              <Link
+                href="/about"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`py-2 transition-colors border-b border-neutral-50 ${pathname === "/about" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
+              >
+                About
               </Link>
               <button
                 type="button"

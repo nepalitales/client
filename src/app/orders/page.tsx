@@ -245,7 +245,7 @@ export default function MyOrdersPage() {
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Home</span>
             </Link>
-            <h1 className="font-primary text-3xl sm:text-4xl font-black text-neutral-900 uppercase tracking-tight">
+            <h1 className="font-secondary text-2xl sm:text-3xl font-bold text-neutral-900 tracking-tight">
               My Orders
             </h1>
             <p className="text-sm text-neutral-500 mt-1">
@@ -272,7 +272,7 @@ export default function MyOrdersPage() {
             <div className="w-16 h-16 rounded-2xl bg-red-50 text-accent-red flex items-center justify-center mx-auto mb-5 shadow-xs">
               <Package className="w-8 h-8 stroke-[2.2]" />
             </div>
-            <h2 className="font-primary text-2xl font-bold uppercase tracking-tight text-neutral-900 mb-2">
+            <h2 className="font-secondary text-xl sm:text-2xl font-bold text-neutral-900 mb-2">
               Sign In to View Your Orders
             </h2>
             <p className="text-sm text-neutral-500 max-w-md mx-auto mb-7 leading-relaxed">
@@ -309,7 +309,7 @@ export default function MyOrdersPage() {
             <div className="w-16 h-16 rounded-2xl bg-neutral-100 text-neutral-400 flex items-center justify-center mx-auto mb-5">
               <Receipt className="w-8 h-8 stroke-[1.8]" />
             </div>
-            <h2 className="font-primary text-2xl font-bold uppercase tracking-tight text-neutral-900 mb-2">
+            <h2 className="font-secondary text-xl sm:text-2xl font-bold text-neutral-900 mb-2">
               No Orders Placed Yet
             </h2>
             <p className="text-sm text-neutral-500 max-w-md mx-auto mb-7 leading-relaxed">
@@ -481,7 +481,7 @@ export default function MyOrdersPage() {
                         <span className="text-xs text-neutral-400 font-bold uppercase tracking-wider block">
                           Total Paid
                         </span>
-                        <span className="font-primary text-xl sm:text-2xl font-black text-accent-red">
+                        <span className="font-secondary text-xl sm:text-2xl font-bold text-accent-red">
                           ₹{order.totalAmount}
                         </span>
                       </div>
@@ -582,7 +582,7 @@ export default function MyOrdersPage() {
             </div>
 
             <div className="space-y-1.5">
-              <h3 className="font-primary text-xl font-bold uppercase tracking-tight text-neutral-900">
+              <h3 className="font-secondary text-lg sm:text-xl font-bold text-neutral-900">
                 Cancel Order #{orderToCancel.orderNumber}?
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
