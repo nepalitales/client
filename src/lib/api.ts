@@ -1359,3 +1359,23 @@ export async function cancelClientOrder(orderId: string): Promise<CancelOrderRes
     return { success: false, message: "Network error cancelling order" };
   }
 }
+
+export async function downloadClientOrderInvoice(orderId: string, orderNumber: string): Promise<void> {
+  const res = await clientFetch(`/orders/${orderId}/invoice.pdf`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to download bill PDF");
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `Invoice_${orderNumber}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 1000);
+}
+

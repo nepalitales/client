@@ -8,6 +8,7 @@ import {
   cancelClientOrder,
   type ClientOrder,
   type ClientOrderStatus,
+  downloadClientOrderInvoice,
 } from "@/lib/api";
 import {
   Package,
@@ -25,6 +26,7 @@ import {
   ArrowLeft,
   Receipt,
   Store,
+  Download,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -34,10 +36,24 @@ export default function MyOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [copiedOrderId, setCopiedOrderId] = useState<string | null>(null);
+  const [downloadingInvoiceId, setDownloadingInvoiceId] = useState<string | null>(null);
 
   // Cancellation Modal State
   const [orderToCancel, setOrderToCancel] = useState<ClientOrder | null>(null);
   const [cancelling, setCancelling] = useState(false);
+
+  const handleDownloadInvoice = async (order: ClientOrder) => {
+    setDownloadingInvoiceId(order.id);
+    try {
+      toast.info(`Preparing invoice for #${order.orderNumber}...`);
+      await downloadClientOrderInvoice(order.id, order.orderNumber);
+      toast.success("Invoice PDF downloaded!");
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to download bill PDF");
+    } finally {
+      setDownloadingInvoiceId(null);
+    }
+  };
 
   const fetchOrders = useCallback(async (isSilent = false) => {
     if (!isSilent) setLoading(true);
@@ -367,6 +383,21 @@ export default function MyOrdersPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleDownloadInvoice(order)}
+                        disabled={downloadingInvoiceId === order.id}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-neutral-700 bg-white border border-neutral-200 hover:bg-neutral-100 transition-colors shadow-2xs cursor-pointer active:scale-95"
+                        title="Download Bill PDF"
+                      >
+                        {downloadingInvoiceId === order.id ? (
+                          <RefreshCw className="w-3 h-3 animate-spin text-neutral-500" />
+                        ) : (
+                          <Download className="w-3 h-3 text-neutral-500" />
+                        )}
+                        <span>Bill PDF</span>
+                      </button>
+
                       <span
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${statusBadge.bgColor} ${statusBadge.textColor} ${statusBadge.borderColor}`}
                       >
