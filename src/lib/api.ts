@@ -336,7 +336,8 @@ export function formatHolidayNotice(
 
 export function getOrderWindowBannerParts(
   orderWindows: OrderWindowDayConfig[],
-  holidays?: HolidayItem[]
+  holidays?: HolidayItem[],
+  weeklyOff?: string[]
 ): {
   scheduleText: string;
   closedText: string;
@@ -441,17 +442,28 @@ export function getOrderWindowBannerParts(
     const closedNames = closedDays
       .map((d) => pluralMap[d] || d.toUpperCase())
       .join(" & ");
-    closedText = `CLOSED ON ${closedNames}`;
+    closedText = `ORDERING CLOSED ON ${closedNames}`;
+  }
+
+  // Kitchen dispatch closure notice for recurring weekly off days
+  let dispatchOffText = "";
+  if (weeklyOff && weeklyOff.length > 0) {
+    const offNames = weeklyOff
+      .map((d) => pluralMap[d.toLowerCase()] || d.toUpperCase())
+      .join(" & ");
+    dispatchOffText = `KITCHEN DISPATCH CLOSED ON ${offNames}`;
   }
 
   const holidayInfo = formatHolidayNotice(holidays);
 
   let fullClosedSegment = "";
-  if (closedText) {
+  const closureParts = [closedText, dispatchOffText].filter(Boolean);
+  if (closureParts.length > 0) {
+    const combinedClosures = closureParts.join(" · ");
     if (holidayInfo) {
-      fullClosedSegment = `${closedText} · ${holidayInfo.text}`;
+      fullClosedSegment = `${combinedClosures} · ${holidayInfo.text}`;
     } else {
-      fullClosedSegment = `${closedText} & HOLIDAYS`;
+      fullClosedSegment = `${combinedClosures} & HOLIDAYS`;
     }
   } else if (holidayInfo) {
     fullClosedSegment = holidayInfo.text;
@@ -461,21 +473,33 @@ export function getOrderWindowBannerParts(
 
   return {
     scheduleText,
-    closedText,
+    closedText: closedText || dispatchOffText,
     holidayInfo,
     fullText,
   };
 }
 
 /**
- * Format order window schedule and holidays into the standardized banner text:
- * ORDER WINDOW · MON–SAT · 10 AM–6 PM · CLOSED ON SUNDAYS & HOLIDAYS
+ * Format order window schedule, weekly off, and holidays into the standardized banner text:
+ * ORDER WINDOW · ALL DAYS · 10 AM–9 PM · KITCHEN DISPATCH CLOSED ON MONDAYS & HOLIDAYS
  */
 export function formatOrderWindowBannerText(
   orderWindows: OrderWindowDayConfig[],
-  holidays?: HolidayItem[]
+  holidays?: HolidayItem[],
+  weeklyOff?: string[]
 ): string {
-  return getOrderWindowBannerParts(orderWindows, holidays).fullText;
+  return getOrderWindowBannerParts(orderWindows, holidays, weeklyOff).fullText;
+}
+
+export async function getClientWeeklyOff(): Promise<{ success: boolean; weeklyOff: string[] } | null> {
+  try {
+    const res = await clientFetch("/weekly-off");
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn("[WeeklyOff API] Error fetching weekly off:", err);
+    return null;
+  }
 }
 
 // ─── 2. Products & Categories API ─────────────────────────────────

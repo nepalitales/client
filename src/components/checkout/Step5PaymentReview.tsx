@@ -258,7 +258,7 @@ export function Step5PaymentReview() {
           </div>
 
           <p className="text-neutral-500 text-[11px]">
-            Window: <strong>{dateDisplay}</strong> ({slotDisplay})
+            Scheduled Delivery / Pickup: <strong>{dateDisplay}</strong> ({slotDisplay})
           </p>
 
           <p className="text-neutral-500 text-[11px] truncate">

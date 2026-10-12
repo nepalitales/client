@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   getClientOrderWindows,
   getClientHolidays,
+  getClientWeeklyOff,
   formatOrderWindowBannerText,
   subscribeToLiveCatalogUpdates,
   type OrderWindowDayConfig,
@@ -13,20 +14,28 @@ import {
 export function OrderWindowBanner() {
   const [orderWindows, setOrderWindows] = useState<OrderWindowDayConfig[]>([]);
   const [holidays, setHolidays] = useState<HolidayItem[]>([]);
+  const [weeklyOff, setWeeklyOff] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
 
     const fetchBannerData = (force = false) => {
-      Promise.all([getClientOrderWindows(force), getClientHolidays(force)])
-        .then(([windowsRes, holidaysRes]) => {
+      Promise.all([
+        getClientOrderWindows(force),
+        getClientHolidays(force),
+        getClientWeeklyOff(),
+      ])
+        .then(([windowsRes, holidaysRes, weeklyOffRes]) => {
           if (!isMounted) return;
           if (windowsRes?.success && windowsRes.orderWindows) {
             setOrderWindows(windowsRes.orderWindows);
           }
           if (holidaysRes?.success && Array.isArray(holidaysRes.holidays)) {
             setHolidays(holidaysRes.holidays);
+          }
+          if (weeklyOffRes?.success && Array.isArray(weeklyOffRes.weeklyOff)) {
+            setWeeklyOff(weeklyOffRes.weeklyOff);
           }
         })
         .catch((err) => {
@@ -53,7 +62,7 @@ export function OrderWindowBanner() {
     };
   }, []);
 
-  const bannerText = formatOrderWindowBannerText(orderWindows, holidays);
+  const bannerText = formatOrderWindowBannerText(orderWindows, holidays, weeklyOff);
 
   if (!loading && !bannerText) {
     return null;
