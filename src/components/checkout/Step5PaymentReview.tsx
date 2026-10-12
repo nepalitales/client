@@ -93,8 +93,7 @@ export function Step5PaymentReview() {
         serverResult.payment?.razorpayOrderId;
       const razorpayKeyId =
         serverResult.razorpay?.keyId ||
-        serverResult.payment?.keyId ||
-        process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+        serverResult.payment?.keyId;
       const amount =
         serverResult.razorpay?.amount ||
         serverResult.payment?.amount ||
