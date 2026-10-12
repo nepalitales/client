@@ -91,7 +91,7 @@ export function Step1OrderType() {
           Continue
         </button>
         <p className="text-[10px] text-neutral-400 leading-tight text-center px-1">
-          * Disclaimer: All items are prepared on 1-day advance pre-order. Food prepared with MSG for authentic flavor. Approved refunds credited within 3–5 working days.
+          * Nepali Tales follows a 1-day advance pre-order policy to ensure fresh preparation. Dishes contain MSG in safe culinary quantities. Approved cancellations are refunded within 3–5 business days.
         </p>
       </div>
     </div>

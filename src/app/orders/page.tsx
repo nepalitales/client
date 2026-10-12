@@ -329,7 +329,7 @@ export default function MyOrdersPage() {
               No Orders Placed Yet
             </h2>
             <p className="text-sm text-neutral-500 max-w-md mx-auto mb-7 leading-relaxed">
-              You have not placed any pre-orders yet. Treat yourself to handcrafted Himalayan momos made fresh by authentic chefs!
+              You have not placed any pre-orders yet. Treat yourself to handcrafted authentic Nepali momos made fresh by authentic chefs!
             </p>
             <Link
               href="/menu"
