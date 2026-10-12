@@ -1207,3 +1207,155 @@ export function loadRazorpayScript(): Promise<boolean> {
     document.body.appendChild(script);
   });
 }
+
+// ─── Customer Orders & Cancellation API ──────────────────────────
+
+export type ClientOrderStatus =
+  | "pending_payment"
+  | "placed"
+  | "preparing"
+  | "ready"
+  | "porter_booked"
+  | "porter_failed"
+  | "out_for_delivery"
+  | "delivered"
+  | "cancelled_by_customer"
+  | "cancelled_by_admin";
+
+export interface ClientOrderItemAddon {
+  addonId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  subtotal: number;
+  image?: string;
+}
+
+export interface ClientOrderItem {
+  productId: string;
+  productName: string;
+  price: number;
+  quantity: number;
+  subtotal: number;
+  image?: string;
+  kind?: "product" | "addon";
+  addonId?: string;
+  addons?: ClientOrderItemAddon[];
+}
+
+export interface ClientOrder {
+  id: string;
+  orderNumber: string;
+  userId: string;
+  customer: {
+    name: string;
+    phone: string;
+    email?: string;
+  };
+  deliveryAddress: {
+    id?: string;
+    label?: string;
+    flatNumber?: string;
+    wing?: string;
+    addressLine1?: string;
+    addressLine2?: string;
+    street: string;
+    building?: string;
+    floor?: string;
+    apartment?: string;
+    landmark?: string;
+    city?: string;
+    pincode?: string;
+    borzoFormat?: {
+      address: string;
+      note: string;
+    };
+  };
+  orderType: "pickup" | "delivery";
+  items: ClientOrderItem[];
+  itemTotal: number;
+  deliveryFee: number;
+  discount: number;
+  totalAmount: number;
+  notes?: string;
+  status: ClientOrderStatus;
+  canCustomerCancelUntil: string;
+  dispatchDate?: string;
+  dispatchSlot?: {
+    id: string;
+    start: string;
+    end: string;
+    label: string;
+  };
+  payment?: {
+    provider: string;
+    razorpayOrderId?: string;
+    razorpayPaymentId?: string;
+    status: string;
+    paidAt?: string;
+  };
+  refund?: {
+    status: "none" | "initiated" | "refunded" | "declined";
+    amount?: number;
+    type?: "full" | "partial" | "decline";
+    reason?: string;
+    razorpayRefundId?: string;
+    refundedAt?: string;
+  };
+  borzo?: {
+    borzoOrderId?: number;
+    borzoOrderName?: string;
+    trackingUrl?: string;
+    status?: string;
+    deliveryFee?: string;
+  };
+  timeline?: Array<{
+    status: ClientOrderStatus;
+    timestamp: string;
+    note?: string;
+  }>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetClientOrdersResult {
+  success: boolean;
+  orders: ClientOrder[];
+  count: number;
+  message?: string;
+}
+
+export interface CancelOrderResult {
+  success: boolean;
+  message: string;
+  order?: ClientOrder;
+  refund?: any;
+}
+
+export async function getClientOrders(): Promise<GetClientOrdersResult> {
+  try {
+    const res = await clientFetch("/orders", {
+      method: "GET",
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return { success: false, orders: [], count: 0, message: err.message || "Failed to load orders" };
+    }
+    const data = await res.json();
+    return data;
+  } catch {
+    return { success: false, orders: [], count: 0, message: "Network error loading orders" };
+  }
+}
+
+export async function cancelClientOrder(orderId: string): Promise<CancelOrderResult> {
+  try {
+    const res = await clientFetch(`/orders/${orderId}/cancel`, {
+      method: "POST",
+    });
+    const data = await res.json();
+    return data;
+  } catch {
+    return { success: false, message: "Network error cancelling order" };
+  }
+}

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShoppingBag, Menu, X, ChevronDown, LogOut } from "lucide-react";
+import { ShoppingBag, Menu, X, ChevronDown, LogOut, Package } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { OrderWindowBanner } from "./OrderWindowBanner";
 import { useCart } from "@/context/CartContext";
@@ -168,13 +168,21 @@ export function Navbar() {
                   />
                 </button>
 
-                {/* Dropdown Menu - Sign Out Only (Clean Website Aesthetic) */}
+                {/* Dropdown Menu - User Links */}
                 {userMenuOpen && (
                   <div
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
-                    className="absolute right-0 mt-2 w-40 bg-white rounded-2xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] border border-neutral-100 p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                    className="absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] border border-neutral-100 p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                   >
+                    <Link
+                      href="/orders"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="w-full text-left px-3.5 py-2.5 text-xs font-bold uppercase tracking-wider text-neutral-700 hover:text-accent-red hover:bg-red-50/70 rounded-xl transition-all flex items-center justify-between cursor-pointer group mb-0.5"
+                    >
+                      <span>My Orders</span>
+                      <Package className="w-3.5 h-3.5 text-neutral-400 group-hover:text-accent-red transition-colors" />
+                    </Link>
                     <button
                       type="button"
                       onClick={() => {
@@ -270,6 +278,14 @@ export function Navbar() {
                 className="py-2 hover:text-accent-red transition-colors border-b border-neutral-50"
               >
                 About
+              </Link>
+              <Link
+                href="/orders"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 hover:text-accent-red transition-colors border-b border-neutral-50 flex items-center justify-between"
+              >
+                <span>My Orders</span>
+                <Package className="w-4 h-4 text-neutral-400" />
               </Link>
               <button
                 type="button"

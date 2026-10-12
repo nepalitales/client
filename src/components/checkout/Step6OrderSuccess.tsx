@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useCheckout } from "@/context/CheckoutContext";
 import { CheckCircle2, Copy, Check } from "lucide-react";
 
@@ -76,14 +77,21 @@ export function Step6OrderSuccess() {
         </div>
       </div>
 
-      {/* Done Button */}
-      <div className="pt-6 w-full">
+      {/* Action Buttons */}
+      <div className="pt-6 w-full space-y-2.5">
+        <Link
+          href="/orders"
+          onClick={resetCheckout}
+          className="w-full bg-[#D92121] hover:bg-[#b81b1b] text-white font-secondary font-bold py-3.5 px-6 rounded-full text-sm sm:text-base tracking-wide transition-all shadow-sm active:scale-[0.98] inline-flex items-center justify-center cursor-pointer"
+        >
+          View My Orders
+        </Link>
         <button
           type="button"
           onClick={resetCheckout}
-          className="w-full bg-[#D92121] hover:bg-[#b81b1b] text-white font-secondary font-bold py-3.5 px-6 rounded-full text-sm sm:text-base tracking-wide transition-all shadow-sm active:scale-[0.98] cursor-pointer"
+          className="w-full py-2.5 text-xs sm:text-sm font-semibold text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
         >
-          Done
+          Continue Browsing
         </button>
       </div>
     </div>
