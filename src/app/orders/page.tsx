@@ -498,7 +498,7 @@ export default function MyOrdersPage() {
                           {isPickup ? (
                             <span className="text-emerald-600 font-semibold">Pickup (Free)</span>
                           ) : (
-                            <>Delivery: <span className="font-semibold text-neutral-800">₹{order.deliveryFee}</span></>
+                            <>Delivery: <span className="font-semibold text-neutral-800">{order.deliveryFee > 0 ? `₹${order.deliveryFee}` : "As per Borzo/Porter"}</span></>
                           )}
                         </p>
                         {order.payment?.razorpayPaymentId && (
