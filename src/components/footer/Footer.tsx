@@ -3,7 +3,12 @@
 import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { getClientOrderWindows, type OrderWindowDayConfig } from "@/lib/api";
+import {
+  getClientOrderWindows,
+  getClientWeeklyOff,
+  subscribeToLiveCatalogUpdates,
+  type OrderWindowDayConfig,
+} from "@/lib/api";
 
 function InstagramIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
@@ -42,30 +47,49 @@ function formatHour(timeStr: string): string {
 
 export function Footer() {
   const [orderWindows, setOrderWindows] = useState<OrderWindowDayConfig[]>([]);
+  const [weeklyOff, setWeeklyOff] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
-    getClientOrderWindows()
-      .then((res) => {
-        if (isMounted && res?.success && res.orderWindows) {
-          setOrderWindows(res.orderWindows);
-        }
-      })
-      .catch((err) => {
-        console.warn("[Footer] Could not fetch order windows:", err);
-      })
-      .finally(() => {
-        if (isMounted) {
-          setLoading(false);
-        }
-      });
+
+    const fetchFooterData = (force = false) => {
+      Promise.all([
+        getClientOrderWindows(force),
+        getClientWeeklyOff(),
+      ])
+        .then(([windowsRes, weeklyOffRes]) => {
+          if (!isMounted) return;
+          if (windowsRes?.success && windowsRes.orderWindows) {
+            setOrderWindows(windowsRes.orderWindows);
+          }
+          if (weeklyOffRes?.success && Array.isArray(weeklyOffRes.weeklyOff)) {
+            setWeeklyOff(weeklyOffRes.weeklyOff);
+          }
+        })
+        .catch((err) => {
+          console.warn("[Footer] Could not fetch order windows / weekly off:", err);
+        })
+        .finally(() => {
+          if (isMounted) {
+            setLoading(false);
+          }
+        });
+    };
+
+    fetchFooterData(false);
+
+    const unsubscribe = subscribeToLiveCatalogUpdates(() => {
+      fetchFooterData(true);
+    });
+
     return () => {
       isMounted = false;
+      unsubscribe();
     };
   }, []);
 
-  // Compute dynamic Ordering Time rows strictly from server order windows
+  // Compute dynamic Ordering Time rows strictly from server order windows & weekly off schedule
   const openingHoursRows = useMemo(() => {
     if (!orderWindows || orderWindows.length === 0) {
       return [];
@@ -80,6 +104,21 @@ export function Footer() {
       friday: { short: "Fri", full: "Friday" },
       saturday: { short: "Sat", full: "Saturday" },
     };
+
+    const prevDayMap: Record<string, string> = {
+      sunday: "saturday",
+      monday: "sunday",
+      tuesday: "monday",
+      wednesday: "tuesday",
+      thursday: "wednesday",
+      friday: "thursday",
+      saturday: "friday",
+    };
+
+    // Days on which ordering is closed due to kitchen weekly off next day
+    const eveOfWeeklyOffDays = (weeklyOff || [])
+      .map((off) => prevDayMap[off.toLowerCase()] || "")
+      .filter(Boolean);
 
     const daysOrder = [
       "monday",
@@ -96,8 +135,15 @@ export function Footer() {
     const openDaysList: Array<{ day: string; timeText: string }> = [];
 
     for (const d of daysOrder) {
+      const isEveOfWeeklyOff = eveOfWeeklyOffDays.includes(d);
       const config = windowMap.get(d as any);
-      if (!config || !config.enabled || !config.windows || config.windows.length === 0) {
+      if (
+        isEveOfWeeklyOff ||
+        !config ||
+        !config.enabled ||
+        !config.windows ||
+        config.windows.length === 0
+      ) {
         closedDays.push(d);
       } else {
         const firstWin = config.windows[0];
@@ -141,12 +187,12 @@ export function Footer() {
       rows.push({ label, value: currentGroup.timeText, closed: false });
     }
 
-    // Add closed days
+    // Add closed days row (e.g., Closed : Sunday)
     if (closedDays.length > 0) {
       if (closedDays.length === 1) {
         rows.push({
-          label: dayNameMap[closedDays[0]]?.full || "Monday",
-          value: "Closed",
+          label: "Closed",
+          value: dayNameMap[closedDays[0]]?.full || "Sunday",
           closed: true,
         });
       } else {
@@ -154,15 +200,15 @@ export function Footer() {
           .map((d) => dayNameMap[d]?.short || d)
           .join(", ");
         rows.push({
-          label: closedLabels,
-          value: "Closed",
+          label: "Closed",
+          value: closedLabels,
           closed: true,
         });
       }
     }
 
     return rows;
-  }, [orderWindows]);
+  }, [orderWindows, weeklyOff]);
 
   return (
     <footer className="w-full bg-white text-neutral-900 border-t border-neutral-100 font-secondary">
