@@ -187,24 +187,32 @@ export function Footer() {
       rows.push({ label, value: currentGroup.timeText, closed: false });
     }
 
-    // Add closed days row (e.g., Closed : Sunday)
+    // Add Ordering Closed row
     if (closedDays.length > 0) {
-      if (closedDays.length === 1) {
-        rows.push({
-          label: "Closed",
-          value: dayNameMap[closedDays[0]]?.full || "Sunday",
-          closed: true,
-        });
-      } else {
-        const closedLabels = closedDays
-          .map((d) => dayNameMap[d]?.short || d)
-          .join(", ");
-        rows.push({
-          label: "Closed",
-          value: closedLabels,
-          closed: true,
-        });
-      }
+      const closedLabels =
+        closedDays.length === 1
+          ? dayNameMap[closedDays[0]]?.full || "Sunday"
+          : closedDays.map((d) => dayNameMap[d]?.short || d).join(", ");
+      rows.push({
+        label: "Ordering Closed",
+        value: closedLabels,
+        closed: true,
+      });
+    }
+
+    // Add Kitchen Closed row (from weekly off schedule)
+    if (weeklyOff && weeklyOff.length > 0) {
+      const kitchenOffLabels =
+        weeklyOff.length === 1
+          ? dayNameMap[weeklyOff[0].toLowerCase()]?.full || weeklyOff[0]
+          : weeklyOff
+              .map((d) => dayNameMap[d.toLowerCase()]?.short || d)
+              .join(", ");
+      rows.push({
+        label: "Kitchen Closed",
+        value: kitchenOffLabels,
+        closed: true,
+      });
     }
 
     return rows;
@@ -276,7 +284,7 @@ export function Footer() {
                     <span
                       className={
                         row.closed
-                          ? "text-neutral-500 font-normal"
+                          ? "text-neutral-600 font-medium"
                           : "text-neutral-900 font-semibold"
                       }
                     >
