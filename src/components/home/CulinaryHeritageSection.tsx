@@ -14,7 +14,7 @@ export function CulinaryHeritageSection() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <span className="font-secondary font-bold text-xs sm:text-sm tracking-wider uppercase text-accent-red block">
-            Himalayan Dumpling Craftsmanship
+            Authentic Dumpling Craftsmanship
           </span>
           <h2 className="font-secondary font-black text-2xl sm:text-3xl lg:text-4xl text-neutral-950 tracking-tight leading-tight mt-1.5 sm:mt-2">
             The Craft &amp; Heritage of Nepali Tales
@@ -40,7 +40,7 @@ export function CulinaryHeritageSection() {
               <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
                 Every momo starts with soft, thin flour dough hand-kneaded each morning in Kasarvadavali, Thane West.
                 Our fillings feature farm-fresh cabbage, sweet onions, and seasoned chicken or soya, seasoned with traditional
-                Himalayan herbs and steam-cooked in small, dedicated batches.
+                aromatic herbs and steam-cooked in small, dedicated batches.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-neutral-100">
@@ -61,7 +61,7 @@ export function CulinaryHeritageSection() {
               </h3>
               <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
                 Founders Ashika &amp; Dipesh grew up steeped in the culinary cultures of Jaigaon along the Indo-Bhutan frontier.
-                After gaining widespread acclaim on MasterChef India and introducing Mumbai to authentic Himalayan dumplings at Momo Ghar
+                After gaining widespread acclaim on MasterChef India and introducing Mumbai to authentic Nepali dumplings at Momo Ghar
                 in 2022, they created Nepali Tales to deliver restaurant-grade craftsmanship straight to your home.
               </p>
             </div>

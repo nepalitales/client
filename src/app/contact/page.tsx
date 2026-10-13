@@ -102,7 +102,7 @@ export default function ContactPage() {
             </h1>
 
             <p className="mt-4 text-base sm:text-lg text-neutral-600 leading-relaxed font-secondary max-w-3xl">
-              Have questions about our authentic Himalayan momo, daily order windows, or dietary allergens?
+              Have questions about our authentic Nepali momo, daily order windows, or dietary allergens?
               Reach out directly to our founders Ashika &amp; Dipesh and the kitchen team.
             </p>
           </header>
@@ -247,7 +247,7 @@ export default function ContactPage() {
               </h2>
               <div className="mt-4 text-sm sm:text-base text-neutral-600 space-y-3 leading-relaxed">
                 <p>
-                  Nepali Tales operates as a specialized culinary kitchen crafting limited-batch authentic Himalayan dumplings and artisanal chilli oil. Because our dough is hand-rolled and freshly prepared every morning, pre-ordering 1 day ahead is strongly encouraged to ensure batch availability.
+                  Nepali Tales operates as a specialized culinary kitchen crafting limited-batch authentic Nepali dumplings and artisanal chilli oil. Because our dough is hand-rolled and freshly prepared every morning, pre-ordering 1 day ahead is strongly encouraged to ensure batch availability.
                 </p>
                 <p>
                   <strong className="text-neutral-900">Self Pickup:</strong> You may pick up orders directly from Metropolis Rivera, Shop No 10, Kasarvadavali, Thane West during your confirmed dispatch slot.

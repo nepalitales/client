@@ -266,7 +266,7 @@ export function RestaurantJsonLd({
         "@type": "SiteNavigationElement",
         name: "About Us",
         url: `${siteConfig.url}/about`,
-        description: "The story of Ashika & Dipesh, Momo Ghar roots, and Himalayan craft.",
+        description: "The story of Ashika & Dipesh, Momo Ghar roots, and authentic culinary craft.",
       },
       {
         "@type": "SiteNavigationElement",
