@@ -188,9 +188,9 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
         setUser(liveUser);
         setContactInfo((prev) => ({
           ...prev,
-          name: liveUser.username || prev.name,
-          phone: liveUser.phone || prev.phone,
-          email: liveUser.email || prev.email,
+          name: prev.name?.trim() ? prev.name : (liveUser.username || ""),
+          phone: prev.phone?.trim() ? prev.phone : (liveUser.phone || ""),
+          email: prev.email?.trim() ? prev.email : (liveUser.email || ""),
         }));
         try {
           localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(liveUser));
@@ -250,9 +250,9 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
           setUser(parsed);
           setContactInfo((prev) => ({
             ...prev,
-            name: parsed.username || prev.name,
-            phone: parsed.phone || prev.phone,
-            email: parsed.email || prev.email,
+            name: prev.name?.trim() ? prev.name : (parsed.username || ""),
+            phone: prev.phone?.trim() ? prev.phone : (parsed.phone || ""),
+            email: prev.email?.trim() ? prev.email : (parsed.email || ""),
           }));
         }
       }

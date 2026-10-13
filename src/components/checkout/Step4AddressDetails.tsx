@@ -25,6 +25,7 @@ export function Step4AddressDetails() {
   const {
     orderType,
     user,
+    setUser,
     contactInfo,
     setContactInfo,
     address,
@@ -43,9 +44,9 @@ export function Step4AddressDetails() {
     if (user) {
       setContactInfo((prev) => ({
         ...prev,
-        name: prev.name || user.username || "",
-        phone: prev.phone || user.phone || "",
-        email: prev.email || user.email || "",
+        name: prev.name?.trim() ? prev.name : (user.username || ""),
+        phone: prev.phone?.trim() ? prev.phone : (user.phone || ""),
+        email: prev.email?.trim() ? prev.email : (user.email || ""),
       }));
     }
   }, [user, setContactInfo]);
@@ -116,13 +117,34 @@ export function Step4AddressDetails() {
     setIsSubmitting(true);
 
     try {
-      // 1. Sync contact phone to user profile in MongoDB if user phone was missing
+      // 1. Sync receiver phone and username to user profile in MongoDB and update state
       const cleanPhone = contactInfo.phone.replace(/\D/g, "");
-      if (cleanPhone && (!user?.phone || user.phone !== cleanPhone)) {
+      const cleanName = contactInfo.name.trim();
+
+      if (cleanPhone || cleanName) {
         try {
-          await updateClientProfile({ phone: cleanPhone, username: contactInfo.name.trim() });
+          const profileRes = await updateClientProfile({
+            phone: cleanPhone || user?.phone,
+            username: cleanName || user?.username,
+          });
+          if (profileRes?.success && profileRes?.user) {
+            setUser(profileRes.user);
+            try {
+              localStorage.setItem("nt_client_user", JSON.stringify(profileRes.user));
+            } catch {}
+          } else if (user) {
+            const mergedUser = {
+              ...user,
+              phone: cleanPhone || user.phone,
+              username: cleanName || user.username,
+            };
+            setUser(mergedUser);
+            try {
+              localStorage.setItem("nt_client_user", JSON.stringify(mergedUser));
+            } catch {}
+          }
         } catch (e) {
-          console.warn("[Address] Non-fatal user phone update error:", e);
+          console.warn("[Address] Non-fatal user phone/profile update error:", e);
         }
       }
 

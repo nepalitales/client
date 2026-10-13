@@ -274,6 +274,7 @@ export function Step3CustomerAuth() {
     setContactInfo((prev) => ({
       ...prev,
       name: userData.username || prev.name,
+      phone: userData.phone || prev.phone,
       email: userData.email || email.trim().toLowerCase() || prev.email,
     }));
 
