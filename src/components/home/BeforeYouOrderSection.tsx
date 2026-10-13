@@ -16,7 +16,7 @@ const STEPS: StepItem[] = [
     step: 1,
     title: "Order in Advance",
     description: "Order 1 day ahead so we can prepare your momo fresh.",
-    image: "/assets/before-you-order-section/order-in-advance.png",
+    image: "/assets/before-you-order-section/order-in-advance.webp",
     imageAlt: "Calendar with 2-3 hours and steaming basket of fresh momo",
   },
   {
@@ -24,7 +24,7 @@ const STEPS: StepItem[] = [
     title: "Pickup or get delivered",
     description:
       "Pick up from our kitchen or choose Porter. Delivery charges apply.",
-    image: "/assets/before-you-order-section/pickup-or-get-delievered.png",
+    image: "/assets/before-you-order-section/pickup-or-get-delievered.webp",
     imageAlt: "Porter delivery scooter and runner carrying fresh takeaway",
   },
   {
@@ -32,7 +32,7 @@ const STEPS: StepItem[] = [
     title: "Need to cancel?",
     description:
       "Cancel at least 3 hours before delivery to receive a refund.",
-    image: "/assets/before-you-order-section/need-to-cancel.png",
+    image: "/assets/before-you-order-section/need-to-cancel.webp",
     imageAlt: "Smartphone order screen and clock showing cancellation window",
   },
 ];
@@ -70,13 +70,13 @@ export function BeforeYouOrderSection() {
               </div>
 
               {/* Upper Section: Graphic Illustration (Enlarged) */}
-              <div className="pt-10 sm:pt-12 pb-6 sm:pb-8 px-4 sm:px-6 flex items-center justify-center flex-1 min-h-57.5 sm:min-h-67.5 lg:min-h-72.5">
-                <div className="relative w-full h-48 sm:h-56 lg:h-64 flex items-center justify-center select-none">
+              <div className="pt-8 sm:pt-10 pb-4 sm:pb-6 px-2 sm:px-4 flex items-center justify-center flex-1 min-h-65 sm:min-h-75 lg:min-h-85">
+                <div className="relative w-full h-60 sm:h-72 lg:h-80 flex items-center justify-center select-none">
                   <Image
                     src={item.image}
                     alt={item.imageAlt}
-                    width={450}
-                    height={400}
+                    width={650}
+                    height={580}
                     priority
                     className="w-full h-full object-contain pointer-events-none transition-transform duration-300 group-hover:scale-105"
                   />
