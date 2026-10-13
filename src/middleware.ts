@@ -253,6 +253,20 @@ Information regarding ingredients used in our kitchen including gluten (wheat fl
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const acceptHeader = request.headers.get("accept");
+
+  // Bypass Next.js internal RSC requests, prefetch requests, and API routes immediately
+  // to ensure zero interference with client-side navigation, cart, or checkout
+  if (
+    pathname.startsWith("/api/") ||
+    request.headers.get("rsc") === "1" ||
+    request.headers.has("next-router-state-tree") ||
+    request.headers.has("next-router-prefetch") ||
+    request.headers.has("next-url") ||
+    acceptHeader?.includes("text/x-component")
+  ) {
+    return NextResponse.next();
+  }
+
   const chosen = preferredType(acceptHeader);
 
   // Check if pathname has a canonical redirect
@@ -307,21 +321,7 @@ The requested resource "${pathname}" was not found on Nepali Tales.
     return notFoundResponse;
   }
 
-  // If client explicitly rejects all types we produce (returns null)
-  if (chosen === null && acceptHeader && !acceptHeader.includes("*/*")) {
-    return new NextResponse(
-      "Not Acceptable\n\nAvailable representations: text/html, text/markdown\n",
-      {
-        status: 406,
-        headers: {
-          "Content-Type": "text/plain; charset=utf-8",
-          "Vary": "Accept",
-        },
-      }
-    );
-  }
-
-  // For regular HTML requests, ensure Vary: Accept is passed
+  // For regular HTML and all other client requests, safely pass through with Vary: Accept
   const response = NextResponse.next();
   appendVaryAccept(response.headers);
   return response;
