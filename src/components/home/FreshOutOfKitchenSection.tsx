@@ -72,7 +72,7 @@ export function FreshOutOfKitchenSection() {
         </h2>
 
         {/* ─── Order Window Announcement Bar (Dynamically from Server) ─ */}
-        <div className="mt-8 sm:mt-10 max-w-3xl mx-auto border-t border-b border-neutral-200/90 py-3 sm:py-3.5 px-4 text-center select-none">
+        <div data-nosnippet className="mt-8 sm:mt-10 max-w-3xl mx-auto border-t border-b border-neutral-200/90 py-3 sm:py-3.5 px-4 text-center select-none">
           <p className="font-secondary font-black text-xs sm:text-sm lg:text-base tracking-wider text-neutral-900 uppercase leading-relaxed">
             {bannerText || "ORDER WINDOW · MON–SAT · 2 PM–4 PM · KITCHEN CLOSED ON MONDAYS (ORDERING CLOSED ON SUNDAYS) & HOLIDAYS"}
           </p>

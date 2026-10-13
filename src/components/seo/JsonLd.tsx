@@ -52,23 +52,7 @@ export function RestaurantJsonLd({
       "@type": "AdministrativeArea",
       name: area,
     })),
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday",
-        ],
-        opens: "11:00",
-        closes: "23:00",
-      },
-    ],
-    menu: `${siteConfig.url}/#menu`,
+    menu: `${siteConfig.url}/menu`,
     acceptsReservations: "False",
     potentialAction: {
       "@type": "OrderAction",
@@ -241,10 +225,10 @@ export function RestaurantJsonLd({
           },
           {
             "@type": "Question",
-            name: "What are the operating hours and delivery areas?",
+            name: "Which locations and areas does Nepali Tales deliver to?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Nepali Tales operates daily from 11:00 AM to 11:00 PM, serving Kasarvadavali, Ghodbunder Road, Ovala, Waghbil, Manpada, Majiwada, Hiranandani Estate, and across Thane and Mumbai suburbs.",
+              text: "Nepali Tales kitchen is based in Kasarvadavali, Thane West, and dispatches freshly packed orders across Ghodbunder Road, Ovala, Waghbil, Manpada, Majiwada, Hiranandani Estate, and across Thane, Mumbai, and Navi Mumbai via reliable on-demand delivery couriers.",
             },
           },
         ];
@@ -269,6 +253,36 @@ export function RestaurantJsonLd({
     ],
   };
 
+  const siteNavigationSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SiteNavigationElement",
+        name: "Food Menu",
+        url: `${siteConfig.url}/menu`,
+        description: "Explore our authentic steamed, pan-fried Kothey, and Jhol momo.",
+      },
+      {
+        "@type": "SiteNavigationElement",
+        name: "About Us",
+        url: `${siteConfig.url}/about`,
+        description: "The story of Ashika & Dipesh, Momo Ghar roots, and Himalayan craft.",
+      },
+      {
+        "@type": "SiteNavigationElement",
+        name: "Contact Us",
+        url: `${siteConfig.url}/contact`,
+        description: "Kitchen location, pickup guidelines, directions, and support in Thane West.",
+      },
+      {
+        "@type": "SiteNavigationElement",
+        name: "Track Orders",
+        url: `${siteConfig.url}/orders`,
+        description: "Live status updates and dispatch tracking for your orders.",
+      },
+    ],
+  };
+
   return (
     <>
       <script
@@ -282,6 +296,10 @@ export function RestaurantJsonLd({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteNavigationSchema) }}
       />
       <script
         type="application/ld+json"

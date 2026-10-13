@@ -207,7 +207,7 @@ export default function ContactPage() {
             </div>
 
             {/* 4. Kitchen & Order Windows */}
-            <div className="bg-neutral-50/70 rounded-2xl border border-neutral-200/80 p-6 flex flex-col justify-between hover:border-neutral-300 transition-colors">
+            <div data-nosnippet className="bg-neutral-50/70 rounded-2xl border border-neutral-200/80 p-6 flex flex-col justify-between hover:border-neutral-300 transition-colors">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-amber-100/80 text-amber-800 flex items-center justify-center mb-4">
                   <Clock className="w-5 h-5" />

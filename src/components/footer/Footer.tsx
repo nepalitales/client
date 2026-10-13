@@ -264,8 +264,8 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Ordering Time (Dynamic from Server) */}
-          <div className="lg:col-span-3 space-y-3">
+          {/* Column 2: Ordering Time (Dynamic from Server - data-nosnippet blocks search crawlers from snippetizing hours) */}
+          <div className="lg:col-span-3 space-y-3" data-nosnippet>
             <h3 className="font-bold text-neutral-950 text-xl tracking-tight">
               Ordering Time
             </h3>

@@ -72,6 +72,7 @@ export function OrderWindowBanner() {
     <div
       role="region"
       aria-label="Order Window Announcement"
+      data-nosnippet
       className="relative z-30 w-full bg-[#202124] text-white py-2 sm:py-2.5 px-3 sm:px-6 flex items-center justify-center text-center select-none shadow-sm transition-all duration-300"
     >
       {loading && !bannerText ? (
