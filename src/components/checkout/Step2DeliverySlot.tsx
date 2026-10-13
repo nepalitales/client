@@ -91,6 +91,10 @@ export function Step2DeliverySlot() {
           <p className="text-xs text-neutral-500">
             Pre-order for <strong className="text-neutral-900">{displayDateStr}</strong>
           </p>
+          <div className="flex items-center gap-1.5 text-[11px] text-neutral-600 bg-neutral-100/80 px-2.5 py-1.5 rounded-lg border border-neutral-200/60">
+            <span className="font-semibold text-neutral-900">Advance Pre-Order:</span>
+            <span>Food is prepared fresh on the morning of dispatch. Kitchen does not cook on weekly off days.</span>
+          </div>
         </div>
 
         {/* ─── Time Slots List ──────────────────────────────────── */}

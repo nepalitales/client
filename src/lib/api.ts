@@ -451,7 +451,7 @@ export function getOrderWindowBannerParts(
     const offNames = weeklyOff
       .map((d) => pluralMap[d.toLowerCase()] || d.toUpperCase())
       .join(" & ");
-    dispatchOffText = `KITCHEN DISPATCH CLOSED ON ${offNames}`;
+    dispatchOffText = `KITCHEN COOKING CLOSED ON ${offNames} · PRE-ORDERS ACCEPTED FOR NEXT DAY`;
   }
 
   const holidayInfo = formatHolidayNotice(holidays);
@@ -481,7 +481,7 @@ export function getOrderWindowBannerParts(
 
 /**
  * Format order window schedule, weekly off, and holidays into the standardized banner text:
- * ORDER WINDOW · ALL DAYS · 10 AM–9 PM · KITCHEN DISPATCH CLOSED ON MONDAYS & HOLIDAYS
+ * ORDER WINDOW · ALL DAYS · 10 AM–9 PM · KITCHEN COOKING CLOSED ON MONDAYS · PRE-ORDERS ACCEPTED FOR NEXT DAY
  */
 export function formatOrderWindowBannerText(
   orderWindows: OrderWindowDayConfig[],
