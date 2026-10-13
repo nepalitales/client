@@ -103,7 +103,7 @@ export function Step2DeliverySlot() {
           <div
             data-lenis-prevent
             onWheel={(e) => e.stopPropagation()}
-            className="space-y-2 max-h-56 sm:max-h-64 overflow-y-auto pr-1.5 custom-scrollbar overscroll-contain touch-pan-y pb-1"
+            className="space-y-2.5 max-h-60 sm:max-h-70 overflow-y-auto -mx-1.5 px-1.5 pt-2 pb-2 custom-scrollbar overscroll-contain touch-pan-y"
           >
             {slotsList.map((slot) => {
               const isSelected = selectedSlot?.id === slot.id;
@@ -115,12 +115,12 @@ export function Step2DeliverySlot() {
                   type="button"
                   disabled={isFull}
                   onClick={() => handleSlotSelect(slot)}
-                  className={`w-full p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                  className={`w-full p-3.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
                     isFull
                       ? "opacity-45 cursor-not-allowed border-neutral-200 bg-neutral-50"
                       : isSelected
-                      ? "border-[#D92121] bg-red-50/50 shadow-xs ring-1 ring-[#D92121]"
-                      : "border-neutral-200 hover:border-neutral-300 bg-white"
+                      ? "border-[#D92121] bg-red-50/50 shadow-xs ring-1 ring-inset ring-[#D92121]"
+                      : "border-neutral-200 hover:border-neutral-300 bg-white hover:bg-neutral-50/50"
                   }`}
                 >
                   <div className="space-y-0.5">
