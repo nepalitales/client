@@ -496,33 +496,33 @@ export function CartDrawer() {
                     </div>
 
                     {/* Horizontal Scrollable Carousel Cards */}
-                    <div className="flex gap-2.5 overflow-x-auto pb-2 pt-0.5 -mx-1 px-1 scrollbar-none snap-x">
+                    <div className="flex gap-2 overflow-x-auto pb-2 pt-0.5 -mx-1 px-1 scrollbar-none snap-x">
                       {availableAddons.map((addon) => {
                         const qty = getAddonQuantity(addon.id);
                         return (
                           <div
                             key={addon.id}
-                            className={`w-36 shrink-0 rounded-xl p-2.5 flex flex-col justify-between snap-start transition-all border ${
+                            className={`w-28 shrink-0 rounded-xl p-2 flex flex-col justify-between snap-start transition-all border ${
                               qty > 0
                                 ? "bg-red-50/40 border-[#E53935]/40 shadow-2xs"
                                 : "bg-neutral-50/70 border-neutral-200/90 hover:border-neutral-300 hover:bg-white hover:shadow-2xs"
                             }`}
                           >
                             {/* Thumbnail */}
-                            <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-white mb-2 border border-neutral-200/70 shadow-2xs">
+                            <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-white mb-1.5 border border-neutral-200/70 shadow-2xs">
                               <Image
                                 src={addon.image}
                                 alt={addon.name}
                                 fill
-                                sizes="120px"
+                                sizes="100px"
                                 className="object-cover group-hover:scale-105 transition-transform duration-300"
                               />
                             </div>
 
                             {/* Title & Price */}
-                            <div className="space-y-0.5 mb-2">
+                            <div className="space-y-0.5 mb-1.5">
                               <h5
-                                className="font-secondary font-bold text-xs text-neutral-900 truncate leading-tight"
+                                className="font-secondary font-bold text-[11px] text-neutral-900 truncate leading-tight"
                                 title={addon.name}
                               >
                                 {addon.name}
@@ -538,10 +538,10 @@ export function CartDrawer() {
                                 <button
                                   type="button"
                                   onClick={() => addAddon(addon, 1)}
-                                  className="w-full bg-white hover:bg-red-50 text-[#D92121] border border-[#E53935] text-[11px] font-bold py-1 px-2 rounded-full shadow-2xs active:scale-95 transition-all flex items-center justify-center gap-1 cursor-pointer"
+                                  className="w-full bg-white hover:bg-red-50 text-[#D92121] border border-[#E53935] text-[10px] font-bold py-1 px-1.5 rounded-full shadow-2xs active:scale-95 transition-all flex items-center justify-center gap-0.5 cursor-pointer"
                                 >
                                   <span>ADD</span>
-                                  <span className="text-xs leading-none">+</span>
+                                  <span className="text-[11px] leading-none">+</span>
                                 </button>
                               ) : (
                                 <div className="w-full bg-white border border-[#E53935] rounded-full shadow-2xs flex items-center justify-between px-1 py-0.5 select-none">
@@ -549,18 +549,18 @@ export function CartDrawer() {
                                     type="button"
                                     onClick={() => updateAddonQuantity(addon.id, qty - 1)}
                                     aria-label={`Decrease ${addon.name} quantity`}
-                                    className="w-5 h-5 flex items-center justify-center text-[#D92121] hover:bg-red-50 rounded-full transition-colors active:scale-90 cursor-pointer"
+                                    className="w-4.5 h-4.5 flex items-center justify-center text-[#D92121] hover:bg-red-50 rounded-full transition-colors active:scale-90 cursor-pointer"
                                   >
                                     <Minus className="w-2.5 h-2.5 stroke-[2.5]" />
                                   </button>
-                                  <span className="font-secondary font-bold text-xs text-neutral-900 min-w-3.5 text-center">
+                                  <span className="font-secondary font-bold text-[11px] text-neutral-900 min-w-3 text-center">
                                     {qty}
                                   </span>
                                   <button
                                     type="button"
                                     onClick={() => updateAddonQuantity(addon.id, qty + 1)}
                                     aria-label={`Increase ${addon.name} quantity`}
-                                    className="w-5 h-5 flex items-center justify-center text-[#D92121] hover:bg-red-50 rounded-full transition-colors active:scale-90 cursor-pointer"
+                                    className="w-4.5 h-4.5 flex items-center justify-center text-[#D92121] hover:bg-red-50 rounded-full transition-colors active:scale-90 cursor-pointer"
                                   >
                                     <Plus className="w-2.5 h-2.5 stroke-[2.5]" />
                                   </button>
