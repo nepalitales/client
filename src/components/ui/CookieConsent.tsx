@@ -37,12 +37,11 @@ export function CookieConsent() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 lg:bottom-10 inset-x-0 z-50 pointer-events-none">
-      <div className="figma-container">
-        <aside
-          aria-label="Cookie consent banner"
-          className="pointer-events-auto max-w-xl"
-        >
+    <div className="fixed bottom-4 left-4 right-4 sm:right-auto sm:left-6 sm:bottom-6 z-50 sm:max-w-md md:max-w-lg">
+      <aside
+        aria-label="Cookie consent banner"
+        className="w-full"
+      >
           <div className="rounded-2xl border border-neutral-200/90 bg-white/95 backdrop-blur-md p-5 sm:p-6 shadow-xl transition-all">
             <div className="flex flex-col gap-4">
               <div className="space-y-1.5">
@@ -94,7 +93,6 @@ export function CookieConsent() {
             </div>
           </div>
         </aside>
-      </div>
     </div>
   );
 }
