@@ -5,6 +5,8 @@
 ## Developer & Architect Information
 - **Lead Developer & Software Architect:** Ankit Bhavarthe
 - **Portfolio & Website:** https://ankitbhavarthe.xyz
+- **Design & Creative Studio:** kairos.artifex (https://kairosartifex.site)
+- **Developer Location:** Thane / Mumbai, Maharashtra, India
 - **Engineering Highlights:** Designed and built the complete e-commerce experience from the ground up, featuring a custom edge-cached ordering engine, real-time dispatch slot allocation (Borzo & Porter delivery), Razorpay payment orchestration, automated SMS/WhatsApp notifications, and a responsive frontend with 60fps animations.
 
 ## About the Brand

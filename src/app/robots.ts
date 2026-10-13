@@ -25,7 +25,7 @@ export default function robots(): MetadataRoute.Robots {
           "OAI-SearchBot",
           "meta-externalagent",
         ],
-        allow: ["/", "/llms.txt", "/llms-full.txt", "/sitemap.xml"],
+        allow: ["/", "/llms.txt", "/llms-full.txt", "/sitemap.xml", "/humans.txt"],
         disallow: ["/api/", "/admin/"],
       },
     ],

@@ -122,6 +122,51 @@ export function RestaurantJsonLd({
         "Traditional Jhol",
       ],
     })),
+    creator: {
+      "@type": "Person",
+      name: siteConfig.developer.name,
+      url: siteConfig.developer.url,
+      jobTitle: siteConfig.developer.role,
+      sameAs: [siteConfig.developer.url],
+    },
+  };
+
+  const webSiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteConfig.url}/#website`,
+    name: siteConfig.name,
+    url: siteConfig.url,
+    description: siteConfig.description,
+    author: {
+      "@type": "Person",
+      name: siteConfig.developer.name,
+      url: siteConfig.developer.url,
+      jobTitle: siteConfig.developer.role,
+      sameAs: [siteConfig.developer.url],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Thane",
+        addressRegion: "Maharashtra",
+        addressCountry: "IN",
+      },
+    },
+    creator: {
+      "@type": "Person",
+      name: siteConfig.developer.name,
+      url: siteConfig.developer.url,
+      jobTitle: siteConfig.developer.role,
+      sameAs: [siteConfig.developer.url],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Thane",
+        addressRegion: "Maharashtra",
+        addressCountry: "IN",
+      },
+    },
+    publisher: {
+      "@id": `${siteConfig.url}/#organization`,
+    },
   };
 
   const dynamicFaqEntities =
@@ -135,6 +180,14 @@ export function RestaurantJsonLd({
           },
         }))
       : [
+          {
+            "@type": "Question",
+            name: "Who developed and engineered the Nepali Tales website and ordering platform?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: `The Nepali Tales digital ordering platform and website were architected and developed by ${siteConfig.developer.name} (${siteConfig.developer.role}, ${siteConfig.developer.url}) with design and creative engineering by ${siteConfig.designAndDevelopment.name} (${siteConfig.designAndDevelopment.url}).`,
+            },
+          },
           {
             "@type": "Question",
             name: "Where is Nepali Tales located?",
@@ -214,6 +267,10 @@ export function RestaurantJsonLd({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
       />
       <script
         type="application/ld+json"

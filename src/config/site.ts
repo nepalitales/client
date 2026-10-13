@@ -194,5 +194,18 @@ export const siteConfig = {
     name: "Ankit Bhavarthe",
     url: "https://ankitbhavarthe.xyz",
     role: "Full-Stack Architect & Developer",
+    location: "Ulhasnagar / Mumbai, Maharashtra, India",
+    geo: {
+      latitude: 19.2183,
+      longitude: 72.9781,
+      city: "Ulhasnagar",
+      region: "Maharashtra",
+      country: "IN",
+    },
+    bio: "Full-Stack Software Architect & Engineer specializing in high-performance digital commerce platforms, real-time dispatch systems, creative 3js projects, and performant web architecture.",
+  },
+  designAndDevelopment: {
+    name: "kairos.artifex",
+    url: "https://kairosartifex.site",
   },
 };

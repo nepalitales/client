@@ -1,0 +1,14 @@
+/* TEAM */
+Lead Developer & Software Architect: Ankit Bhavarthe
+Site: https://ankitbhavarthe.xyz
+Location: Thane / Mumbai, Maharashtra, India
+
+Design & Creative Studio: kairos.artifex
+Site: https://kairosartifex.site
+
+/* SITE */
+Client: Nepali Tales
+Site: https://nepalitales.com
+Founders: Ashika & Dipesh
+Location: Metropolis Rivera, Kasarvadavali, Thane West, Maharashtra 400615, India
+Standards: HTML5, CSS3, Next.js, React, Tailwind CSS, Turbopack

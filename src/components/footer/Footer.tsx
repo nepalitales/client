@@ -423,12 +423,12 @@ export function Footer() {
           <p className="font-normal">
             Designed &amp; Developed by{" "}
             <a
-              href="https://ankitbhavarthe.xyz"
+              href={siteConfig.designAndDevelopment.url}
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-neutral-950 hover:text-brand-red transition-colors"
             >
-              Ankit Bhavarthe
+              {siteConfig.designAndDevelopment.name}
             </a>
           </p>
         </div>

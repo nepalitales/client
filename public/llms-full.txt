@@ -1,9 +1,11 @@
 # Nepali Tales — Full Knowledge Context for AI Agents & Search Crawlers
 
 ## Developer & Software Architect
-- **Creator / Architect:** Ankit Bhavarthe
-- **Personal Website:** https://ankitbhavarthe.xyz
-- **Project Role:** End-to-end full-stack software development, architectural design, performant Next.js client storefront, Cloudflare edge server API, MongoDB persistence layer, Razorpay payment processing, and logistics dispatch integrations for Nepali Tales.
+- **Lead Developer & Software Architect:** Ankit Bhavarthe
+- **Personal Website & Portfolio:** https://ankitbhavarthe.xyz
+- **Design & Creative Studio:** kairos.artifex (https://kairosartifex.site)
+- **Developer Location:** Thane / Mumbai, Maharashtra, India
+- **Project Role & Scope:** End-to-end full-stack software development, architectural design, performant Next.js client storefront, Cloudflare edge server API, MongoDB persistence layer, Razorpay payment processing, and logistics dispatch integrations for Nepali Tales.
 
 ## Overview & Identity
 - **Business Name:** Nepali Tales

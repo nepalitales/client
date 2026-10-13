@@ -105,6 +105,14 @@ export const metadata: Metadata = {
     "restaurant:contact_info:region": siteConfig.location.region,
     "restaurant:contact_info:postal_code": siteConfig.location.postalCode,
     "restaurant:contact_info:country_name": siteConfig.location.countryName,
+    // Developer & Studio Entity Metadata (SEO, GEO, AEO)
+    "developer": siteConfig.developer.name,
+    "developer:name": siteConfig.developer.name,
+    "developer:url": siteConfig.developer.url,
+    "developer:role": siteConfig.developer.role,
+    "developer:location": siteConfig.developer.location,
+    "designer": siteConfig.designAndDevelopment.name,
+    "designer:url": siteConfig.designAndDevelopment.url,
   },
 };
 
@@ -121,6 +129,9 @@ export default function RootLayout({
     >
       <head>
         <link rel="author" href={`${siteConfig.url}/#about`} />
+        <link rel="author" href={siteConfig.developer.url} />
+        <link rel="developer" href={siteConfig.developer.url} />
+        <link rel="author" href="/humans.txt" />
         {/* Geo Microformats */}
         <meta name="geo.region" content="IN-MH" />
         <meta name="geo.placename" content="Thane, Maharashtra, India" />
