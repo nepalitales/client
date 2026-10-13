@@ -317,12 +317,18 @@ export function formatHolidayNotice(
 
     if (isTomorrow) {
       text = reasonClean
-        ? `CLOSED TOMORROW (${dateFormatted} - ${reasonClean})`
-        : `CLOSED TOMORROW (${dateFormatted})`;
+        ? `ORDERING CLOSED TODAY · KITCHEN CLOSED TOMORROW (${dateFormatted} - ${reasonClean})`
+        : `ORDERING CLOSED TODAY · KITCHEN CLOSED TOMORROW (${dateFormatted})`;
     } else {
+      const holidayEveDate = new Date(dateObj.getTime() - 24 * 60 * 60 * 1000);
+      const eveMonthStr = holidayEveDate
+        .toLocaleDateString("en-US", { month: "short", timeZone: "UTC" })
+        .toUpperCase();
+      const eveFormatted = `${eveMonthStr} ${holidayEveDate.getUTCDate()}`;
+
       text = reasonClean
-        ? `HOLIDAY ON ${dateFormatted} (${reasonClean})`
-        : `HOLIDAY ON ${dateFormatted}`;
+        ? `HOLIDAY ON ${dateFormatted} (${reasonClean}) · NO ORDERS ON ${eveFormatted}`
+        : `HOLIDAY ON ${dateFormatted} · NO ORDERS ON ${eveFormatted}`;
     }
   }
 
@@ -391,6 +397,16 @@ export function getOrderWindowBannerParts(
     sunday: "SUNDAYS",
   };
 
+  const prevDayMap: Record<string, string> = {
+    monday: "sunday",
+    tuesday: "monday",
+    wednesday: "tuesday",
+    thursday: "wednesday",
+    friday: "thursday",
+    saturday: "friday",
+    sunday: "saturday",
+  };
+
   const windowMap = new Map(orderWindows.map((w) => [w.day, w]));
   const openDays: string[] = [];
   const closedDays: string[] = [];
@@ -445,13 +461,33 @@ export function getOrderWindowBannerParts(
     closedText = `ORDERING CLOSED ON ${closedNames}`;
   }
 
+  // Check if today in IST is the eve (day before) a weekly off day
+  const istWeekday = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
+    weekday: "long",
+  }).format(new Date()).toLowerCase();
+
+  const isTodayEveOfWeeklyOff = weeklyOff ? weeklyOff.some(
+    (off) => prevDayMap[off.toLowerCase()] === istWeekday
+  ) : false;
+
   // Kitchen dispatch closure notice for recurring weekly off days
   let dispatchOffText = "";
-  if (weeklyOff && weeklyOff.length > 0) {
+  if (isTodayEveOfWeeklyOff && weeklyOff && weeklyOff.length > 0) {
+    const matchingOffDays = weeklyOff
+      .filter((off) => prevDayMap[off.toLowerCase()] === istWeekday)
+      .map((d) => d.toUpperCase())
+      .join(" & ");
+    dispatchOffText = `ORDERING CLOSED TODAY · KITCHEN CLOSED TOMORROW (${matchingOffDays})`;
+  } else if (weeklyOff && weeklyOff.length > 0) {
     const offNames = weeklyOff
       .map((d) => pluralMap[d.toLowerCase()] || d.toUpperCase())
       .join(" & ");
-    dispatchOffText = `KITCHEN COOKING CLOSED ON ${offNames} · PRE-ORDERS ACCEPTED FOR NEXT DAY`;
+    const prevNames = weeklyOff
+      .map((d) => pluralMap[prevDayMap[d.toLowerCase()] || ""] || "")
+      .filter(Boolean)
+      .join(" & ");
+    dispatchOffText = `KITCHEN CLOSED ON ${offNames} (ORDERING CLOSED ON ${prevNames})`;
   }
 
   const holidayInfo = formatHolidayNotice(holidays);
