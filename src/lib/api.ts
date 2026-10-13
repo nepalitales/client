@@ -453,9 +453,19 @@ export function getOrderWindowBannerParts(
 
   const scheduleText = ["ORDER WINDOW", openRange, timeStr].filter(Boolean).join(" · ");
 
+  // Identify days that are the eve (day before) a recurring weekly off day
+  const eveOfWeeklyOffDays = (weeklyOff || [])
+    .map((off) => prevDayMap[off.toLowerCase()] || "")
+    .filter(Boolean);
+
+  // Filter out closed days that are already explained by weekly off (e.g. Sunday before Monday)
+  const independentClosedDays = closedDays.filter(
+    (d) => !eveOfWeeklyOffDays.includes(d.toLowerCase())
+  );
+
   let closedText = "";
-  if (closedDays.length > 0) {
-    const closedNames = closedDays
+  if (independentClosedDays.length > 0) {
+    const closedNames = independentClosedDays
       .map((d) => pluralMap[d] || d.toUpperCase())
       .join(" & ");
     closedText = `ORDERING CLOSED ON ${closedNames}`;

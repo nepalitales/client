@@ -4,47 +4,50 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   getClientOrderWindows,
+  getClientHolidays,
+  getClientWeeklyOff,
+  formatOrderWindowBannerText,
   subscribeToLiveCatalogUpdates,
+  type OrderWindowDayConfig,
+  type HolidayItem,
 } from "@/lib/api";
 
 export function FreshOutOfKitchenSection() {
-  const [windowText, setWindowText] = useState<string>("");
+  const [orderWindows, setOrderWindows] = useState<OrderWindowDayConfig[]>([]);
+  const [holidays, setHolidays] = useState<HolidayItem[]>([]);
+  const [weeklyOff, setWeeklyOff] = useState<string[]>([]);
 
   useEffect(() => {
     let isMounted = true;
 
-    const fetchWindows = (force = false) => {
-      getClientOrderWindows(force)
-        .then((res) => {
-          if (!isMounted || !res?.success || !res.orderWindows) return;
-          const enabledDay = res.orderWindows.find(
-            (d) => d.enabled && d.windows && d.windows.length > 0
-          );
-          if (enabledDay && enabledDay.windows.length > 0) {
-            const w = enabledDay.windows[0];
-            const formatH = (t: string) => {
-              const [hStr, mStr] = t.split(":");
-              let h = parseInt(hStr, 10);
-              const m = parseInt(mStr || "0", 10);
-              const ampm = h >= 12 ? "PM" : "AM";
-              h = h % 12 || 12;
-              const padH = h < 10 ? `0${h}` : `${h}`;
-              const padM = m < 10 ? `0${m}` : `${m}`;
-              return `${padH}:${padM} ${ampm}`;
-            };
-            setWindowText(`${formatH(w.start)} - ${formatH(w.end)}`);
+    const fetchBannerData = (force = false) => {
+      Promise.all([
+        getClientOrderWindows(force),
+        getClientHolidays(force),
+        getClientWeeklyOff(),
+      ])
+        .then(([windowsRes, holidaysRes, weeklyOffRes]) => {
+          if (!isMounted) return;
+          if (windowsRes?.success && windowsRes.orderWindows) {
+            setOrderWindows(windowsRes.orderWindows);
+          }
+          if (holidaysRes?.success && Array.isArray(holidaysRes.holidays)) {
+            setHolidays(holidaysRes.holidays);
+          }
+          if (weeklyOffRes?.success && Array.isArray(weeklyOffRes.weeklyOff)) {
+            setWeeklyOff(weeklyOffRes.weeklyOff);
           }
         })
         .catch((err) => {
-          console.warn("[FreshOutOfKitchenSection] Could not fetch order windows:", err);
+          console.warn("[FreshOutOfKitchenSection] Could not fetch banner data:", err);
         });
     };
 
     // Initial mount reuses cached order windows instead of busting cache
-    fetchWindows(false);
+    fetchBannerData(false);
 
     const unsubscribe = subscribeToLiveCatalogUpdates(() => {
-      fetchWindows(true);
+      fetchBannerData(true);
     });
 
     return () => {
@@ -52,6 +55,8 @@ export function FreshOutOfKitchenSection() {
       unsubscribe();
     };
   }, []);
+
+  const bannerText = formatOrderWindowBannerText(orderWindows, holidays, weeklyOff);
 
   return (
     <section
@@ -67,9 +72,9 @@ export function FreshOutOfKitchenSection() {
         </h2>
 
         {/* ─── Order Window Announcement Bar (Dynamically from Server) ─ */}
-        <div className="mt-8 sm:mt-10 max-w-xl mx-auto border-t border-b border-neutral-200/90 py-3 sm:py-3.5 px-4 text-center select-none">
-          <p className="font-secondary font-black text-xs sm:text-sm lg:text-base tracking-wider text-neutral-900 uppercase">
-            ORDER WINDOW • {windowText || "02:00 PM - 04:00 PM"}
+        <div className="mt-8 sm:mt-10 max-w-3xl mx-auto border-t border-b border-neutral-200/90 py-3 sm:py-3.5 px-4 text-center select-none">
+          <p className="font-secondary font-black text-xs sm:text-sm lg:text-base tracking-wider text-neutral-900 uppercase leading-relaxed">
+            {bannerText || "ORDER WINDOW · MON–SAT · 2 PM–4 PM · KITCHEN CLOSED ON MONDAYS (ORDERING CLOSED ON SUNDAYS) & HOLIDAYS"}
           </p>
         </div>
 
