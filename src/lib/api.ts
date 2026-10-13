@@ -1425,3 +1425,17 @@ export async function downloadClientOrderInvoice(orderId: string, orderNumber: s
   }, 1000);
 }
 
+/**
+ * Converts any 24-hour times (e.g. "14:00 - 16:00") within a message string into 12-hour AM/PM format ("02:00 PM - 04:00 PM").
+ */
+export function formatMessageTime12(message: string): string {
+  if (!message) return "";
+  return message.replace(/\b([01]?\d|2[0-3]):([0-5]\d)(?!\s*[apAP][mM])\b/g, (_, hStr, mStr) => {
+    let h = parseInt(hStr, 10);
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    const padH = h < 10 ? `0${h}` : `${h}`;
+    return `${padH}:${mStr} ${ampm}`;
+  });
+}
+

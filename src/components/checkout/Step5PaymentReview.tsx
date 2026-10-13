@@ -7,6 +7,7 @@ import {
   createClientOrder,
   verifyClientPayment,
   loadRazorpayScript,
+  formatMessageTime12,
   type CreateOrderPayload,
 } from "@/lib/api";
 import { Loader2, ShieldCheck } from "lucide-react";
@@ -241,7 +242,7 @@ export function Step5PaymentReview() {
       <div className="space-y-4 pt-1">
         {paymentError && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
-            {paymentError}
+            {formatMessageTime12(paymentError)}
           </div>
         )}
 

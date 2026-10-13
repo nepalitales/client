@@ -17,6 +17,7 @@ import {
 import { useCart } from "@/context/CartContext";
 import { useCheckout } from "@/context/CheckoutContext";
 import { gsap } from "@/lib/gsap";
+import { formatMessageTime12 } from "@/lib/api";
 
 export function CartDrawer() {
   const { openCheckout } = useCheckout();
@@ -248,7 +249,7 @@ export function CartDrawer() {
                 </span>
               ) : (
                 <span>
-                  <strong>{orderWindowStatus?.message || "Order window closed"}</strong>
+                  <strong>{formatMessageTime12(orderWindowStatus?.message || "Order window closed")}</strong>
                 </span>
               )}
             </p>
