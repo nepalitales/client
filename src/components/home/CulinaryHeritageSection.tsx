@@ -14,88 +14,95 @@ export function CulinaryHeritageSection() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <span className="font-secondary font-bold text-xs sm:text-sm tracking-wider uppercase text-accent-red block">
-            Authentic Dumpling Craftsmanship
+            The Journey
           </span>
           <h2 className="font-secondary font-black text-2xl sm:text-3xl lg:text-4xl text-neutral-950 tracking-tight leading-tight mt-1.5 sm:mt-2">
-            The Craft &amp; Heritage of Nepali Tales
+            Our Story &amp; Heritage
           </h2>
           <p className="mt-4 text-sm sm:text-base text-neutral-600 leading-relaxed">
-            Nepali Tales is a specialized culinary kitchen born from family recipes along the Indo-Bhutan border,
-            shaped by Momo Ghar and MasterChef India couple Ashika &amp; Dipesh. We believe authentic momo should never
-            come from a frozen factory line, but should be hand-rolled fresh every morning and served with soulful broths.
+            Today, Nepali Tales is built on that same belief &mdash; fresh food, honest flavors,
+            and never giving up on what we love. From family kitchens in Jaigaon to Mumbai and Thane.
           </p>
         </div>
 
         {/* 3 Heritage Columns Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-          {/* 1. Daily Rolling & Clean Ingredients */}
+          {/* 1. Our Story (Direct text from OurStorySection) */}
           <article className="bg-white rounded-2xl border border-neutral-200/90 p-6 sm:p-7 shadow-xs flex flex-col justify-between">
             <div>
               <div className="w-10 h-10 rounded-xl bg-red-100/80 text-accent-red flex items-center justify-center mb-4">
-                <Utensils className="w-5 h-5" />
-              </div>
-              <h3 className="font-bold text-lg sm:text-xl text-neutral-950 tracking-tight">
-                Hand-Rolled Fresh Every Morning
-              </h3>
-              <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
-                Every momo starts with soft, thin flour dough hand-kneaded each morning in Kasarvadavali, Thane West.
-                Our fillings feature farm-fresh cabbage, sweet onions, and seasoned chicken or soya, seasoned with traditional
-                aromatic herbs and steam-cooked in small, dedicated batches.
-              </p>
-            </div>
-            <div className="mt-6 pt-4 border-t border-neutral-100">
-              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
-                100% Preservative Free
-              </span>
-            </div>
-          </article>
-
-          {/* 2. MasterChef Heritage */}
-          <article className="bg-white rounded-2xl border border-neutral-200/90 p-6 sm:p-7 shadow-xs flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-amber-100/80 text-amber-800 flex items-center justify-center mb-4">
                 <HeartHandshake className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-lg sm:text-xl text-neutral-950 tracking-tight">
-                MasterChef India Founders &amp; Roots
+                Our Story
               </h3>
               <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
-                Founders Ashika &amp; Dipesh grew up steeped in the culinary cultures of Jaigaon along the Indo-Bhutan frontier.
-                After gaining widespread acclaim on MasterChef India and introducing Mumbai to authentic Nepali dumplings at Momo Ghar
-                in 2022, they created Nepali Tales to deliver restaurant-grade craftsmanship straight to your home.
+                Two people, one shared love for momo, and a dream that refused to stay down.
+                From family kitchens in Jaigaon to countless fresh starts across cities, our journey
+                has been anything but easy. Nepali Tales is our story, served one plate at a time.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-neutral-100">
               <Link
                 href="/about"
-                className="text-xs font-semibold text-accent-red hover:underline"
+                className="text-xs font-semibold text-accent-red hover:underline inline-flex items-center gap-1"
               >
-                Read Ashika &amp; Dipesh&apos;s Full Story &rarr;
+                <span>Read Full Story</span>
+                <span>&rarr;</span>
               </Link>
             </div>
           </article>
 
-          {/* 3. Artisanal Chilli Oil & Jhol Broths */}
+          {/* 2. Momo Ghar to Nepali Tales (Direct text from MomoGharStorySection) */}
           <article className="bg-white rounded-2xl border border-neutral-200/90 p-6 sm:p-7 shadow-xs flex flex-col justify-between">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-100/80 text-emerald-800 flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-xl bg-amber-100/80 text-amber-800 flex items-center justify-center mb-4">
                 <Sparkles className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-lg sm:text-xl text-neutral-950 tracking-tight">
-                Slow-Cooked Chilli Oil &amp; Jhol Broth
+                Momo Ghar to Nepali Tales
               </h3>
               <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
-                Our momos are never served alone. They are paired with our viral slow-cooked artisanal chilli oil,
-                steeped over slow heat with aromatic spices, along with a velvety, nutty Jhol broth simmered with roasted
-                sesame seeds, golden soybeans, and crushed peanuts.
+                What started in family kitchens in Jaigaon became a dream of bringing that same simple,
+                soulful taste to every plate. We tried, failed, moved cities, and started again.
+                From Momo Ghar to supper clubs and countless early mornings, every setback taught us something.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-neutral-100">
+              <a
+                href="https://indianexpress.com/article/cities/mumbai/nepali-tales-thane-momos-prajakta-koli-masterchef-couple-10864209/lite/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold text-accent-red hover:underline inline-flex items-center gap-1"
+              >
+                <span>As Featured in The Indian Express</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+          </article>
+
+          {/* 3. Authentic Momo & Broths (Direct text from Hero and Signature Sections) */}
+          <article className="bg-white rounded-2xl border border-neutral-200/90 p-6 sm:p-7 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-emerald-100/80 text-emerald-800 flex items-center justify-center mb-4">
+                <Utensils className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-lg sm:text-xl text-neutral-950 tracking-tight">
+                Authentic Momo &amp; Broths
+              </h3>
+              <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+                Something that&apos;ll make you say best MOMO you have ever had. Steamed momo is served
+                with soup which is rich, creamy, and nutty from roasted sesame seeds, peanuts, and soybeans,
+                along with our signature slow-cooked artisanal chilli oil.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-neutral-100">
               <Link
                 href="/menu"
-                className="text-xs font-semibold text-accent-red hover:underline"
+                className="text-xs font-semibold text-accent-red hover:underline inline-flex items-center gap-1"
               >
-                Explore Signature Jars &amp; Momos &rarr;
+                <span>Explore Menu &amp; Jars</span>
+                <span>&rarr;</span>
               </Link>
             </div>
           </article>
