@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useCheckout } from "@/context/CheckoutContext";
 import {
   getClientOrders,
   cancelClientOrder,
+  downloadClientOrderInvoice,
+  subscribeToLiveCatalogUpdates,
+  formatExternalTrackingUrl,
   type ClientOrder,
   type ClientOrderStatus,
-  downloadClientOrderInvoice,
 } from "@/lib/api";
 import {
   Package,
@@ -20,13 +22,13 @@ import {
   Check,
   Truck,
   ExternalLink,
-  RefreshCw,
   MapPin,
   Calendar,
   ArrowLeft,
   Receipt,
   Store,
   Download,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -34,9 +36,9 @@ export default function MyOrdersPage() {
   const { isLoggedIn, openAuthModal, user } = useCheckout();
   const [orders, setOrders] = useState<ClientOrder[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [copiedOrderId, setCopiedOrderId] = useState<string | null>(null);
   const [downloadingInvoiceId, setDownloadingInvoiceId] = useState<string | null>(null);
+  const isFetchingRef = useRef(false);
 
   // Cancellation Modal State
   const [orderToCancel, setOrderToCancel] = useState<ClientOrder | null>(null);
@@ -56,8 +58,9 @@ export default function MyOrdersPage() {
   };
 
   const fetchOrders = useCallback(async (isSilent = false) => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
     if (!isSilent) setLoading(true);
-    else setRefreshing(true);
 
     try {
       const res = await getClientOrders();
@@ -70,10 +73,11 @@ export default function MyOrdersPage() {
       if (!isSilent) toast.error("Network error fetching orders.");
     } finally {
       setLoading(false);
-      setRefreshing(false);
+      isFetchingRef.current = false;
     }
   }, []);
 
+  // 1. Initial load on mount or auth change
   useEffect(() => {
     if (isLoggedIn) {
       fetchOrders();
@@ -82,6 +86,50 @@ export default function MyOrdersPage() {
       setOrders([]);
     }
   }, [isLoggedIn, fetchOrders]);
+
+  // 2. Production Real-time Updates (Industry Standard SWR + SSE + Smart Polling)
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    // Window focus & tab visibility change listener (immediate refresh when user views the tab)
+    const handleVisibilityOrFocus = () => {
+      if (document.visibilityState === "visible") {
+        fetchOrders(true);
+      }
+    };
+
+    window.addEventListener("focus", handleVisibilityOrFocus);
+    document.addEventListener("visibilitychange", handleVisibilityOrFocus);
+
+    // Live Server Broadcast (SSE / BroadcastChannel sync)
+    const unsubscribeLive = subscribeToLiveCatalogUpdates(() => {
+      fetchOrders(true);
+    });
+
+    // Check if any order is currently in an active, non-terminal state
+    const hasActiveOrders = orders.some(
+      (o) =>
+        o.status !== "delivered" &&
+        o.status !== "cancelled_by_customer" &&
+        o.status !== "cancelled_by_admin"
+    );
+
+    // Active orders poll frequently (8s) while tab is visible; terminal orders back off to 45s
+    const pollIntervalMs = hasActiveOrders ? 8000 : 45000;
+
+    const intervalId = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        fetchOrders(true);
+      }
+    }, pollIntervalMs);
+
+    return () => {
+      window.removeEventListener("focus", handleVisibilityOrFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityOrFocus);
+      unsubscribeLive();
+      clearInterval(intervalId);
+    };
+  }, [isLoggedIn, orders, fetchOrders]);
 
   const handleCopy = (orderNumber: string) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -268,18 +316,6 @@ export default function MyOrdersPage() {
               Track kitchen preparation status, delivery riders, and manage placed pre-orders.
             </p>
           </div>
-
-          {isLoggedIn && (
-            <button
-              type="button"
-              onClick={() => fetchOrders(true)}
-              disabled={refreshing || loading}
-              className="inline-flex items-center gap-2 self-start sm:self-auto px-4 py-2 text-xs font-bold uppercase tracking-wider text-neutral-700 bg-white border border-neutral-200 hover:border-neutral-300 rounded-full shadow-xs hover:shadow transition-all active:scale-[0.98] cursor-pointer"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-accent-red" : ""}`} />
-              <span>{refreshing ? "Updating..." : "Refresh"}</span>
-            </button>
-          )}
         </div>
 
         {/* ─── State 1: User Not Logged In ─────────────────────────────── */}
@@ -391,7 +427,7 @@ export default function MyOrdersPage() {
                         title="Download Bill PDF"
                       >
                         {downloadingInvoiceId === order.id ? (
-                          <RefreshCw className="w-3 h-3 animate-spin text-neutral-500" />
+                          <Loader2 className="w-3 h-3 animate-spin text-neutral-500" />
                         ) : (
                           <Download className="w-3 h-3 text-neutral-500" />
                         )}
@@ -522,7 +558,7 @@ export default function MyOrdersPage() {
                     {order.borzo?.trackingUrl && !isCancelled && (
                       <div className="pt-2">
                         <a
-                          href={order.borzo.trackingUrl}
+                          href={formatExternalTrackingUrl(order.borzo.trackingUrl)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-xs"

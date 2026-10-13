@@ -1439,3 +1439,22 @@ export function formatMessageTime12(message: string): string {
   });
 }
 
+/**
+ * Normalizes an external tracking URL or contact string.
+ * Ensures URLs without protocols (e.g. "porter.in/track/123" or "dxdxdcdcdcdcd")
+ * are prefixed with "https://" so they open externally rather than navigating relative to nepalitales.com.
+ */
+export function formatExternalTrackingUrl(url?: string | null): string {
+  if (!url) return "#";
+  const trimmed = url.trim();
+  if (!trimmed) return "#";
+  if (/^(https?:\/\/|tel:|mailto:)/i.test(trimmed)) {
+    return trimmed;
+  }
+  // Check if it's a telephone number
+  if (/^\+?\d{10,15}$/.test(trimmed.replace(/[\s-]/g, ""))) {
+    return `tel:${trimmed.replace(/[\s-]/g, "")}`;
+  }
+  return `https://${trimmed}`;
+}
+
