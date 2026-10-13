@@ -18,7 +18,7 @@ export const siteConfig = {
     kitchenWhatsapp:
       "https://wa.me/917678097659?text=Hi%20Nepali%20Tales%20Kitchen%2C%20I%20have%20an%20order%20query!",
     instagram: "https://www.instagram.com/nepali_tales?stkn=d2lkY3Z5cjN5aHdm",
-    youtube: "https://www.youtube.com/@nepali_tales",
+    youtube: "https://youtube.com/@ashidipesh?si=ZiLmy1cj-Ull9vTd",
   },
   location: {
     shopName: "Shop No 10",

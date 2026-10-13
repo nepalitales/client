@@ -19,6 +19,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
     },
     {
+      path: "/contact",
+      priority: 0.8,
+      changeFrequency: "weekly" as const,
+    },
+    {
       path: "/terms-and-conditions",
       priority: 0.5,
       changeFrequency: "monthly" as const,

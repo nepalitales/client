@@ -41,6 +41,16 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/privacy",
+        destination: "/privacy-policy",
+        permanent: true,
+      },
+      {
+        source: "/contact-us",
+        destination: "/contact",
+        permanent: true,
+      },
+      {
         source: "/allergen-info",
         destination: "/allergen-advisory",
         permanent: true,
@@ -49,6 +59,23 @@ const nextConfig: NextConfig = {
         source: "/allergens",
         destination: "/allergen-advisory",
         permanent: true,
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Vary",
+            value: "Accept",
+          },
+          {
+            key: "X-Agent-Ready",
+            value: "true",
+          },
+        ],
       },
     ];
   },

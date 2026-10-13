@@ -329,6 +329,14 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link
+                  href="/contact"
+                  className="hover:text-brand-red transition-colors inline-block"
+                >
+                  Contact Us
+                </Link>
+              </li>
+              <li>
                 <a
                   href={siteConfig.location.googleMapsUrl}
                   target="_blank"

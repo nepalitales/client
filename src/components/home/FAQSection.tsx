@@ -4,30 +4,75 @@ import React, { useState, useEffect, useMemo } from "react";
 import { ChevronRight, ChevronDown, Loader2 } from "lucide-react";
 import { getClientFaqs, type ClientFaq } from "@/lib/api";
 
+const DEFAULT_FAQS: ClientFaq[] = [
+  {
+    id: "faq-preorder",
+    question: "How does pre-ordering work with Nepali Tales?",
+    answer:
+      "We prepare all our dumpling dough and flavorful fillings fresh from scratch every single morning. Because each momo is hand-rolled and cooked in limited daily batches, we strongly recommend ordering 1 day ahead during our daily order windows to ensure batch reservation.",
+    category: "Ordering",
+    displayOrder: 1,
+  },
+  {
+    id: "faq-location",
+    question: "Where is the Nepali Tales kitchen located for pickups?",
+    answer:
+      "Our kitchen is located at Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, Ghodbunder Road, Thane West, Maharashtra 400615. Customers and courier riders can pick up freshly packed orders directly from this hub.",
+    category: "Location",
+    displayOrder: 2,
+  },
+  {
+    id: "faq-delivery",
+    question: "How does delivery work across Thane and Mumbai?",
+    answer:
+      "We dispatch fresh orders across Thane, Mumbai, and Navi Mumbai via reliable on-demand courier partners like Porter and Borzo. Delivery charges are calculated transparently during checkout based on the delivery distance from our kitchen.",
+    category: "Delivery",
+    displayOrder: 3,
+  },
+  {
+    id: "faq-flavors",
+    question: "What makes your authentic Nepali momos unique?",
+    answer:
+      "Curated by MasterChef India couple Ashika & Dipesh, our momos honor heritage recipes from the Indo-Bhutan border. We serve traditional steamed dumplings, crispy-bottom pan-fried Kothey momo, and signature Jhol momo in a rich, nutty broth made of roasted sesame, soybean, and peanuts, served with artisanal slow-cooked chilli oil.",
+    category: "Food & Menu",
+    displayOrder: 4,
+  },
+  {
+    id: "faq-dietary",
+    question: "Are vegetarian and non-vegetarian items prepared separately?",
+    answer:
+      "Yes, absolutely. We maintain strictly separated preparation stations, cutting boards, utensils, and steamers for vegetarian momos (filled with fresh cabbage, onions, and soya) and non-vegetarian momos (fresh seasoned chicken).",
+    category: "Food & Menu",
+    displayOrder: 5,
+  },
+  {
+    id: "faq-cancellation",
+    question: "What is your order cancellation and modification policy?",
+    answer:
+      "You may request order modifications or cancellations up to 3 hours before your scheduled dispatch window by contacting our kitchen support on WhatsApp at +91 76780 97659.",
+    category: "Ordering",
+    displayOrder: 6,
+  },
+];
+
 export function FAQSection() {
-  const [faqs, setFaqs] = useState<ClientFaq[]>([]);
+  const [faqs, setFaqs] = useState<ClientFaq[]>(DEFAULT_FAQS);
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [openFaqId, setOpenFaqId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [openFaqId, setOpenFaqId] = useState<string | null>("faq-preorder");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // 1. Initial fetch of all FAQs to populate categories and default state
   useEffect(() => {
     let isMounted = true;
     async function loadInitial() {
-      setIsLoading(true);
       try {
         const data = await getClientFaqs();
-        if (isMounted) {
+        if (isMounted && Array.isArray(data) && data.length > 0) {
           setFaqs(data);
-          // Set first FAQ as open by default, matching design mockup
-          if (data && data.length > 0) {
-            setOpenFaqId(data[0].id);
-          }
+          setOpenFaqId(data[0].id);
         }
       } catch (err) {
-        console.warn("[FAQSection] Failed to load FAQs:", err);
-      } finally {
-        if (isMounted) setIsLoading(false);
+        console.warn("[FAQSection] Failed to load live FAQs, using defaults:", err);
       }
     }
     loadInitial();
@@ -134,9 +179,9 @@ export function FAQSection() {
                       aria-controls={`faq-answer-${faq.id}`}
                       className="w-full flex items-center justify-between gap-4 text-left group cursor-pointer select-none"
                     >
-                      <span className="font-secondary font-bold text-base sm:text-lg text-neutral-950 group-hover:text-[#D92121] transition-colors leading-snug">
+                      <h3 className="font-secondary font-bold text-base sm:text-lg text-neutral-950 group-hover:text-[#D92121] transition-colors leading-snug">
                         {faq.question}
-                      </span>
+                      </h3>
 
                       {/* Right Chevron Indicator (Red) */}
                       <span className="shrink-0 text-[#D92121] transition-transform duration-200 flex items-center justify-center">
@@ -148,17 +193,19 @@ export function FAQSection() {
                       </span>
                     </button>
 
-                    {/* Answer Collapsible Body */}
-                    {isOpen && (
-                      <div
-                        id={`faq-answer-${faq.id}`}
-                        className="mt-3 sm:mt-4 pr-6 sm:pr-10 animate-in fade-in slide-in-from-top-1 duration-200"
-                      >
-                        <p className="font-secondary text-sm sm:text-base text-neutral-600 leading-relaxed whitespace-pre-line">
-                          {faq.answer}
-                        </p>
-                      </div>
-                    )}
+                    {/* Answer Collapsible Body - Included in DOM for SEO & Non-JS crawlers */}
+                    <div
+                      id={`faq-answer-${faq.id}`}
+                      className={`mt-3 sm:mt-4 pr-6 sm:pr-10 ${
+                        isOpen
+                          ? "block animate-in fade-in slide-in-from-top-1 duration-200"
+                          : "hidden"
+                      }`}
+                    >
+                      <p className="font-secondary text-sm sm:text-base text-neutral-600 leading-relaxed whitespace-pre-line">
+                        {faq.answer}
+                      </p>
+                    </div>
                   </div>
                 );
               })

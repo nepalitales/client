@@ -37,7 +37,7 @@ export function RestaurantJsonLd({
       longitude: siteConfig.location.geo.longitude,
     },
     hasMap: siteConfig.location.googleMapsUrl,
-    sameAs: [siteConfig.contact.instagram],
+    sameAs: [siteConfig.contact.instagram, siteConfig.contact.youtube],
     founder: siteConfig.founders.map((f) => ({
       "@type": "Person",
       name: f.name,
@@ -95,8 +95,18 @@ export function RestaurantJsonLd({
     legalName: siteConfig.legalName,
     url: siteConfig.url,
     logo: `${siteConfig.url}/icon.png`,
-    sameAs: [siteConfig.contact.instagram],
+    email: siteConfig.contact.email,
+    telephone: siteConfig.contact.phoneClean,
+    sameAs: [siteConfig.contact.instagram, siteConfig.contact.youtube],
     description: siteConfig.description,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: `${siteConfig.location.building}, ${siteConfig.location.shopName}, ${siteConfig.location.area}, ${siteConfig.location.street}`,
+      addressLocality: siteConfig.location.city,
+      addressRegion: siteConfig.location.region,
+      postalCode: siteConfig.location.postalCode,
+      addressCountry: siteConfig.location.country,
+    },
     foundingLocation: {
       "@type": "Place",
       name: "Jaigaon, Indo-Bhutan border, India",
@@ -105,6 +115,7 @@ export function RestaurantJsonLd({
       {
         "@type": "ContactPoint",
         telephone: siteConfig.contact.phoneClean,
+        email: siteConfig.contact.email,
         contactType: "customer service",
         areaServed: "IN",
         availableLanguage: ["English", "Hindi", "Nepali"],

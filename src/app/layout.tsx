@@ -65,6 +65,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteConfig.url,
+    types: {
+      "text/markdown": `${siteConfig.url}/llms.txt`,
+    },
   },
   openGraph: {
     title: `${siteConfig.name} - ${siteConfig.tagline}`,

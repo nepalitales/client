@@ -1,6 +1,7 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { SignatureProductSection } from "@/components/home/SignatureProductSection";
 import { BeforeYouOrderSection } from "@/components/home/BeforeYouOrderSection";
+import { CulinaryHeritageSection } from "@/components/home/CulinaryHeritageSection";
 import { FreshOutOfKitchenSection } from "@/components/home/FreshOutOfKitchenSection";
 import { FAQSection } from "@/components/home/FAQSection";
 
@@ -10,6 +11,7 @@ export default function HomePage() {
       <HeroSection />
       <SignatureProductSection />
       <BeforeYouOrderSection />
+      <CulinaryHeritageSection />
       <FreshOutOfKitchenSection />
       <FAQSection />
     </main>

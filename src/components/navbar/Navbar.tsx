@@ -123,6 +123,14 @@ export function Navbar() {
             >
               About
             </Link>
+            <Link
+              href="/contact"
+              className={`text-sm font-semibold tracking-wide transition-colors ${
+                pathname === "/contact" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
+              }`}
+            >
+              Contact
+            </Link>
           </nav>
 
           {/* Center Column: Wordmark with 4% letter spacing & accent red */}
@@ -300,6 +308,13 @@ export function Navbar() {
                 className={`py-2 transition-colors border-b border-neutral-50 ${pathname === "/about" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
               >
                 About
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`py-2 transition-colors border-b border-neutral-50 ${pathname === "/contact" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
+              >
+                Contact
               </Link>
               <button
                 type="button"
