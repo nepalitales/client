@@ -12,6 +12,7 @@ import {
   Clock,
   ArrowRight,
   ShieldCheck,
+  AlertCircle,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useCheckout } from "@/context/CheckoutContext";
@@ -196,12 +197,12 @@ export function CartDrawer() {
       />
 
       {/* ─── Slide-Over Panel on Right Side ─────────────────────── */}
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10 pointer-events-none">
+      <div className="fixed inset-y-0 right-0 max-w-full flex sm:pl-10 pointer-events-none justify-end">
         <aside
           ref={panelRef}
           data-lenis-prevent
           onWheel={(e) => e.stopPropagation()}
-          className="w-screen max-w-md bg-white shadow-2xl flex flex-col pointer-events-auto h-full"
+          className="w-full sm:w-[448px] max-w-full bg-white shadow-2xl flex flex-col pointer-events-auto h-full"
         >
           {/* ─── Header ────────────────────────────────────────── */}
           <div
@@ -572,6 +573,30 @@ export function CartDrawer() {
                     </div>
                   </div>
                 )}
+
+                {/* 4. Dietary & Allergen Guidance */}
+                <div className="pt-2 border-t border-neutral-100">
+                  <div className="rounded-xl p-3 sm:p-3.5 bg-amber-50/70 border border-amber-200/80 font-secondary space-y-1.5">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
+                      <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                      <span>Allergen &amp; Dietary Guidance</span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-neutral-700">
+                      <strong className="text-neutral-900 font-bold">Specify in Order Notes:</strong> Clearly state any ingredient exclusions (e.g., &quot;No peanut chutney&quot;, &quot;Mild spice, no chilli oil&quot;) during checkout.
+                    </p>
+                    <div className="pt-1 flex items-center justify-between text-[10px]">
+                      <span className="text-neutral-500">Have severe allergies?</span>
+                      <Link
+                        href="/allergen-advisory"
+                        onClick={closeCart}
+                        className="font-bold text-[#D92121] hover:underline inline-flex items-center gap-0.5 cursor-pointer"
+                      >
+                        <span>View Allergen Advisory</span>
+                        <ArrowRight className="w-2.5 h-2.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -580,37 +605,37 @@ export function CartDrawer() {
           {items.length > 0 && (
             <div
               ref={footerRef}
-              className="border-t border-neutral-200/90 bg-neutral-50/70 p-4 sm:p-5 space-y-3 font-secondary shrink-0"
+              className="border-t border-neutral-200/90 bg-neutral-50/70 p-4 sm:p-5 pb-6 sm:pb-5 space-y-3 font-secondary shrink-0"
             >
               <div className="space-y-1.5 text-xs text-neutral-600">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span>
                     Momo Subtotal ({totalDishesCount} {totalDishesCount === 1 ? "dish" : "dishes"})
                   </span>
-                  <span className="font-semibold text-neutral-900">
+                  <span className="font-semibold text-neutral-900 shrink-0 pl-2">
                     ₹{itemsSubtotal}
                   </span>
                 </div>
 
                 {addonsSubtotal > 0 && (
-                  <div className="flex justify-between text-neutral-700">
+                  <div className="flex justify-between items-center text-neutral-700">
                     <span>Add-ons Subtotal</span>
-                    <span className="font-semibold text-neutral-900">
+                    <span className="font-semibold text-neutral-900 shrink-0 pl-2">
                       ₹{addonsSubtotal}
                     </span>
                   </div>
                 )}
 
-                <div className="flex justify-between">
-                  <span>Delivery (All over Mumbai via Borzo)</span>
-                  <span className="font-semibold text-neutral-900">
+                <div className="flex justify-between items-center">
+                  <span className="truncate pr-2">Delivery (All over Mumbai via Borzo)</span>
+                  <span className="font-semibold text-neutral-900 shrink-0 text-right">
                     Paid upon delivery
                   </span>
                 </div>
 
-                <div className="flex justify-between pt-2 border-t border-neutral-200 text-sm font-bold text-neutral-950">
+                <div className="flex justify-between items-center pt-2 border-t border-neutral-200 text-sm font-bold text-neutral-950">
                   <span>To Pay</span>
-                  <span>₹{totalAmount}</span>
+                  <span className="text-base text-neutral-950 shrink-0 pl-2">₹{totalAmount}</span>
                 </div>
               </div>
 

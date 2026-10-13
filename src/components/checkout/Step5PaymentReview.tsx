@@ -277,6 +277,16 @@ export function Step5PaymentReview() {
           </p>
         </div>
 
+        {/* ─── Order Notes / Dietary Exclusions (if provided) ─── */}
+        {contactInfo.notes && (
+          <div className="bg-amber-50/70 rounded-xl p-3.5 border border-amber-200/80 text-xs text-amber-950 space-y-1 text-left">
+            <span className="font-bold text-amber-900 block text-[11px]">
+              Order Notes &amp; Kitchen Exclusions:
+            </span>
+            <p className="text-neutral-700 text-xs italic">&ldquo;{contactInfo.notes}&rdquo;</p>
+          </div>
+        )}
+
         {/* ─── Bill Breakdown ─────────────────────────────────── */}
         <div className="bg-white rounded-xl p-4 border border-neutral-200 space-y-2.5 text-xs">
           <div className="flex justify-between text-neutral-600">

@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export function HeroSection() {
   return (
@@ -45,6 +47,15 @@ export function HeroSection() {
             <p className="font-secondary text-neutral-600 font-normal text-xs sm:text-sm md:text-base leading-relaxed mt-3 sm:mt-4 max-w-70 sm:max-w-80">
               Something that&apos;ll make you say best MOMO you have ever had
             </p>
+            <div className="mt-5 sm:mt-6">
+              <Link
+                href="/menu"
+                className="bg-[#D92121] hover:bg-[#b81b1b] text-white font-secondary font-bold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-7 py-3 rounded-full transition-all duration-200 active:scale-95 shadow-sm inline-flex items-center gap-2 cursor-pointer select-none group"
+              >
+                <span>Explore Menu</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
           </div>
 
           {/* ─── 3. Bottom Featured Tag ────────────────────────────────── */}

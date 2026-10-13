@@ -492,6 +492,25 @@ export function Step4AddressDetails() {
         </div>
       )}
 
+      {/* ─── Order Notes / Dietary Instructions ─────────────── */}
+      <div className="pt-1 text-left">
+        <label className="block text-[11px] font-semibold text-neutral-600 mb-1">
+          Specify in Order Notes (Optional)
+        </label>
+        <textarea
+          rows={2}
+          value={contactInfo.notes || ""}
+          onChange={(e) =>
+            setContactInfo((prev) => ({ ...prev, notes: e.target.value }))
+          }
+          placeholder='e.g. "No peanut chutney", "Mild spice, no chilli oil"'
+          className={`${baseInputClass} placeholder-neutral-400 border-neutral-200 resize-none py-2 text-xs`}
+        />
+        <p className="text-[10px] text-neutral-500 mt-1 pl-1">
+          State any ingredient exclusions or special preparation notes for the kitchen.
+        </p>
+      </div>
+
       {/* ─── Proceed to checkout CTA Button ─────────────────────── */}
       <div className="pt-6 w-full">
         <button
