@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  getClientConfig,
   getClientOrderWindows,
   getClientHolidays,
   getClientWeeklyOff,
@@ -20,36 +21,44 @@ export function OrderWindowBanner() {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchBannerData = (force = false) => {
-      Promise.all([
-        getClientOrderWindows(force),
-        getClientHolidays(force),
-        getClientWeeklyOff(),
-      ])
-        .then(([windowsRes, holidaysRes, weeklyOffRes]) => {
-          if (!isMounted) return;
-          if (windowsRes?.success && windowsRes.orderWindows) {
-            setOrderWindows(windowsRes.orderWindows);
-          }
-          if (holidaysRes?.success && Array.isArray(holidaysRes.holidays)) {
-            setHolidays(holidaysRes.holidays);
-          }
-          if (weeklyOffRes?.success && Array.isArray(weeklyOffRes.weeklyOff)) {
-            setWeeklyOff(weeklyOffRes.weeklyOff);
-          }
-        })
-        .catch((err) => {
-          console.warn("[OrderWindowBanner] Could not fetch banner data:", err);
-        })
-        .finally(() => {
-          if (isMounted) {
-            setLoading(false);
-          }
-        });
+    const fetchBannerData = async (force = false) => {
+      try {
+        const config = await getClientConfig(force);
+        if (!isMounted) return;
+        if (config?.success) {
+          if (config.orderWindows) setOrderWindows(config.orderWindows);
+          if (config.holidays) setHolidays(config.holidays);
+          if (config.weeklyOff) setWeeklyOff(config.weeklyOff);
+          return;
+        }
+
+        // Fallback to individual endpoints if config endpoint is unavailable
+        const [windowsRes, holidaysRes, weeklyOffRes] = await Promise.all([
+          getClientOrderWindows(force),
+          getClientHolidays(force),
+          getClientWeeklyOff(),
+        ]);
+        if (!isMounted) return;
+        if (windowsRes?.success && windowsRes.orderWindows) {
+          setOrderWindows(windowsRes.orderWindows);
+        }
+        if (holidaysRes?.success && Array.isArray(holidaysRes.holidays)) {
+          setHolidays(holidaysRes.holidays);
+        }
+        if (weeklyOffRes?.success && Array.isArray(weeklyOffRes.weeklyOff)) {
+          setWeeklyOff(weeklyOffRes.weeklyOff);
+        }
+      } catch (err) {
+        console.warn("[OrderWindowBanner] Could not fetch banner data:", err);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
     };
 
-    // Initial fetch (force fresh to bypass any previous session cache)
-    fetchBannerData(true);
+    // Initial fetch using cached or consolidated config snapshot
+    fetchBannerData(false);
 
     // Live update when admin adds or deletes holidays or changes schedule
     const unsubscribe = subscribeToLiveCatalogUpdates(() => {

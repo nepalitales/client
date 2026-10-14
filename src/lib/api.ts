@@ -212,11 +212,48 @@ export interface ClientHolidaysResponse {
 const HOLIDAYS_CACHE_KEY = "nt_client_holidays_cache";
 
 let cachedHolidaysPromise: Promise<ClientHolidaysResponse | null> | null = null;
+export interface ClientConfigSnapshotResponse {
+  success: boolean;
+  configVersion: string;
+  orderWindows: OrderWindowDayConfig[];
+  weeklyOff: string[];
+  holidays: HolidayItem[];
+}
+
+let cachedConfigPromise: Promise<ClientConfigSnapshotResponse | null> | null = null;
 let cachedCategoriesPromise: Promise<CategoryWithProducts[]> | null = null;
 let categoriesCacheTimestamp = 0;
 const CATEGORIES_CACHE_TTL_MS = 60_000; // 60s in-memory freshness
 
+export async function getClientConfig(
+  forceRefresh = false
+): Promise<ClientConfigSnapshotResponse | null> {
+  if (cachedConfigPromise && !forceRefresh) {
+    return cachedConfigPromise;
+  }
+
+  cachedConfigPromise = (async () => {
+    try {
+      const res = await clientFetch("/config", { cache: "default" });
+      if (!res.ok) return null;
+      const json: ClientConfigSnapshotResponse = await res.json();
+      if (json?.success) {
+        if (json.configVersion && json.configVersion !== globalKnownVersion) {
+          globalKnownVersion = json.configVersion;
+        }
+      }
+      return json;
+    } catch (err) {
+      console.warn("[Config API] Error fetching config snapshot:", err);
+      return null;
+    }
+  })();
+
+  return cachedConfigPromise;
+}
+
 export function invalidateClientConfigCache(): void {
+  cachedConfigPromise = null;
   cachedHolidaysPromise = null;
   cachedOrderWindowsPromise = null;
   cachedCategoriesPromise = null;
@@ -234,15 +271,6 @@ export function invalidateClientConfigCache(): void {
 export async function getClientHolidays(
   forceRefresh = false
 ): Promise<ClientHolidaysResponse | null> {
-  // Purge any legacy sessionStorage cache immediately
-  if (typeof window !== "undefined") {
-    try {
-      sessionStorage.removeItem(HOLIDAYS_CACHE_KEY);
-    } catch {
-      // Storage access blocked or unavailable
-    }
-  }
-
   if (cachedHolidaysPromise && !forceRefresh) {
     return cachedHolidaysPromise;
   }
@@ -250,7 +278,7 @@ export async function getClientHolidays(
   cachedHolidaysPromise = (async () => {
     try {
       const res = await clientFetch("/holidays", {
-        cache: "no-store",
+        cache: "default",
       });
       if (!res.ok) return null;
       const json: ClientHolidaysResponse = await res.json();
@@ -263,6 +291,7 @@ export async function getClientHolidays(
 
   return cachedHolidaysPromise;
 }
+
 
 export interface HolidayBannerDetail {
   text: string;
@@ -583,7 +612,7 @@ export async function getPaginatedProducts(
   const endpoint = `/products${qs ? `?${qs}` : ""}`;
 
   try {
-    const res = await clientFetch(endpoint, { cache: "no-store" });
+    const res = await clientFetch(endpoint, { cache: "default" });
     if (!res.ok) throw new Error(`HTTP error ${res.status}`);
     return await res.json();
   } catch (err) {
@@ -718,6 +747,7 @@ let globalInFlight = false;
 const catalogListeners = new Set<() => void>();
 
 async function pollConfigVersion() {
+  if (typeof document !== "undefined" && document.hidden) return;
   if (globalInFlight) return;
   globalInFlight = true;
 
@@ -902,7 +932,7 @@ export const DEFAULT_CLIENT_ORDER_SETTINGS: ClientOrderSettings = {
 
 export async function getClientOrderSettings(): Promise<ClientOrderSettings> {
   try {
-    const res = await clientFetch("/order-settings", { cache: "no-store" });
+    const res = await clientFetch("/order-settings", { cache: "default" });
     if (!res.ok) return DEFAULT_CLIENT_ORDER_SETTINGS;
     const json = await res.json();
     return json?.settings || DEFAULT_CLIENT_ORDER_SETTINGS;
