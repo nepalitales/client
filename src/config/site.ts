@@ -7,6 +7,7 @@ export const siteConfig = {
   description:
     "Authentic Nepali momo and viral artisanal chilli oil by Ashika & Dipesh. Hand-rolled dough, soulful stuffing, and traditional jhol made fresh daily at Metropolis Rivera, Shop No 10, Kasarvadavali, Opp to Laxmi Narayan Mandir, Thane (Pincode: 400615). Born from family kitchens on the Indo-Bhutan border, shaped by Momo Ghar and MasterChef India.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://nepalitales.com",
+  ogImage: "/opengraph-image.png",
   contact: {
     phone: "+91 76780 97659",
     phoneClean: "+917678097659",

@@ -20,6 +20,7 @@ export function RestaurantJsonLd({
     currenciesAccepted: siteConfig.currenciesAccepted,
     paymentAccepted: siteConfig.paymentAccepted,
     image: [
+      `${siteConfig.url}/opengraph-image.png`,
       `${siteConfig.url}/opengraph-image`,
       `${siteConfig.url}/icon.png`,
     ],
