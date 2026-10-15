@@ -33,7 +33,7 @@ export function MenuPageView() {
   const loadMenu = React.useCallback(async (isSilent = false) => {
     try {
       if (!isSilent) setLoading(true);
-      const catList = await getCategoriesWithProducts();
+      const catList = await getCategoriesWithProducts(isSilent);
       const allProds: Product[] = [];
       const catCounts: Array<{
         id: string;

@@ -223,7 +223,7 @@ export interface ClientConfigSnapshotResponse {
 let cachedConfigPromise: Promise<ClientConfigSnapshotResponse | null> | null = null;
 let cachedCategoriesPromise: Promise<CategoryWithProducts[]> | null = null;
 let categoriesCacheTimestamp = 0;
-const CATEGORIES_CACHE_TTL_MS = 60_000; // 60s in-memory freshness
+const CATEGORIES_CACHE_TTL_MS = 5_000; // 5s in-memory freshness
 
 export async function getClientConfig(
   forceRefresh = false
@@ -644,7 +644,7 @@ export async function getCategoriesWithProducts(
 
   cachedCategoriesPromise = (async () => {
     try {
-      const res = await clientFetch("/categories");
+      const res = await clientFetch("/categories", { cache: "no-store" });
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const data = await res.json();
       categoriesCacheTimestamp = Date.now();
