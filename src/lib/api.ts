@@ -256,12 +256,14 @@ export function invalidateClientConfigCache(): void {
   cachedConfigPromise = null;
   cachedHolidaysPromise = null;
   cachedOrderWindowsPromise = null;
+  cachedWeeklyOffPromise = null;
   cachedCategoriesPromise = null;
   categoriesCacheTimestamp = 0;
   if (typeof window !== "undefined") {
     try {
       sessionStorage.removeItem(HOLIDAYS_CACHE_KEY);
       sessionStorage.removeItem(ORDER_WINDOWS_CACHE_KEY);
+      sessionStorage.removeItem(WEEKLY_OFF_CACHE_KEY);
     } catch {
       // Storage access blocked or unavailable
     }
@@ -566,15 +568,54 @@ export function formatOrderWindowBannerText(
   return getOrderWindowBannerParts(orderWindows, holidays, weeklyOff).fullText;
 }
 
-export async function getClientWeeklyOff(): Promise<{ success: boolean; weeklyOff: string[] } | null> {
-  try {
-    const res = await clientFetch("/weekly-off");
-    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-    return await res.json();
-  } catch (err) {
-    console.warn("[WeeklyOff API] Error fetching weekly off:", err);
-    return null;
+const WEEKLY_OFF_CACHE_KEY = "nt_client_weekly_off_cache";
+let cachedWeeklyOffPromise: Promise<{ success: boolean; weeklyOff: string[] } | null> | null = null;
+
+export async function getClientWeeklyOff(
+  forceRefresh = false
+): Promise<{ success: boolean; weeklyOff: string[] } | null> {
+  if (cachedWeeklyOffPromise && !forceRefresh) {
+    return cachedWeeklyOffPromise;
   }
+
+  if (!forceRefresh && typeof window !== "undefined") {
+    try {
+      const raw = sessionStorage.getItem(WEEKLY_OFF_CACHE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Date.now() - parsed.timestamp < ORDER_WINDOWS_CACHE_TTL_MS) {
+          cachedWeeklyOffPromise = Promise.resolve(parsed.data);
+          return parsed.data;
+        }
+      }
+    } catch {
+      // Storage access blocked or unavailable
+    }
+  }
+
+  cachedWeeklyOffPromise = (async () => {
+    try {
+      const res = await clientFetch("/weekly-off", { cache: "default" });
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      const data = await res.json();
+      if (typeof window !== "undefined" && data?.success) {
+        try {
+          sessionStorage.setItem(
+            WEEKLY_OFF_CACHE_KEY,
+            JSON.stringify({ timestamp: Date.now(), data })
+          );
+        } catch {
+          // Ignore quota errors
+        }
+      }
+      return data;
+    } catch (err) {
+      console.warn("[WeeklyOff API] Error fetching weekly off:", err);
+      return null;
+    }
+  })();
+
+  return cachedWeeklyOffPromise;
 }
 
 // ─── 2. Products & Categories API ─────────────────────────────────

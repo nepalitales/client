@@ -4,6 +4,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import {
+  getClientConfig,
   getClientOrderWindows,
   getClientWeeklyOff,
   subscribeToLiveCatalogUpdates,
@@ -53,28 +54,34 @@ export function Footer() {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchFooterData = (force = false) => {
-      Promise.all([
-        getClientOrderWindows(force),
-        getClientWeeklyOff(),
-      ])
-        .then(([windowsRes, weeklyOffRes]) => {
-          if (!isMounted) return;
-          if (windowsRes?.success && windowsRes.orderWindows) {
-            setOrderWindows(windowsRes.orderWindows);
-          }
-          if (weeklyOffRes?.success && Array.isArray(weeklyOffRes.weeklyOff)) {
-            setWeeklyOff(weeklyOffRes.weeklyOff);
-          }
-        })
-        .catch((err) => {
-          console.warn("[Footer] Could not fetch order windows / weekly off:", err);
-        })
-        .finally(() => {
-          if (isMounted) {
-            setLoading(false);
-          }
-        });
+    const fetchFooterData = async (force = false) => {
+      try {
+        const config = await getClientConfig(force);
+        if (!isMounted) return;
+        if (config?.success) {
+          if (config.orderWindows) setOrderWindows(config.orderWindows);
+          if (config.weeklyOff) setWeeklyOff(config.weeklyOff);
+          return;
+        }
+
+        const [windowsRes, weeklyOffRes] = await Promise.all([
+          getClientOrderWindows(force),
+          getClientWeeklyOff(force),
+        ]);
+        if (!isMounted) return;
+        if (windowsRes?.success && windowsRes.orderWindows) {
+          setOrderWindows(windowsRes.orderWindows);
+        }
+        if (weeklyOffRes?.success && Array.isArray(weeklyOffRes.weeklyOff)) {
+          setWeeklyOff(weeklyOffRes.weeklyOff);
+        }
+      } catch (err) {
+        console.warn("[Footer] Could not fetch order windows / weekly off:", err);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
     };
 
     fetchFooterData(false);

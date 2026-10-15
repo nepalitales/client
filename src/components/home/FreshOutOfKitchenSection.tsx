@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
+  getClientConfig,
   getClientOrderWindows,
   getClientHolidays,
   getClientWeeklyOff,
@@ -20,30 +21,38 @@ export function FreshOutOfKitchenSection() {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchBannerData = (force = false) => {
-      Promise.all([
-        getClientOrderWindows(force),
-        getClientHolidays(force),
-        getClientWeeklyOff(),
-      ])
-        .then(([windowsRes, holidaysRes, weeklyOffRes]) => {
-          if (!isMounted) return;
-          if (windowsRes?.success && windowsRes.orderWindows) {
-            setOrderWindows(windowsRes.orderWindows);
-          }
-          if (holidaysRes?.success && Array.isArray(holidaysRes.holidays)) {
-            setHolidays(holidaysRes.holidays);
-          }
-          if (weeklyOffRes?.success && Array.isArray(weeklyOffRes.weeklyOff)) {
-            setWeeklyOff(weeklyOffRes.weeklyOff);
-          }
-        })
-        .catch((err) => {
-          console.warn("[FreshOutOfKitchenSection] Could not fetch banner data:", err);
-        });
+    const fetchBannerData = async (force = false) => {
+      try {
+        const config = await getClientConfig(force);
+        if (!isMounted) return;
+        if (config?.success) {
+          if (config.orderWindows) setOrderWindows(config.orderWindows);
+          if (config.holidays) setHolidays(config.holidays);
+          if (config.weeklyOff) setWeeklyOff(config.weeklyOff);
+          return;
+        }
+
+        const [windowsRes, holidaysRes, weeklyOffRes] = await Promise.all([
+          getClientOrderWindows(force),
+          getClientHolidays(force),
+          getClientWeeklyOff(force),
+        ]);
+        if (!isMounted) return;
+        if (windowsRes?.success && windowsRes.orderWindows) {
+          setOrderWindows(windowsRes.orderWindows);
+        }
+        if (holidaysRes?.success && Array.isArray(holidaysRes.holidays)) {
+          setHolidays(holidaysRes.holidays);
+        }
+        if (weeklyOffRes?.success && Array.isArray(weeklyOffRes.weeklyOff)) {
+          setWeeklyOff(weeklyOffRes.weeklyOff);
+        }
+      } catch (err) {
+        console.warn("[FreshOutOfKitchenSection] Could not fetch banner data:", err);
+      }
     };
 
-    // Initial mount reuses cached order windows instead of busting cache
+    // Initial mount reuses cached config snapshot instead of busting cache
     fetchBannerData(false);
 
     const unsubscribe = subscribeToLiveCatalogUpdates(() => {
