@@ -130,9 +130,9 @@ function getMarkdownForRoute(routeName: string): string {
 4. **Allergen & Kitchen Segregation:** Answering ingredient queries (soy, gluten, peanuts, sesame) with strict veg/non-veg segregation.
 
 ## Operating Schedule & Order Windows
-- **Daily Order Windows:** 2:00 PM – 4:00 PM
-- **Ordering Closed:** Sundays
-- **Kitchen Closed:** Mondays & Public Holidays
+- **Daily Order Windows:** 2:00 PM – 4:00 PM (Monday to Saturday)
+- **Advance Ordering & Weekly Off Policy:** We close on Monday so the ordering window is closed on Sunday. For Tuesday’s order, you have to book on Monday when the ordering window will be open at 2:00 PM – 4:00 PM.
+- **Kitchen Closed:** Mondays & Public Holidays (Kitchen cooking & dispatch paused; online order intake active on Monday for Tuesday dispatch).
 - **Advance Notice:** All dough and fillings are hand-rolled fresh daily in limited batches. 1-day advance pre-orders are recommended.
 
 ## Signature Handcrafted Offerings
