@@ -302,6 +302,9 @@ export function Footer() {
               ) : (
                 <p className="text-neutral-500 text-sm">Schedule unavailable</p>
               )}
+              <p className="mt-2 text-xs text-neutral-500 leading-normal border-t border-neutral-100 pt-2">
+                We close on Monday so the ordering window is closed on Sunday. For Tuesday’s order, you have to book on Monday (ordering window open 2:00 PM – 4:00 PM).
+              </p>
             </div>
           </div>
 
