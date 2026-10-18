@@ -14,6 +14,14 @@ const DEFAULT_FAQS: ClientFaq[] = [
     displayOrder: 1,
   },
   {
+    id: "faq-sunday-monday-ordering",
+    question: "Why is the ordering window closed on Sunday if the kitchen is closed on Monday?",
+    answer:
+      "Nepali Tales operates on a next-day advance pre-order model. We close on Monday so the ordering window is closed on Sunday (since the kitchen will not cook on Monday). For Tuesday’s order, you have to book on Monday when the ordering window is open at 2:00 PM – 4:00 PM.",
+    category: "Ordering",
+    displayOrder: 2,
+  },
+  {
     id: "faq-location",
     question: "Where is the Nepali Tales kitchen located for pickups?",
     answer:
