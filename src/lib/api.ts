@@ -428,6 +428,16 @@ export function getOrderWindowBannerParts(
     sunday: "SUNDAYS",
   };
 
+  const nextDayMap: Record<string, string> = {
+    monday: "tuesday",
+    tuesday: "wednesday",
+    wednesday: "thursday",
+    thursday: "friday",
+    friday: "saturday",
+    saturday: "sunday",
+    sunday: "monday",
+  };
+
   const prevDayMap: Record<string, string> = {
     monday: "sunday",
     tuesday: "monday",
@@ -438,31 +448,83 @@ export function getOrderWindowBannerParts(
     sunday: "saturday",
   };
 
+  // Identify days that are the eve (day before) a recurring weekly off day
+  const eveOfWeeklyOffDays = (weeklyOff || [])
+    .map((off) => prevDayMap[off.toLowerCase()] || "")
+    .filter(Boolean);
+
   const windowMap = new Map(orderWindows.map((w) => [w.day, w]));
   const openDays: string[] = [];
   const closedDays: string[] = [];
   let timeStr = "";
 
   for (const day of dayOrder) {
+    const isEveOfWeeklyOff = eveOfWeeklyOffDays.includes(day);
     const config = windowMap.get(day);
-    if (config && config.enabled && config.windows && config.windows.length > 0) {
+
+    if (!isEveOfWeeklyOff && config && config.enabled && config.windows && config.windows.length > 0) {
       openDays.push(day);
-      if (!timeStr) {
-        const w = config.windows[0];
-        const formatH = (t: string) => {
-          const [hStr, mStr] = t.split(":");
-          let h = parseInt(hStr, 10);
-          const m = parseInt(mStr || "0", 10);
-          const ampm = h >= 12 ? "PM" : "AM";
-          h = h % 12 || 12;
-          return m > 0 ? `${h}:${mStr} ${ampm}` : `${h} ${ampm}`;
-        };
-        timeStr = `${formatH(w.start)}–${formatH(w.end)}`;
-      }
     } else {
       closedDays.push(day);
     }
+
+    if (!timeStr && config && config.windows && config.windows.length > 0) {
+      const w = config.windows[0];
+      const formatH = (t: string) => {
+        const [hStr, mStr] = t.split(":");
+        let h = parseInt(hStr, 10);
+        const m = parseInt(mStr || "0", 10);
+        const ampm = h >= 12 ? "PM" : "AM";
+        h = h % 12 || 12;
+        return m > 0 ? `${h}:${mStr} ${ampm}` : `${h} ${ampm}`;
+      };
+      timeStr = `${formatH(w.start)}–${formatH(w.end)}`;
+    }
   }
+
+  if (!timeStr) {
+    timeStr = "2 PM–4 PM";
+  }
+
+  function formatDayRanges(days: string[]): string {
+    if (days.length === 0) return "CURRENTLY CLOSED";
+    if (days.length === 7) return "ALL DAYS";
+
+    const ranges: string[] = [];
+    let startIdx = -1;
+    let prevIdx = -1;
+
+    for (let i = 0; i < dayOrder.length; i++) {
+      const d = dayOrder[i];
+      if (days.includes(d)) {
+        if (startIdx === -1) {
+          startIdx = i;
+          prevIdx = i;
+        } else if (i === prevIdx + 1) {
+          prevIdx = i;
+        } else {
+          if (startIdx === prevIdx) {
+            ranges.push(shortMap[dayOrder[startIdx]]);
+          } else {
+            ranges.push(`${shortMap[dayOrder[startIdx]]}–${shortMap[dayOrder[prevIdx]]}`);
+          }
+          startIdx = i;
+          prevIdx = i;
+        }
+      }
+    }
+    if (startIdx !== -1) {
+      if (startIdx === prevIdx) {
+        ranges.push(shortMap[dayOrder[startIdx]]);
+      } else {
+        ranges.push(`${shortMap[dayOrder[startIdx]]}–${shortMap[dayOrder[prevIdx]]}`);
+      }
+    }
+
+    return ranges.join(", ");
+  }
+
+  const openRange = formatDayRanges(openDays);
 
   if (openDays.length === 0) {
     return {
@@ -473,21 +535,7 @@ export function getOrderWindowBannerParts(
     };
   }
 
-  let openRange = "";
-  if (openDays.length === 7) {
-    openRange = "ALL DAYS";
-  } else if (openDays.length > 1) {
-    openRange = `${shortMap[openDays[0]]}–${shortMap[openDays[openDays.length - 1]]}`;
-  } else {
-    openRange = shortMap[openDays[0]];
-  }
-
   const scheduleText = ["ORDER WINDOW", openRange, timeStr].filter(Boolean).join(" · ");
-
-  // Identify days that are the eve (day before) a recurring weekly off day
-  const eveOfWeeklyOffDays = (weeklyOff || [])
-    .map((off) => prevDayMap[off.toLowerCase()] || "")
-    .filter(Boolean);
 
   // Filter out closed days that are already explained by weekly off (e.g. Sunday before Monday)
   const independentClosedDays = closedDays.filter(
@@ -502,24 +550,42 @@ export function getOrderWindowBannerParts(
     closedText = `ORDERING CLOSED ON ${closedNames}`;
   }
 
-  // Check if today in IST is the eve (day before) a weekly off day
+  // Check current weekday in IST (Asia/Kolkata)
   const istWeekday = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Kolkata",
     weekday: "long",
   }).format(new Date()).toLowerCase();
 
-  const isTodayEveOfWeeklyOff = weeklyOff ? weeklyOff.some(
-    (off) => prevDayMap[off.toLowerCase()] === istWeekday
-  ) : false;
+  const isTodayEveOfWeeklyOff = weeklyOff
+    ? weeklyOff.some((off) => prevDayMap[off.toLowerCase()] === istWeekday)
+    : false;
 
-  // Kitchen dispatch closure notice for recurring weekly off days
+  const isTodayWeeklyOff = weeklyOff
+    ? weeklyOff.some((off) => off.toLowerCase() === istWeekday)
+    : false;
+
+  // Dynamic explanation for weekly off and advance booking
   let dispatchOffText = "";
   if (isTodayEveOfWeeklyOff && weeklyOff && weeklyOff.length > 0) {
-    const matchingOffDays = weeklyOff
-      .filter((off) => prevDayMap[off.toLowerCase()] === istWeekday)
+    const matchingOff = weeklyOff.filter(
+      (off) => prevDayMap[off.toLowerCase()] === istWeekday
+    );
+    const offNames = matchingOff
+      .map((d) => pluralMap[d.toLowerCase()] || d.toUpperCase())
+      .join(" & ");
+    const nextNames = matchingOff
+      .map((d) => (nextDayMap[d.toLowerCase()] || "").toUpperCase())
+      .filter(Boolean)
+      .join(" & ");
+    const bookDays = matchingOff
       .map((d) => d.toUpperCase())
       .join(" & ");
-    dispatchOffText = `ORDERING CLOSED TODAY · KITCHEN CLOSED TOMORROW (${matchingOffDays})`;
+
+    dispatchOffText = `ORDERING CLOSED TODAY · WE CLOSE ON ${offNames} SO THE ORDERING WINDOW IS CLOSED ON SUNDAYS · FOR ${nextNames}'S ORDER, BOOK ON ${bookDays} (${timeStr})`;
+  } else if (isTodayWeeklyOff && weeklyOff && weeklyOff.length > 0) {
+    const nextTarget = (nextDayMap[istWeekday] || "TOMORROW").toUpperCase();
+    const todayName = istWeekday.toUpperCase();
+    dispatchOffText = `ORDER WINDOW OPENS TODAY AT ${timeStr} FOR ${nextTarget}'S ORDER · KITCHEN CLOSED TODAY (${todayName})`;
   } else if (weeklyOff && weeklyOff.length > 0) {
     const offNames = weeklyOff
       .map((d) => pluralMap[d.toLowerCase()] || d.toUpperCase())
@@ -528,25 +594,43 @@ export function getOrderWindowBannerParts(
       .map((d) => pluralMap[prevDayMap[d.toLowerCase()] || ""] || "")
       .filter(Boolean)
       .join(" & ");
-    dispatchOffText = `KITCHEN CLOSED ON ${offNames} (ORDERING CLOSED ON ${prevNames})`;
+    const nextNames = weeklyOff
+      .map((d) => (nextDayMap[d.toLowerCase()] || "").toUpperCase())
+      .filter(Boolean)
+      .join(" & ");
+    const bookDays = weeklyOff
+      .map((d) => d.toUpperCase())
+      .join(" & ");
+
+    dispatchOffText = `WE CLOSE ON ${offNames} SO THE ORDERING WINDOW IS CLOSED ON ${prevNames} · FOR ${nextNames}'S ORDER, BOOK ON ${bookDays} (ORDER WINDOW OPEN ${timeStr})`;
   }
 
   const holidayInfo = formatHolidayNotice(holidays);
 
-  let fullClosedSegment = "";
-  const closureParts = [closedText, dispatchOffText].filter(Boolean);
-  if (closureParts.length > 0) {
-    const combinedClosures = closureParts.join(" · ");
-    if (holidayInfo) {
-      fullClosedSegment = `${combinedClosures} · ${holidayInfo.text}`;
-    } else {
-      fullClosedSegment = `${combinedClosures} & HOLIDAYS`;
-    }
-  } else if (holidayInfo) {
-    fullClosedSegment = holidayInfo.text;
-  }
+  let fullText = "";
 
-  const fullText = [scheduleText, fullClosedSegment].filter(Boolean).join(" · ");
+  if (isTodayEveOfWeeklyOff) {
+    const holidaySuffix = holidayInfo ? ` · ${holidayInfo.text}` : " & HOLIDAYS";
+    fullText = `${dispatchOffText}${holidaySuffix}`;
+  } else if (isTodayWeeklyOff) {
+    const holidaySuffix = holidayInfo ? ` · ${holidayInfo.text}` : " & HOLIDAYS";
+    fullText = `${dispatchOffText}${holidaySuffix}`;
+  } else {
+    const closureParts = [closedText, dispatchOffText].filter(Boolean);
+    let fullClosedSegment = "";
+    if (closureParts.length > 0) {
+      const combinedClosures = closureParts.join(" · ");
+      if (holidayInfo) {
+        fullClosedSegment = `${combinedClosures} · ${holidayInfo.text}`;
+      } else {
+        fullClosedSegment = `${combinedClosures} & HOLIDAYS`;
+      }
+    } else if (holidayInfo) {
+      fullClosedSegment = holidayInfo.text;
+    }
+
+    fullText = [scheduleText, fullClosedSegment].filter(Boolean).join(" · ");
+  }
 
   return {
     scheduleText,
@@ -738,6 +822,14 @@ export const FALLBACK_FAQS: ClientFaq[] = [
       "Our momo dough is rolled fresh by hand every morning, and our jhol soup simmered for hours. Operating on pre-orders ensures zero food waste, highest quality, and honest craft.",
     category: "Ordering",
     displayOrder: 3,
+  },
+  {
+    id: "faq_preorder_schedule",
+    question: "Why is ordering closed on Sunday if the kitchen is closed on Monday?",
+    answer:
+      "We close on Monday so the ordering window will be closed on Sunday. For Tuesday’s order, you have to book on Monday when the ordering window will be open at 2:00 PM – 4:00 PM.",
+    category: "Ordering",
+    displayOrder: 4,
   },
   {
     id: "faq_4",
