@@ -492,32 +492,18 @@ export function getOrderWindowBannerParts(
 
     const ranges: string[] = [];
     let startIdx = -1;
-    let prevIdx = -1;
 
-    for (let i = 0; i < dayOrder.length; i++) {
-      const d = dayOrder[i];
-      if (days.includes(d)) {
-        if (startIdx === -1) {
-          startIdx = i;
-          prevIdx = i;
-        } else if (i === prevIdx + 1) {
-          prevIdx = i;
-        } else {
-          if (startIdx === prevIdx) {
-            ranges.push(shortMap[dayOrder[startIdx]]);
-          } else {
-            ranges.push(`${shortMap[dayOrder[startIdx]]}–${shortMap[dayOrder[prevIdx]]}`);
-          }
-          startIdx = i;
-          prevIdx = i;
-        }
-      }
-    }
-    if (startIdx !== -1) {
-      if (startIdx === prevIdx) {
-        ranges.push(shortMap[dayOrder[startIdx]]);
-      } else {
-        ranges.push(`${shortMap[dayOrder[startIdx]]}–${shortMap[dayOrder[prevIdx]]}`);
+    for (let i = 0; i <= dayOrder.length; i++) {
+      if (i < dayOrder.length && days.includes(dayOrder[i])) {
+        if (startIdx === -1) startIdx = i;
+      } else if (startIdx !== -1) {
+        const prevIdx = i - 1;
+        ranges.push(
+          startIdx === prevIdx
+            ? shortMap[dayOrder[startIdx]]
+            : `${shortMap[dayOrder[startIdx]]}–${shortMap[dayOrder[prevIdx]]}`
+        );
+        startIdx = -1;
       }
     }
 
@@ -609,10 +595,7 @@ export function getOrderWindowBannerParts(
 
   let fullText = "";
 
-  if (isTodayEveOfWeeklyOff) {
-    const holidaySuffix = holidayInfo ? ` · ${holidayInfo.text}` : " & HOLIDAYS";
-    fullText = `${dispatchOffText}${holidaySuffix}`;
-  } else if (isTodayWeeklyOff) {
+  if (isTodayEveOfWeeklyOff || isTodayWeeklyOff) {
     const holidaySuffix = holidayInfo ? ` · ${holidayInfo.text}` : " & HOLIDAYS";
     fullText = `${dispatchOffText}${holidaySuffix}`;
   } else {
