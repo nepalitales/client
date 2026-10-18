@@ -215,7 +215,7 @@ export default function ContactPage() {
                 <h2 className="text-lg font-bold text-neutral-950">Operating Hours</h2>
                 <ul className="mt-2 text-xs sm:text-sm text-neutral-600 space-y-1.5 leading-relaxed">
                   <li>
-                    <span className="font-semibold text-neutral-900">Order Windows:</span> Daily 2:00 PM – 4:00 PM
+                    <span className="font-semibold text-neutral-900">Order Windows:</span> Mon–Sat 2:00 PM – 4:00 PM
                   </li>
                   <li>
                     <span className="font-semibold text-neutral-900">Ordering Closed:</span> Sundays
@@ -224,6 +224,12 @@ export default function ContactPage() {
                     <span className="font-semibold text-neutral-900">Kitchen Closed:</span> Mondays &amp; Holidays
                   </li>
                 </ul>
+                <div className="mt-3 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-950">
+                  <p className="font-semibold text-neutral-900">Advance Pre-Order Schedule:</p>
+                  <p className="mt-0.5 text-neutral-600 leading-normal">
+                    We close on Monday so the ordering window will be closed on Sunday. For Tuesday’s order, you have to book on Monday when the ordering window will be open at 2:00 PM – 4:00 PM.
+                  </p>
+                </div>
               </div>
 
               <div className="mt-6 pt-4 border-t border-neutral-200">
