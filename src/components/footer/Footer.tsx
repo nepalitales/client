@@ -217,7 +217,7 @@ export function Footer() {
               .join(", ");
       rows.push({
         label: "Kitchen Closed",
-        value: kitchenOffLabels,
+        value: `${kitchenOffLabels} & Holidays`,
         closed: true,
       });
     }
