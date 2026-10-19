@@ -2,9 +2,14 @@
 
 import React from "react";
 import { useCheckout } from "@/context/CheckoutContext";
+import { useCart } from "@/context/CartContext";
+import { formatMessageTime12, formatCartNotice } from "@/lib/api";
 
 export function Step1OrderType() {
   const { orderType, setOrderType, orderSettings, deliveryFee, nextStep } = useCheckout();
+  const { orderWindowStatus } = useCart();
+  const isOrderingOpen = orderWindowStatus?.isOpen ?? true;
+  const cartNotice = formatCartNotice(orderWindowStatus?.message);
 
   const isDeliveryAvailable = orderSettings.deliveryEnabled;
   const isPickupAvailable = orderSettings.pickupEnabled;
@@ -14,6 +19,12 @@ export function Step1OrderType() {
       {/* ─── Center Content (No 3D icons or illustrations) ─────── */}
       <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6">
         <div className="space-y-2 max-w-xs mx-auto">
+          {!isOrderingOpen && (
+            <div className="w-full bg-rose-50 border border-rose-200 rounded-xl p-3 text-rose-800 text-xs text-left leading-relaxed mb-3 space-y-0.5">
+              <span className="font-bold block">{cartNotice.title}</span>
+              {cartNotice.subtitle && <span>{cartNotice.subtitle}</span>}
+            </div>
+          )}
           <h4 className="font-secondary font-bold text-lg sm:text-xl text-neutral-900 leading-snug">
             How would you like to receive your order?
           </h4>
@@ -85,10 +96,15 @@ export function Step1OrderType() {
       <div className="pt-4 w-full space-y-2">
         <button
           type="button"
-          onClick={nextStep}
-          className="w-full bg-[#D92121] hover:bg-[#b81b1b] text-white font-secondary font-bold py-3.5 px-6 rounded-full text-sm sm:text-base tracking-wide transition-all shadow-sm active:scale-[0.98] cursor-pointer"
+          disabled={!isOrderingOpen}
+          onClick={() => isOrderingOpen && nextStep()}
+          className={`w-full font-secondary font-bold py-3.5 px-6 rounded-full text-sm sm:text-base tracking-wide transition-all shadow-sm ${
+            isOrderingOpen
+              ? "bg-[#D92121] hover:bg-[#b81b1b] text-white active:scale-[0.98] cursor-pointer"
+              : "bg-neutral-200 text-neutral-400 cursor-not-allowed shadow-none"
+          }`}
         >
-          Continue
+          {isOrderingOpen ? "Continue" : "Ordering Closed"}
         </button>
         <p className="text-[10px] text-neutral-400 leading-tight text-center px-1">
           * Nepali Tales follows a 1-day advance pre-order policy to ensure fresh preparation. Dishes contain MSG in safe culinary quantities. Approved cancellations are refunded within 3–5 business days.

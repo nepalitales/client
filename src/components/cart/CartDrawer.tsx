@@ -17,7 +17,7 @@ import {
 import { useCart } from "@/context/CartContext";
 import { useCheckout } from "@/context/CheckoutContext";
 import { gsap } from "@/lib/gsap";
-import { formatMessageTime12 } from "@/lib/api";
+import { formatMessageTime12, formatCartNotice } from "@/lib/api";
 
 export function CartDrawer() {
   const { openCheckout } = useCheckout();
@@ -41,6 +41,8 @@ export function CartDrawer() {
     totalAmount,
     orderWindowStatus,
   } = useCart();
+
+  const cartNotice = formatCartNotice(orderWindowStatus?.message);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
@@ -203,7 +205,7 @@ export function CartDrawer() {
           ref={panelRef}
           data-lenis-prevent
           onWheel={(e) => e.stopPropagation()}
-          className="w-full sm:w-[448px] max-w-full bg-white shadow-2xl flex flex-col pointer-events-auto h-full"
+          className="w-full sm:w-md max-w-full bg-white shadow-2xl flex flex-col pointer-events-auto h-full"
         >
           {/* ─── Header ────────────────────────────────────────── */}
           <div
@@ -235,24 +237,24 @@ export function CartDrawer() {
           {/* ─── Live Server Order Window Status Banner ──────────── */}
           <div
             ref={bannerRef}
-            className={`px-4 py-2.5 text-xs font-secondary flex items-center gap-2 border-b select-none shrink-0 ${
+            className={`px-4 py-2 text-xs font-secondary flex items-center gap-2 border-b select-none shrink-0 ${
               isOpenNow
-                ? "bg-emerald-50/70 border-emerald-100 text-emerald-900"
-                : "bg-amber-50/80 border-amber-100 text-amber-900"
+                ? "bg-emerald-50/80 border-emerald-100 text-emerald-900"
+                : "bg-amber-50/90 border-amber-200/60 text-amber-900"
             }`}
           >
             <Clock className="w-4 h-4 shrink-0 text-current" />
-            <p className="line-clamp-1">
+            <div className="flex-1 min-w-0 text-[11px] sm:text-xs leading-snug">
               {isOpenNow ? (
                 <span>
-                  <strong>Ordering Open</strong> - Preparing for next dispatch slot
+                  <strong className="font-bold">Ordering Open</strong> · Preparing for next dispatch slot
                 </span>
               ) : (
-                <span>
-                  <strong>{formatMessageTime12(orderWindowStatus?.message || "Order window closed")}</strong>
+                <span className="truncate block">
+                  <strong className="font-bold">Pre-orders Paused:</strong> {cartNotice.title}
                 </span>
               )}
-            </p>
+            </div>
           </div>
 
           {/* ─── Items List or Empty State ──────────────────────── */}
@@ -647,20 +649,41 @@ export function CartDrawer() {
               </div>
 
               {/* Primary Checkout CTA */}
-              <div className="pt-2">
+              <div className="pt-2 space-y-1.5">
                 <button
                   type="button"
+                  disabled={!isOpenNow}
                   onClick={() => {
+                    if (!isOpenNow) return;
                     closeCart();
                     setTimeout(() => {
                       openCheckout();
                     }, 180);
                   }}
-                  className="w-full bg-[#D92121] hover:bg-[#b81b1b] text-white font-secondary font-bold py-3 px-4 rounded-full text-xs sm:text-sm tracking-wider uppercase transition-all shadow-sm active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
+                  className={`w-full font-secondary font-bold py-3 px-4 rounded-full text-xs sm:text-sm tracking-wider uppercase transition-all shadow-sm flex items-center justify-center gap-2 ${
+                    isOpenNow
+                      ? "bg-[#D92121] hover:bg-[#b81b1b] text-white active:scale-[0.98] cursor-pointer"
+                      : "bg-neutral-200 text-neutral-400 cursor-not-allowed select-none shadow-none"
+                  }`}
                 >
-                  <span>Proceed to Checkout</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>{isOpenNow ? "Proceed to Checkout" : "Ordering Currently Closed"}</span>
+                  {isOpenNow && <ArrowRight className="w-4 h-4" />}
                 </button>
+                {!isOpenNow && (
+                  <div className="text-[11px] text-center text-amber-900 bg-amber-50/90 border border-amber-200/80 rounded-xl py-2 px-3 leading-relaxed space-y-0.5">
+                    <p className="font-bold text-amber-950">
+                      {cartNotice.title}
+                    </p>
+                    {cartNotice.subtitle && (
+                      <p className="text-[10px] text-amber-800">
+                        {cartNotice.subtitle}
+                      </p>
+                    )}
+                    <p className="text-[10px] text-neutral-500 pt-0.5">
+                      Your items are saved in your bag and ready for checkout once ordering opens.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}

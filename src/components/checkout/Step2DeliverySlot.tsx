@@ -45,6 +45,12 @@ export function Step2DeliverySlot() {
               setSelectedSlot(firstAvailable);
             }
           }
+        } else if (res && res.isOpen === false) {
+          setSlotData(res);
+          setSlotsList([]);
+          if (res.targetDate) setSelectedDate(res.targetDate);
+          if (res.displayDate) setDisplayDateStr(res.displayDate);
+          setSelectedSlot(null);
         } else {
           setSlotsList(FALLBACK_DISPATCH_SLOTS);
           if (!selectedSlot && FALLBACK_DISPATCH_SLOTS.length > 0) {
@@ -102,6 +108,15 @@ export function Step2DeliverySlot() {
           <div className="py-12 flex flex-col items-center justify-center text-neutral-400 gap-2">
             <Loader2 className="w-5 h-5 animate-spin text-[#D92121]" />
             <span className="text-xs font-medium">Checking available slots...</span>
+          </div>
+        ) : slotsList.length === 0 ? (
+          <div className="py-8 px-4 text-center rounded-xl bg-amber-50 border border-amber-200/80 space-y-2">
+            <p className="text-xs font-semibold text-amber-950">
+              {slotData?.message || "No dispatch slots available for this date."}
+            </p>
+            <p className="text-[11px] text-amber-700 leading-relaxed">
+              Dispatches are paused on this day. Please check back during open order intake hours (2:00 PM – 4:00 PM) for the next operating day.
+            </p>
           </div>
         ) : (
           <div

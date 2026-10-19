@@ -567,11 +567,12 @@ export function getOrderWindowBannerParts(
       .map((d) => d.toUpperCase())
       .join(" & ");
 
-    dispatchOffText = `ORDERING CLOSED TODAY · WE CLOSE ON ${offNames} SO THE ORDERING WINDOW IS CLOSED ON SUNDAYS · FOR ${nextNames}'S ORDER, BOOK ON ${bookDays} (${timeStr})`;
+    const todayName = istWeekday.toUpperCase();
+    dispatchOffText = `ORDERING CLOSED TODAY (${todayName}) · KITCHEN HAS OFF TOMORROW · NEXT ORDER WINDOW OPENS ${bookDays} (${timeStr})`;
   } else if (isTodayWeeklyOff && weeklyOff && weeklyOff.length > 0) {
     const nextTarget = (nextDayMap[istWeekday] || "TOMORROW").toUpperCase();
     const todayName = istWeekday.toUpperCase();
-    dispatchOffText = `ORDER WINDOW OPENS TODAY AT ${timeStr} FOR ${nextTarget}'S ORDER · KITCHEN CLOSED TODAY (${todayName})`;
+    dispatchOffText = `ORDER WINDOW OPENS TODAY AT ${timeStr} FOR ${nextTarget} DELIVERY · NO DELIVERIES TODAY (${todayName})`;
   } else if (weeklyOff && weeklyOff.length > 0) {
     const offNames = weeklyOff
       .map((d) => pluralMap[d.toLowerCase()] || d.toUpperCase())
@@ -1583,6 +1584,52 @@ export function formatMessageTime12(message: string): string {
     const padH = h < 10 ? `0${h}` : `${h}`;
     return `${padH}:${mStr} ${ampm}`;
   });
+}
+
+/**
+ * Formats server order window closure messages into concise, customer-friendly cart notices.
+ */
+export function formatCartNotice(msg?: string): { title: string; subtitle?: string } {
+  if (!msg) {
+    return {
+      title: "Ordering is currently closed",
+      subtitle: "Please check back during our regular ordering window.",
+    };
+  }
+
+  const cleaned = formatMessageTime12(msg);
+
+  // If weekly off closure
+  if (/weekly off|kitchen off/i.test(cleaned)) {
+    const dayMatch = cleaned.match(/(?:off on|tomorrow\s*\()\s*([A-Za-z]+)/i);
+    const dayName = dayMatch ? dayMatch[1] : "";
+    return {
+      title: dayName ? `Kitchen closed for weekly off on ${dayName}` : "Kitchen closed for weekly off",
+      subtitle: dayName
+        ? `Ordering reopens ${dayName} at 2:00 PM – 4:00 PM for advance delivery.`
+        : "Ordering will reopen during the next scheduled window at 2:00 PM.",
+    };
+  }
+
+  // If festival holiday
+  if (/holiday/i.test(cleaned)) {
+    return {
+      title: "Kitchen closed for scheduled holiday",
+      subtitle: "Pre-orders will resume on our next operating day at 2:00 PM.",
+    };
+  }
+
+  // If daily order window (e.g. outside 2 PM - 4 PM)
+  if (/02:00 PM|2:00 PM|order window/i.test(cleaned)) {
+    return {
+      title: "Today's order window opens at 2:00 PM – 4:00 PM",
+      subtitle: "Dishes will be handcrafted fresh for tomorrow's delivery.",
+    };
+  }
+
+  return {
+    title: cleaned,
+  };
 }
 
 /**
