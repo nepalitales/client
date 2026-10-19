@@ -54,6 +54,7 @@ export interface Product {
   categorySlug: string;
   type: FoodType;
   quantity?: string; // e.g. "6 pcs", "2 pcs"
+  isTestOnly?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -701,7 +702,9 @@ export async function getCategoriesWithProducts(
 
   cachedCategoriesPromise = (async () => {
     try {
-      const res = await clientFetch("/categories", { cache: "no-store" });
+      const isTesterInUrl = typeof window !== "undefined" && window.location.search.includes("tester=bhavartheankit");
+      const url = isTesterInUrl ? "/categories?tester=bhavartheankit" : "/categories";
+      const res = await clientFetch(url, { cache: "no-store" });
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const data = await res.json();
       categoriesCacheTimestamp = Date.now();
@@ -718,7 +721,9 @@ export async function getCategoriesWithProducts(
 
 export async function getProductById(productId: string): Promise<Product | null> {
   try {
-    const res = await clientFetch(`/products/${productId}`);
+    const isTesterInUrl = typeof window !== "undefined" && window.location.search.includes("tester=bhavartheankit");
+    const url = isTesterInUrl ? `/products/${productId}?tester=bhavartheankit` : `/products/${productId}`;
+    const res = await clientFetch(url);
     if (!res.ok) return null;
     const data = await res.json();
     return data.product || null;
