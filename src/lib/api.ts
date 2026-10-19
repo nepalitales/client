@@ -142,52 +142,17 @@ let cachedOrderWindowsPromise: Promise<ClientOrderWindowsResponse | null> | null
 export async function getClientOrderWindows(
   forceRefresh = false
 ): Promise<ClientOrderWindowsResponse | null> {
-  // 1. In-memory promise check (for same-session navigation)
   if (cachedOrderWindowsPromise && !forceRefresh) {
     return cachedOrderWindowsPromise;
   }
 
-  // 2. Client storage check (for page refreshes across tabs/reloads)
-  if (!forceRefresh && typeof window !== "undefined") {
-    try {
-      const raw = sessionStorage.getItem(ORDER_WINDOWS_CACHE_KEY);
-      if (raw) {
-        const parsed: CachedOrderWindowsEntry = JSON.parse(raw);
-        if (Date.now() - parsed.timestamp < ORDER_WINDOWS_CACHE_TTL_MS) {
-          cachedOrderWindowsPromise = Promise.resolve(parsed.data);
-          return parsed.data;
-        }
-      }
-    } catch {
-      // Storage access blocked or unavailable; proceed to network fetch
-    }
-  }
-
-  // 3. Network fetch
   cachedOrderWindowsPromise = (async () => {
     try {
       const res = await clientFetch("/order-windows", {
-        cache: "default",
+        cache: "no-store",
       });
       if (!res.ok) return null;
       const json: ClientOrderWindowsResponse = await res.json();
-
-      // Cache to sessionStorage if successful
-      if (typeof window !== "undefined" && json?.success) {
-        try {
-          const entry: CachedOrderWindowsEntry = {
-            timestamp: Date.now(),
-            data: json,
-          };
-          sessionStorage.setItem(
-            ORDER_WINDOWS_CACHE_KEY,
-            JSON.stringify(entry)
-          );
-        } catch {
-          // Ignore quota / private-mode exceptions
-        }
-      }
-
       return json;
     } catch (err) {
       console.warn("[OrderWindows API] Error fetching windows:", err);
@@ -234,7 +199,7 @@ export async function getClientConfig(
 
   cachedConfigPromise = (async () => {
     try {
-      const res = await clientFetch("/config", { cache: "default" });
+      const res = await clientFetch("/config", { cache: "no-store" });
       if (!res.ok) return null;
       const json: ClientConfigSnapshotResponse = await res.json();
       if (json?.success) {
@@ -280,7 +245,7 @@ export async function getClientHolidays(
   cachedHolidaysPromise = (async () => {
     try {
       const res = await clientFetch("/holidays", {
-        cache: "default",
+        cache: "no-store",
       });
       if (!res.ok) return null;
       const json: ClientHolidaysResponse = await res.json();
@@ -654,36 +619,11 @@ export async function getClientWeeklyOff(
     return cachedWeeklyOffPromise;
   }
 
-  if (!forceRefresh && typeof window !== "undefined") {
-    try {
-      const raw = sessionStorage.getItem(WEEKLY_OFF_CACHE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Date.now() - parsed.timestamp < ORDER_WINDOWS_CACHE_TTL_MS) {
-          cachedWeeklyOffPromise = Promise.resolve(parsed.data);
-          return parsed.data;
-        }
-      }
-    } catch {
-      // Storage access blocked or unavailable
-    }
-  }
-
   cachedWeeklyOffPromise = (async () => {
     try {
-      const res = await clientFetch("/weekly-off", { cache: "default" });
+      const res = await clientFetch("/weekly-off", { cache: "no-store" });
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const data = await res.json();
-      if (typeof window !== "undefined" && data?.success) {
-        try {
-          sessionStorage.setItem(
-            WEEKLY_OFF_CACHE_KEY,
-            JSON.stringify({ timestamp: Date.now(), data })
-          );
-        } catch {
-          // Ignore quota errors
-        }
-      }
       return data;
     } catch (err) {
       console.warn("[WeeklyOff API] Error fetching weekly off:", err);
