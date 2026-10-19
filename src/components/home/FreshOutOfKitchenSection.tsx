@@ -59,9 +59,15 @@ export function FreshOutOfKitchenSection() {
       fetchBannerData(true);
     });
 
+    const handleFocus = () => {
+      fetchBannerData(true);
+    };
+    window.addEventListener("focus", handleFocus);
+
     return () => {
       isMounted = false;
       unsubscribe();
+      window.removeEventListener("focus", handleFocus);
     };
   }, []);
 

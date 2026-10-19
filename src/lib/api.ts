@@ -130,7 +130,7 @@ export async function getOrderWindowStatus(): Promise<OrderWindowStatusResponse 
 }
 
 const ORDER_WINDOWS_CACHE_KEY = "nt_order_windows_cache";
-const ORDER_WINDOWS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const ORDER_WINDOWS_CACHE_TTL_MS = 5 * 1000; // 5 seconds freshness
 
 interface CachedOrderWindowsEntry {
   timestamp: number;
@@ -453,10 +453,32 @@ export function getOrderWindowBannerParts(
     .map((off) => prevDayMap[off.toLowerCase()] || "")
     .filter(Boolean);
 
+  // Check current weekday in IST (Asia/Kolkata)
+  const istWeekday = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
+    weekday: "long",
+  }).format(new Date()).toLowerCase();
+
+  const formatH = (t: string) => {
+    const [hStr, mStr] = t.split(":");
+    let h = parseInt(hStr, 10);
+    const m = parseInt(mStr || "0", 10);
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return m > 0 ? `${h}:${mStr} ${ampm}` : `${h} ${ampm}`;
+  };
+
   const windowMap = new Map(orderWindows.map((w) => [w.day, w]));
   const openDays: string[] = [];
   const closedDays: string[] = [];
   let timeStr = "";
+
+  // Prioritize TODAY's order window so the banner instantly reflects today's active times
+  const todayConfig = windowMap.get(istWeekday as any);
+  if (todayConfig && todayConfig.enabled && todayConfig.windows && todayConfig.windows.length > 0) {
+    const w = todayConfig.windows[0];
+    timeStr = `${formatH(w.start)}–${formatH(w.end)}`;
+  }
 
   for (const day of dayOrder) {
     const isEveOfWeeklyOff = eveOfWeeklyOffDays.includes(day);
@@ -470,14 +492,6 @@ export function getOrderWindowBannerParts(
 
     if (!timeStr && config && config.windows && config.windows.length > 0) {
       const w = config.windows[0];
-      const formatH = (t: string) => {
-        const [hStr, mStr] = t.split(":");
-        let h = parseInt(hStr, 10);
-        const m = parseInt(mStr || "0", 10);
-        const ampm = h >= 12 ? "PM" : "AM";
-        h = h % 12 || 12;
-        return m > 0 ? `${h}:${mStr} ${ampm}` : `${h} ${ampm}`;
-      };
       timeStr = `${formatH(w.start)}–${formatH(w.end)}`;
     }
   }
@@ -535,12 +549,6 @@ export function getOrderWindowBannerParts(
       .join(" & ");
     closedText = `ORDERING CLOSED ON ${closedNames}`;
   }
-
-  // Check current weekday in IST (Asia/Kolkata)
-  const istWeekday = new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Kolkata",
-    weekday: "long",
-  }).format(new Date()).toLowerCase();
 
   const isTodayEveOfWeeklyOff = weeklyOff
     ? weeklyOff.some((off) => prevDayMap[off.toLowerCase()] === istWeekday)
@@ -855,7 +863,7 @@ export async function getClientAddons(): Promise<Addon[]> {
 
 // ─── 5. Config Version Polling (Live Catalog Sync - Singleton) ────
 
-const CONFIG_POLL_INTERVAL_MS = 60_000; // Poll every 60s
+const CONFIG_POLL_INTERVAL_MS = 10_000; // Poll every 10s for real-time responsiveness
 
 let globalKnownVersion = "0";
 let globalIntervalId: ReturnType<typeof setInterval> | null = null;
