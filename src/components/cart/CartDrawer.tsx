@@ -42,7 +42,7 @@ export function CartDrawer() {
     orderWindowStatus,
   } = useCart();
 
-  const cartNotice = formatCartNotice(orderWindowStatus?.message);
+  const cartNotice = formatCartNotice(orderWindowStatus?.message, orderWindowStatus);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
@@ -666,7 +666,13 @@ export function CartDrawer() {
                       : "bg-neutral-200 text-neutral-400 cursor-not-allowed select-none shadow-none"
                   }`}
                 >
-                  <span>{isOpenNow ? "Proceed to Checkout" : "Ordering Currently Closed"}</span>
+                  <span>
+                    {isOpenNow
+                      ? "Proceed to Checkout"
+                      : orderWindowStatus?.windowState === "after"
+                      ? "Ordering Closed for Today"
+                      : "Ordering Currently Closed"}
+                  </span>
                   {isOpenNow && <ArrowRight className="w-4 h-4" />}
                 </button>
                 {!isOpenNow && (

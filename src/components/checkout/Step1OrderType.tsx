@@ -9,7 +9,7 @@ export function Step1OrderType() {
   const { orderType, setOrderType, orderSettings, deliveryFee, nextStep } = useCheckout();
   const { orderWindowStatus } = useCart();
   const isOrderingOpen = orderWindowStatus?.isOpen ?? true;
-  const cartNotice = formatCartNotice(orderWindowStatus?.message);
+  const cartNotice = formatCartNotice(orderWindowStatus?.message, orderWindowStatus);
 
   const isDeliveryAvailable = orderSettings.deliveryEnabled;
   const isPickupAvailable = orderSettings.pickupEnabled;

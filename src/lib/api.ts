@@ -70,12 +70,20 @@ export interface CategoryWithProducts {
 export interface OrderWindowStatusResponse {
   success: boolean;
   isOpen: boolean;
+  windowState?: "before" | "open" | "after";
   message: string;
   currentWindow?: { start: string; end: string } | null;
   canCancelUntil?: string | null;
   todayDateStr?: string;
   todayDay?: string;
   activeWindows?: Array<{ start: string; end: string; maxOrders?: number }>;
+  nextWindow?: {
+    day: string;
+    dayLabel: string;
+    start: string;
+    end: string;
+    timeFormatted: string;
+  } | null;
   nextWindowText?: string;
 }
 
@@ -501,7 +509,27 @@ export function getOrderWindowBannerParts(
     };
   }
 
-  const scheduleText = ["ORDER WINDOW", openRange, timeStr].filter(Boolean).join(" · ");
+  const istHourMinute = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date());
+
+  const todayWindow = todayConfig?.windows?.[0];
+  const isAfterTodayWindow = Boolean(todayWindow && istHourMinute > todayWindow.end);
+  const isOpenNowToday = Boolean(todayWindow && istHourMinute >= todayWindow.start && istHourMinute <= todayWindow.end);
+
+  let scheduleText = ["ORDER WINDOW", openRange, timeStr].filter(Boolean).join(" · ");
+  if (isAfterTodayWindow) {
+    const tomorrowConfig = windowMap.get((nextDayMap[istWeekday] || "") as any);
+    const tomorrowTimeStr = tomorrowConfig?.windows?.[0]
+      ? `${formatH(tomorrowConfig.windows[0].start)}–${formatH(tomorrowConfig.windows[0].end)}`
+      : timeStr;
+    scheduleText = `ORDER WINDOW CLOSED FOR TODAY · OPENS TOMORROW AT ${tomorrowTimeStr}`;
+  } else if (isOpenNowToday) {
+    scheduleText = `ORDER WINDOW IS OPEN NOW (${timeStr})`;
+  }
 
   // Filter out closed days that are already explained by weekly off (e.g. Sunday before Monday)
   const independentClosedDays = closedDays.filter(
@@ -546,7 +574,18 @@ export function getOrderWindowBannerParts(
   } else if (isTodayWeeklyOff && weeklyOff && weeklyOff.length > 0) {
     const nextTarget = (nextDayMap[istWeekday] || "TOMORROW").toUpperCase();
     const todayName = istWeekday.toUpperCase();
-    dispatchOffText = `ORDER WINDOW OPENS TODAY AT ${timeStr} FOR ${nextTarget} DELIVERY · NO DELIVERIES TODAY (${todayName})`;
+    if (isAfterTodayWindow) {
+      const tomorrowConfig = windowMap.get((nextDayMap[istWeekday] || "") as any);
+      const tomorrowTimeStr = tomorrowConfig?.windows?.[0]
+        ? `${formatH(tomorrowConfig.windows[0].start)}–${formatH(tomorrowConfig.windows[0].end)}`
+        : timeStr;
+      const afterTarget = (nextDayMap[nextDayMap[istWeekday] || ""] || "ADVANCE").toUpperCase();
+      dispatchOffText = `ORDER WINDOW CLOSED FOR TODAY · OPENS TOMORROW AT ${tomorrowTimeStr} FOR ${afterTarget} DELIVERY · NO DELIVERIES TODAY (${todayName})`;
+    } else if (isOpenNowToday) {
+      dispatchOffText = `ORDER WINDOW IS OPEN NOW (${timeStr}) FOR ${nextTarget} DELIVERY · NO DELIVERIES TODAY (${todayName})`;
+    } else {
+      dispatchOffText = `ORDER WINDOW OPENS TODAY AT ${timeStr} FOR ${nextTarget} DELIVERY · NO DELIVERIES TODAY (${todayName})`;
+    }
   } else if (weeklyOff && weeklyOff.length > 0) {
     const offNames = weeklyOff
       .map((d) => pluralMap[d.toLowerCase()] || d.toUpperCase())
@@ -1542,15 +1581,29 @@ export function formatMessageTime12(message: string): string {
 /**
  * Formats server order window closure messages into concise, customer-friendly cart notices.
  */
-export function formatCartNotice(msg?: string): { title: string; subtitle?: string } {
-  if (!msg) {
+export function formatCartNotice(
+  msg?: string,
+  status?: OrderWindowStatusResponse | null
+): { title: string; subtitle?: string } {
+  const effectiveMsg = status?.message || msg;
+  if (!effectiveMsg) {
     return {
       title: "Ordering is currently closed",
       subtitle: "Please check back during our regular ordering window.",
     };
   }
 
-  const cleaned = formatMessageTime12(msg);
+  const cleaned = formatMessageTime12(effectiveMsg);
+
+  // If status is OPEN
+  if (status?.isOpen) {
+    return {
+      title: "Ordering is currently open",
+      subtitle: status.currentWindow
+        ? `Open until ${formatMessageTime12(status.currentWindow.end)}`
+        : "Preparing for next dispatch slot",
+    };
+  }
 
   // If weekly off closure
   if (/weekly off|kitchen off/i.test(cleaned)) {
@@ -1558,9 +1611,11 @@ export function formatCartNotice(msg?: string): { title: string; subtitle?: stri
     const dayName = dayMatch ? dayMatch[1] : "";
     return {
       title: dayName ? `Kitchen closed for weekly off on ${dayName}` : "Kitchen closed for weekly off",
-      subtitle: dayName
-        ? `Ordering reopens ${dayName} at 2:00 PM – 4:00 PM for advance delivery.`
-        : "Ordering will reopen during the next scheduled window at 2:00 PM.",
+      subtitle: cleaned.includes("Opens") || cleaned.includes("reopens")
+        ? cleaned
+        : dayName
+        ? `Ordering reopens ${dayName} for advance delivery.`
+        : "Ordering will reopen during the next scheduled window.",
     };
   }
 
@@ -1568,20 +1623,23 @@ export function formatCartNotice(msg?: string): { title: string; subtitle?: stri
   if (/holiday/i.test(cleaned)) {
     return {
       title: "Kitchen closed for scheduled holiday",
-      subtitle: "Pre-orders will resume on our next operating day at 2:00 PM.",
+      subtitle: cleaned.includes("Opens") || cleaned.includes("resume")
+        ? cleaned
+        : "Pre-orders will resume on our next operating day.",
     };
   }
 
-  // If daily order window (e.g. outside 2 PM - 4 PM)
-  if (/02:00 PM|2:00 PM|order window/i.test(cleaned)) {
+  // If daily order window (after or before or general message)
+  if (/closed for today|opens tomorrow|opens today|order window/i.test(cleaned)) {
     return {
-      title: "Today's order window opens at 2:00 PM – 4:00 PM",
+      title: cleaned,
       subtitle: "Dishes will be handcrafted fresh for tomorrow's delivery.",
     };
   }
 
   return {
     title: cleaned,
+    subtitle: "Dishes will be handcrafted fresh for tomorrow's delivery.",
   };
 }
 
