@@ -912,6 +912,105 @@ function handleGlobalVisibility() {
   }
 }
 
+export interface LiveWindowExtendedEvent {
+  type: "LIVE_WINDOW_EXTENDED";
+  version: string;
+  timestamp: string;
+  todayDay: string;
+  previousEndTime: string;
+  newEndTime: string;
+  newEndTimeFormatted: string;
+  previousMaxOrders?: number;
+  newMaxOrders?: number;
+  addedCap: number;
+  extendedMinutes: number;
+  autoExtendedSlots?: AvailableSlotItem[];
+  currentOrdersCount: number;
+  targetDispatchDate?: string;
+}
+
+type LiveWindowListener = (event: LiveWindowExtendedEvent) => void;
+const liveWindowListeners = new Set<LiveWindowListener>();
+let globalEventSource: EventSource | null = null;
+let eventSourceReconnectTimeout: ReturnType<typeof setTimeout> | null = null;
+
+function setupLiveWindowEventSource() {
+  if (typeof window === "undefined" || !("EventSource" in window)) return;
+  if (globalEventSource) return;
+
+  try {
+    const streamUrl = `${API_BASE}/live-window/stream`;
+    const es = new EventSource(streamUrl);
+    globalEventSource = es;
+
+    es.addEventListener("LIVE_WINDOW_EXTENDED", (event) => {
+      try {
+        const payload: LiveWindowExtendedEvent = JSON.parse(event.data);
+        invalidateClientConfigCache();
+
+        // 1. Notify all live window listeners with full in-memory delta (0 DB load)
+        liveWindowListeners.forEach((listener) => {
+          try {
+            listener(payload);
+          } catch (err) {
+            console.error("Live window listener error:", err);
+          }
+        });
+
+        // 2. Also notify catalog listeners so existing banners update instantly
+        catalogListeners.forEach((listener) => {
+          try {
+            listener();
+          } catch (err) {
+            console.error("Catalog listener error:", err);
+          }
+        });
+      } catch (err) {
+        console.warn("Failed to parse LIVE_WINDOW_EXTENDED event:", err);
+      }
+    });
+
+    es.onerror = () => {
+      es.close();
+      globalEventSource = null;
+      if (!eventSourceReconnectTimeout) {
+        const jitter = Math.floor(Math.random() * 2000) + 3000;
+        eventSourceReconnectTimeout = setTimeout(() => {
+          eventSourceReconnectTimeout = null;
+          if (liveWindowListeners.size > 0 || catalogListeners.size > 0) {
+            setupLiveWindowEventSource();
+          }
+        }, jitter);
+      }
+    };
+  } catch (err) {
+    console.warn("Could not initiate live window EventSource:", err);
+  }
+}
+
+/**
+ * Subscribes a callback to live ordering window extensions.
+ * Provides instant zero-query updates directly with full event payload.
+ */
+export function subscribeToLiveWindow(
+  onExtended: (event: LiveWindowExtendedEvent) => void,
+): () => void {
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+
+  liveWindowListeners.add(onExtended);
+  setupLiveWindowEventSource();
+
+  return () => {
+    liveWindowListeners.delete(onExtended);
+    if (liveWindowListeners.size === 0 && catalogListeners.size === 0 && globalEventSource) {
+      globalEventSource.close();
+      globalEventSource = null;
+    }
+  };
+}
+
 /**
  * Subscribes a callback to live catalog changes.
  * Managed as a shared singleton across the application to prevent redundant HTTP requests.
@@ -924,13 +1023,14 @@ export function subscribeToLiveCatalogUpdates(
   }
 
   catalogListeners.add(onUpdate);
+  setupLiveWindowEventSource();
 
   if (!globalVisibilityBound) {
     document.addEventListener("visibilitychange", handleGlobalVisibility);
     globalVisibilityBound = true;
   }
 
-  // Trigger poll on initial subscriber
+  // Trigger poll on initial subscriber as fallback
   if (catalogListeners.size === 1) {
     pollConfigVersion();
     startGlobalPolling();
@@ -940,6 +1040,10 @@ export function subscribeToLiveCatalogUpdates(
     catalogListeners.delete(onUpdate);
     if (catalogListeners.size === 0) {
       stopGlobalPolling();
+      if (liveWindowListeners.size === 0 && globalEventSource) {
+        globalEventSource.close();
+        globalEventSource = null;
+      }
     }
   };
 }
