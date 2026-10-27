@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useCheckout } from "@/context/CheckoutContext";
 import {
   getDispatchSlots,
+  subscribeToLiveWindow,
+  subscribeToLiveCatalogUpdates,
   FALLBACK_DISPATCH_SLOTS,
   type AvailableSlotItem,
   type DispatchAvailabilityResponse,
@@ -73,6 +75,37 @@ export function Step2DeliverySlot() {
       isMounted = false;
     };
   }, [setSelectedDate, setSelectedSlot, selectedSlot]);
+
+  // Live real-time slot update: merges auto-extended slots instantly with 0 DB reads
+  // Dual-channel architecture: instant SSE push + catalog poll fallback
+  useEffect(() => {
+    const unsubscribeWindow = subscribeToLiveWindow((event) => {
+      if (event.autoExtendedSlots && event.autoExtendedSlots.length > 0) {
+        setSlotsList((prev) => {
+          const existingIds = new Set(prev.map((s) => s.id));
+          const newSlots = (event.autoExtendedSlots || []).filter(
+            (s) => !existingIds.has(s.id),
+          );
+          if (newSlots.length === 0) return prev;
+          return [...prev, ...newSlots];
+        });
+      }
+    });
+
+    const unsubscribeCatalog = subscribeToLiveCatalogUpdates(() => {
+      // Re-fetch slots quietly when version is bumped
+      getDispatchSlots().then((res) => {
+        if (res && res.success && res.slots && res.slots.length > 0) {
+          setSlotsList(res.slots);
+        }
+      }).catch(() => {});
+    });
+
+    return () => {
+      unsubscribeWindow();
+      unsubscribeCatalog();
+    };
+  }, []);
 
   const handleSlotSelect = (slot: AvailableSlotItem) => {
     if (slot.isFull) return;
