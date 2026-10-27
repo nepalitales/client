@@ -8,6 +8,7 @@ import {
   getClientWeeklyOff,
   formatOrderWindowBannerText,
   subscribeToLiveCatalogUpdates,
+  subscribeToLiveWindow,
   type OrderWindowDayConfig,
   type HolidayItem,
 } from "@/lib/api";
@@ -65,6 +66,21 @@ export function OrderWindowBanner() {
       fetchBannerData(true);
     });
 
+    // Zero-query instant in-memory update when live window is extended
+    const unsubscribeLive = subscribeToLiveWindow((event) => {
+      setOrderWindows((prev) => {
+        return prev.map((dayConfig) => {
+          if (dayConfig.day.toLowerCase() === event.todayDay.toLowerCase()) {
+            const updatedWindows = (dayConfig.windows || []).map((win) => {
+              return { ...win, end: event.newEndTime, maxOrders: event.newMaxOrders };
+            });
+            return { ...dayConfig, enabled: true, windows: updatedWindows };
+          }
+          return dayConfig;
+        });
+      });
+    });
+
     const handleFocus = () => {
       fetchBannerData(true);
     };
@@ -73,6 +89,7 @@ export function OrderWindowBanner() {
     return () => {
       isMounted = false;
       unsubscribe();
+      unsubscribeLive();
       window.removeEventListener("focus", handleFocus);
     };
   }, []);
