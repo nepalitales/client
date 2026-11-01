@@ -24,7 +24,7 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
     type: "veg",
     quantity: "6 pcs",
     price: 219,
-    image: "/assets/signature-product-section/veg-kothey-momo.png",
+    image: "/assets/signature-product-section/veg-kothey-momo.webp",
     shortDescription:
       "Bite-sized dumplings filled with fresh and finely chopped cabbage, onion, soya chunks.....",
     fullDescription:
@@ -36,7 +36,7 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
     type: "non-veg",
     quantity: "6 pcs",
     price: 249,
-    image: "/assets/signature-product-section/chicken-jhol-momo.png",
+    image: "/assets/signature-product-section/chicken-jhol-momo.webp",
     shortDescription:
       "Steamed momo is served with the soup which is rich and creamy, and nutty flavour.....",
     fullDescription:
@@ -48,7 +48,7 @@ const SIGNATURE_PRODUCTS: SignatureItem[] = [
     type: "non-veg",
     quantity: "2 pcs",
     price: 239,
-    image: "/assets/signature-product-section/chicken-shaphaley.png",
+    image: "/assets/signature-product-section/chicken-shaphaley.webp",
     shortDescription:
       "Made of crispy fried bread stuffed with seasoned minced chicken, onions, and spices.....",
     fullDescription:
