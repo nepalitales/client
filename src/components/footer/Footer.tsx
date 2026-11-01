@@ -333,6 +333,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/about"
+                  prefetch={false}
                   className="hover:text-brand-red transition-colors inline-block"
                 >
                   About Us
@@ -341,6 +342,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/contact"
+                  prefetch={false}
                   className="hover:text-brand-red transition-colors inline-block"
                 >
                   Contact Us
@@ -368,6 +370,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/terms-and-conditions"
+                  prefetch={false}
                   className="hover:text-brand-red transition-colors inline-block"
                 >
                   Terms &amp; Conditions
@@ -376,6 +379,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/privacy-policy"
+                  prefetch={false}
                   className="hover:text-brand-red transition-colors inline-block"
                 >
                   Privacy Policy
@@ -384,6 +388,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/cancellation-policy"
+                  prefetch={false}
                   className="hover:text-brand-red transition-colors inline-block"
                 >
                   Cancellation &amp; Refund Policy
@@ -392,6 +397,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/delivery-policy"
+                  prefetch={false}
                   className="hover:text-brand-red transition-colors inline-block"
                 >
                   Delivery Policy
@@ -400,6 +406,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/allergen-advisory"
+                  prefetch={false}
                   className="hover:text-brand-red transition-colors inline-block"
                 >
                   Allergen Advisory

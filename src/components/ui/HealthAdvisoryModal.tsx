@@ -101,6 +101,7 @@ export function HealthAdvisoryModal() {
           <div className="mt-6 pt-4 border-t border-neutral-100 flex flex-col sm:flex-row items-center justify-between gap-3">
             <Link
               href="/allergen-advisory"
+              prefetch={false}
               onClick={handleDismiss}
               className="text-xs sm:text-sm font-secondary font-semibold text-neutral-600 hover:text-[#D92121] underline transition-colors"
             >

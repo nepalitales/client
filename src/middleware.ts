@@ -321,20 +321,17 @@ The requested resource "${pathname}" was not found on Nepali Tales.
     return notFoundResponse;
   }
 
-  // For regular HTML and all other client requests, safely pass through with Vary: Accept
-  const response = NextResponse.next();
-  appendVaryAccept(response.headers);
-  return response;
+  // For regular HTML and all other client requests, safely pass through
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for:
-     * - _next/static, _next/image
-     * - static assets, favicon, manifest
-     * - public files with extensions
+     * Only execute Edge Middleware for explicit markdown requests (.md).
+     * All normal human visitor traffic completely bypasses Edge Middleware,
+     * eliminating 900,000+ unnecessary Vercel Edge invocations per month.
      */
-    "/((?!_next/static|_next/image|assets/|favicon\\.ico|icon\\.png|manifest\\.webmanifest|.*\\.(?:png|jpg|jpeg|webp|svg|gif|ico|txt|xml)$).*)",
+    "/((?:.+)\\.md$)",
   ],
 };

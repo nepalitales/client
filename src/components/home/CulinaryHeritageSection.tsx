@@ -45,6 +45,7 @@ export function CulinaryHeritageSection() {
             <div className="mt-6 pt-4 border-t border-neutral-100">
               <Link
                 href="/about"
+                prefetch={false}
                 className="text-xs font-semibold text-accent-red hover:underline inline-flex items-center gap-1"
               >
                 <span>Read Full Story</span>

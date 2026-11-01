@@ -68,12 +68,35 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: [
           {
-            key: "Vary",
-            value: "Accept",
-          },
-          {
             key: "X-Agent-Ready",
             value: "true",
+          },
+        ],
+      },
+      {
+        source: "/assets/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/fonts/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/:file(icon\\.png|favicon\\.ico|og-image\\.png|openGraphImg\\.png|opengraph-image\\.png)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
           },
         ],
       },

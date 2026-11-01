@@ -55,6 +55,7 @@ export function CookieConsent() {
                   cookies. Read our{" "}
                   <Link
                     href="/privacy-policy"
+                    prefetch={false}
                     className="font-semibold text-[#D92121] underline hover:text-[#b81b1b]"
                   >
                     Privacy Policy
@@ -62,6 +63,7 @@ export function CookieConsent() {
                   and{" "}
                   <Link
                     href="/terms-and-conditions"
+                    prefetch={false}
                     className="font-semibold text-[#D92121] underline hover:text-[#b81b1b]"
                   >
                     Terms & Conditions
