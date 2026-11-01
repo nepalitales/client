@@ -93,6 +93,7 @@ export function Navbar() {
           >
             <Link
               href="/"
+              prefetch={false}
               className={`text-sm font-semibold tracking-wide transition-colors ${
                 pathname === "/" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
               }`}
@@ -101,6 +102,7 @@ export function Navbar() {
             </Link>
             <Link
               href="/menu"
+              prefetch={false}
               className={`text-sm font-semibold tracking-wide transition-colors ${
                 pathname === "/menu" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
               }`}
@@ -109,6 +111,7 @@ export function Navbar() {
             </Link>
             <Link
               href="/orders"
+              prefetch={false}
               className={`text-sm font-semibold tracking-wide transition-colors ${
                 pathname === "/orders" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
               }`}
@@ -117,6 +120,7 @@ export function Navbar() {
             </Link>
             <Link
               href="/about"
+              prefetch={false}
               className={`text-sm font-semibold tracking-wide transition-colors ${
                 pathname === "/about" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
               }`}
@@ -125,6 +129,7 @@ export function Navbar() {
             </Link>
             <Link
               href="/contact"
+              prefetch={false}
               className={`text-sm font-semibold tracking-wide transition-colors ${
                 pathname === "/contact" ? "text-accent-red font-bold" : "text-neutral-800 hover:text-accent-red"
               }`}
@@ -137,6 +142,7 @@ export function Navbar() {
           <div className="flex items-center justify-center">
             <Link
               href="/"
+              prefetch={false}
               className="font-primary text-2xl xl:text-3xl font-black uppercase tracking-[0.04em] text-accent-red hover:opacity-90 transition-opacity select-none text-center"
               aria-label={`${siteConfig.name} Home`}
             >
@@ -282,6 +288,7 @@ export function Navbar() {
             >
               <Link
                 href="/"
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`py-2 transition-colors border-b border-neutral-50 ${pathname === "/" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
               >
@@ -289,6 +296,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/menu"
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`py-2 transition-colors border-b border-neutral-50 ${pathname === "/menu" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
               >
@@ -296,6 +304,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/orders"
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`py-2 transition-colors border-b border-neutral-50 flex items-center justify-between ${pathname === "/orders" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
               >
@@ -304,6 +313,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/about"
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`py-2 transition-colors border-b border-neutral-50 ${pathname === "/about" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
               >
@@ -311,6 +321,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/contact"
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`py-2 transition-colors border-b border-neutral-50 ${pathname === "/contact" ? "text-accent-red font-bold" : "hover:text-accent-red"}`}
               >

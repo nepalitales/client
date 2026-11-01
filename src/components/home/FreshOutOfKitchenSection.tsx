@@ -97,6 +97,7 @@ export function FreshOutOfKitchenSection() {
         <div className="flex justify-center mt-7 sm:mt-9">
           <Link
             href="/menu"
+            prefetch={false}
             className="bg-[#D92121] hover:bg-[#b81b1b] text-white font-secondary font-medium text-sm sm:text-base px-8 sm:px-10 py-2.5 sm:py-3 rounded-full transition-all duration-200 active:scale-95 shadow-xs inline-flex items-center justify-center cursor-pointer select-none"
           >
             Explore Menu

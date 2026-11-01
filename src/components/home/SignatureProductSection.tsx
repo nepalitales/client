@@ -196,6 +196,7 @@ export function SignatureProductSection() {
           <div className="sm:self-end">
             <Link
               href="/menu"
+              prefetch={false}
               className="font-secondary text-sm sm:text-base font-semibold text-[#D92121] underline hover:text-[#b81b1b] transition-colors inline-flex items-center gap-1 group"
             >
               <span>See full menu</span>

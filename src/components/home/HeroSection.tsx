@@ -50,6 +50,7 @@ export function HeroSection() {
             <div className="mt-5 sm:mt-6">
               <Link
                 href="/menu"
+                prefetch={false}
                 className="bg-[#D92121] hover:bg-[#b81b1b] text-white font-secondary font-bold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-7 py-3 rounded-full transition-all duration-200 active:scale-95 shadow-sm inline-flex items-center gap-2 cursor-pointer select-none group"
               >
                 <span>Explore Menu</span>
