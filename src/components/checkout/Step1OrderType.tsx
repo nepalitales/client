@@ -18,7 +18,7 @@ export function Step1OrderType() {
     <div className="flex flex-col min-h-95 justify-between pt-4 pb-2">
       {/* ─── Center Content (No 3D icons or illustrations) ─────── */}
       <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6">
-        <div className="space-y-2 max-w-xs mx-auto">
+        <div className="space-y-2 max-w-sm mx-auto">
           {!isOrderingOpen && (
             <div className="w-full bg-rose-50 border border-rose-200 rounded-xl p-3 text-rose-800 text-xs text-left leading-relaxed mb-3 space-y-0.5">
               <span className="font-bold block">{cartNotice.title}</span>
@@ -28,9 +28,9 @@ export function Step1OrderType() {
           <h4 className="font-secondary font-bold text-lg sm:text-xl text-neutral-900 leading-snug">
             How would you like to receive your order?
           </h4>
-          <p className="text-xs text-neutral-500 font-medium">
+          <p className="text-xs text-neutral-500 font-medium leading-relaxed">
             {orderType === "delivery"
-              ? "Note : Delivery fee calculated separately."
+              ? "Note : Delivery fee calculated separately. Delivery charges must be paid by the customers at the time of delivery."
               : "Note : Collect directly from our Thane cloud kitchen."}
           </p>
         </div>
@@ -75,7 +75,7 @@ export function Step1OrderType() {
                 <span className="text-[#D92121] font-bold">Borzo Porter</span>
               </div>
               <p className="text-neutral-500 leading-relaxed text-[11px]">
-                Dispatched fresh all over Mumbai via Borzo porter service. Delivery fee calculated separately as per actual distance.
+                Dispatched fresh all over Mumbai via Borzo porter service. Delivery fee calculated separately as per actual distance. Delivery charges must be paid by the customers at the time of delivery.
               </p>
             </>
           ) : (
