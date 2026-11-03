@@ -18,7 +18,7 @@ export function Step1OrderType() {
     <div className="flex flex-col min-h-95 justify-between pt-4 pb-2">
       {/* ─── Center Content (No 3D icons or illustrations) ─────── */}
       <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6">
-        <div className="space-y-2 max-w-sm mx-auto">
+        <div className="space-y-3 max-w-sm mx-auto w-full">
           {!isOrderingOpen && (
             <div className="w-full bg-rose-50 border border-rose-200 rounded-xl p-3 text-rose-800 text-xs text-left leading-relaxed mb-3 space-y-0.5">
               <span className="font-bold block">{cartNotice.title}</span>
@@ -28,11 +28,20 @@ export function Step1OrderType() {
           <h4 className="font-secondary font-bold text-lg sm:text-xl text-neutral-900 leading-snug">
             How would you like to receive your order?
           </h4>
-          <p className="text-xs text-neutral-500 font-medium leading-relaxed">
-            {orderType === "delivery"
-              ? "Note : Delivery fee calculated separately. Delivery charges must be paid by the customers at the time of delivery."
-              : "Note : Collect directly from our Thane cloud kitchen."}
-          </p>
+          {orderType === "delivery" ? (
+            <div className="bg-amber-50/90 border border-amber-200/80 rounded-xl px-3.5 py-2 text-xs text-amber-900 leading-relaxed text-center">
+              <span className="font-bold text-amber-950">Note : </span>
+              <span>Delivery fee calculated separately. </span>
+              <span className="font-bold text-[#D92121]">
+                Delivery charges must be paid by the customers at the time of delivery.
+              </span>
+            </div>
+          ) : (
+            <div className="bg-neutral-100/80 border border-neutral-200/70 rounded-xl px-3.5 py-2 text-xs text-neutral-600 leading-relaxed text-center font-medium">
+              <span className="font-bold text-neutral-900">Note : </span>
+              <span>Collect directly from our Thane cloud kitchen.</span>
+            </div>
+          )}
         </div>
 
         {/* ─── Pickup / Delivery Pill Buttons ─────────────────── */}
@@ -75,7 +84,10 @@ export function Step1OrderType() {
                 <span className="text-[#D92121] font-bold">Borzo Porter</span>
               </div>
               <p className="text-neutral-500 leading-relaxed text-[11px]">
-                Dispatched fresh all over Mumbai via Borzo porter service. Delivery fee calculated separately as per actual distance. Delivery charges must be paid by the customers at the time of delivery.
+                Dispatched fresh all over Mumbai via Borzo porter service. Delivery fee calculated separately as per actual distance.{" "}
+                <strong className="font-semibold text-neutral-800">
+                  Delivery charges must be paid by the customers at the time of delivery.
+                </strong>
               </p>
             </>
           ) : (
